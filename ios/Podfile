@@ -21,6 +21,8 @@ target 'BeAware' do
 
   pod 'react-native-sqlite-2', :path => '../node_modules/react-native-sqlite-2'
 
+  pod 'RNPopoverMenu', :path => '../node_modules/react-native-popover-menu'
+
   target 'BeAwareTests' do
     inherit! :complete
     # Pods for testing

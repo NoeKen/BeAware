@@ -4,24 +4,26 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import light from '../constants/theme/light';
 import AddExpense from '../containers/AddExpense';
 import Dashboard from '../containers/Dashboard';
-import Expenses from '../containers/Expenses';
-import Home from '../containers/Home';
+import { ExpensesNav } from './nav';
 
 const Tab = createBottomTabNavigator();
 
 export default function routes() {
   return (
     <Tab.Navigator
-      initialRouteName="Feed"
+      initialRouteName="Expenses"
       screenOptions={{
         headerShown:false,
         tabBarActiveTintColor: light.brandPrimary,
+        tabBarHideOnKeyboard:true
       }}
     >
       <Tab.Screen
-        name="Expenses"
-        component={Expenses}
+        name="Expense"
+        component={ExpensesNav}
         options={{
+          headerShown:false,
+          headerTitleStyle:{color:light.brandPrimary},
           tabBarLabel: 'Expenses',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="format-list-bulleted-type" color={color} size={size} />
