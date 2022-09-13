@@ -216,13 +216,13 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     fontSize: 42,
-    lineHeight: 120,
+    lineHeight: 140,
     fontWeight: 'bold',
     textAlign: 'center',
-    backgroundColor: '#783c3cc0',
+    backgroundColor: '#5ad6ec5a',
   },
   header: {
-    height: 120,
+    height: 140,
     // backgroundColor: '#eab07ea9',
     // marginBottom: 20,
   },

@@ -56,7 +56,7 @@ export default function ExpenseItem({item, navigation}) {
           navigation.navigate('Expense Detail'), console.log('item pressed');
         }}
         style={{
-          backgroundColor: '#c3c5c4ff',
+          backgroundColor: light.whiteGrey,
           height: 60,
           borderRadius: 8,
           padding: 8,
@@ -110,8 +110,9 @@ export default function ExpenseItem({item, navigation}) {
               color: light.brandPrimary,
               alignSelf: 'flex-end',
               fontFamily: 'ubuntu-bold',
-              fontSize: 18,
+              fontSize: 16,
               overflow: 'hidden',
+              // fontWeight:'bold'
             }}
             numberOfLines={1}>
             {item.amount}

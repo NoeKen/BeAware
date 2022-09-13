@@ -7,6 +7,7 @@ import {StyleSheet} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import light, {LightTheme} from './src/constants/theme/light';
 import ExpenseDetails from './src/containers/Expense details';
+import SplashScreen from 'react-native-splash-screen';
 
 import routes from './src/routes';
 // import { initDatabase } from './src/services/db-service';
@@ -17,8 +18,11 @@ const App = () => {
     //   await initDatabase();
     // }
     // init();
+    SplashScreen.hide();
   }, []);
   const Stack = createNativeStackNavigator();
+
+  
 
   // const theme = extendTheme({ colors: LightTheme });
   return (
