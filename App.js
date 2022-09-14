@@ -38,7 +38,7 @@ const App = () => {
               // title:false
               headerTitleStyle:{color:light.brandPrimary},
               statusBarColor:light.brandPrimary,
-              orientation:'portrait'
+              orientation:'default'
             }}
             
             >

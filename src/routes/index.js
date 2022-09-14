@@ -4,7 +4,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import light from '../constants/theme/light';
 import AddExpense from '../containers/AddExpense';
 import Dashboard from '../containers/Dashboard';
-import { ExpensesNav } from './nav';
+import { DashboardNav, ExpensesNav } from './nav';
 
 const Tab = createBottomTabNavigator();
 
@@ -42,7 +42,7 @@ export default function routes() {
       />
       <Tab.Screen
         name="Dashboard"
-        component={Dashboard}
+        component={DashboardNav}
         options={{
           tabBarLabel: 'Dashboard',
           tabBarIcon: ({ color, size }) => (

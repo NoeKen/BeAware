@@ -14,7 +14,7 @@ import {
 import SQLite from 'react-native-sqlite-2';
 import light from '../constants/theme/light';
 import {getDBConnection, getExpenses} from '../services/db-service';
-import {Content, Input, Tab, Textarea} from 'native-base';
+import {Container, Content, Input, Tab, Textarea} from 'native-base';
 
 // const db = openDatabase({
 //   name: 'baAware',location:'default'
@@ -108,7 +108,7 @@ export default function AddExpense({navigation}) {
   }, []);
   //   console.log('tasks: ', tasks);
   return (
-    <View style={{flex: 1}}>
+    <Container style={{flex: 1}}>
       <View style={styles.header}>
         {/* {ToastAndroid.show('plateform: '+Platform.os)} */}
         <MaterialCommunityIcons
@@ -196,7 +196,7 @@ export default function AddExpense({navigation}) {
         <Text>{expense.amount}</Text>
         <Text>{expense.description}</Text>
       </Content>
-    </View>
+    </Container>
   );
 }
 
@@ -251,7 +251,8 @@ const styles = StyleSheet.create({
   input: {
     // borderWidth:0.5,
     borderRadius: 10,
-    backgroundColor: '#e91e6216',
+    // backgroundColor: light.inputBg,
+    backgroundColor: light.whiteGrey,
     paddingLeft: 10,
   },
   textarea: {
@@ -259,7 +260,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 10,
     height: 100,
-    backgroundColor: '#e91e6216',
+    // backgroundColor: light.inputBg,
+    backgroundColor: light.whiteGrey,
   },
   image: {
     flex: 1,
