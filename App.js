@@ -1,7 +1,6 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 // import { extendTheme, NativeBaseProvider } from 'native-base';
-// import { extendTheme, NativeBaseProvider } from 'native-base';
 import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -10,6 +9,7 @@ import ExpenseDetails from './src/containers/Expense details';
 import SplashScreen from 'react-native-splash-screen';
 
 import routes from './src/routes';
+import { Root } from 'native-base';
 // import { initDatabase } from './src/services/db-service';
 
 const App = () => {
@@ -28,7 +28,9 @@ const App = () => {
   return (
     // <Router>
     // <GestureHandlerRootView style={{flex: 1}}>
+    <Root>
       <NavigationContainer>
+        
         {/* <NativeBaseProvider theme={theme} > */}
         <Stack.Navigator>
           <Stack.Screen
@@ -48,6 +50,7 @@ const App = () => {
         </Stack.Navigator>
         {/* </NativeBaseProvider> */}
       </NavigationContainer>
+      </Root>
     // </GestureHandlerRootView>
     // </Router>
   );

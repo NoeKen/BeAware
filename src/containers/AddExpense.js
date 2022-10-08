@@ -59,6 +59,7 @@ export default function AddExpense({navigation}) {
         );
         txn.executeSql(
           'INSERT INTO Expenses (title,amount,description) VALUES (:title,:amount,:description)',
+          // 'INSERT INTO Expenses (title,amount,description,created_at) VALUES (:title,:amount,:description,:created_at)',
           [expense.title, expense.amount, expense.description],
         );
         // txn.executeSql('SELECT * FROM `Expenses`', [], function (tx, res) {
@@ -79,7 +80,7 @@ export default function AddExpense({navigation}) {
   const [tasks, setTask] = useState([{}]);
 
   useEffect(() => {
-    
+    // console.log('new date: ', new Date());
     // resetForm();
     // createTables();
     // var resul = [];
@@ -192,9 +193,6 @@ export default function AddExpense({navigation}) {
             <Text style={styles.cancelText}>Cancel</Text>
           </TouchableOpacity>
         </View>
-        <Text>{expense.title}</Text>
-        <Text>{expense.amount}</Text>
-        <Text>{expense.description}</Text>
       </Content>
     </Container>
   );
@@ -203,16 +201,14 @@ export default function AddExpense({navigation}) {
 const styles = StyleSheet.create({
   header: {
     height: 60,
-    // justifyContent:'center',
     paddingLeft: 16,
-    // borderWidth:1,
     flexDirection: 'row',
-    // backgroundColor: '#eab07ea9',
-
     alignItems: 'center',
+    // justifyContent:'center',
+    // borderWidth:1,
+    // backgroundColor: '#eab07ea9',
   },
   saveButton: {
-    // marginHorizontal: 16,
     backgroundColor: light.brandPrimary,
     paddingVertical: 14,
     borderRadius: 8,
@@ -220,11 +216,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   cancelButton: {
-    // marginHorizontal: 16,
-    // backgroundColor: light.brandPrimary,
-    // paddingVertical: 14,
     alignItems: 'center',
-    // marginTop:-10,
     marginTop: 25,
   },
   error: {
@@ -246,32 +238,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     text: {
       fontWeight: 'bold',
+      color: light.textColor,
     },
   },
   input: {
-    // borderWidth:0.5,
     borderRadius: 10,
-    // backgroundColor: light.inputBg,
     backgroundColor: light.whiteGrey,
     paddingLeft: 10,
   },
   textarea: {
-    // borderWidth:0.5,
     marginTop: 10,
     borderRadius: 10,
     height: 100,
-    // backgroundColor: light.inputBg,
     backgroundColor: light.whiteGrey,
   },
   image: {
     flex: 1,
   },
-  // text: {
-  //   color: 'white',
-  //   fontSize: 42,
-  //   lineHeight: 120,
-  //   fontWeight: 'bold',
-  //   textAlign: 'center',
-  //   backgroundColor: '#783c3cc0',
-  // },
 });

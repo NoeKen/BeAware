@@ -27,7 +27,7 @@ export function DashboardNav() {
         // headerShown:false,
         headerTitleStyle: {color: light.brandPrimary},
         headerBackVisible: false,
-        // statusBarColor:light.brandPrimary
+        // statusBarColor:light.brandSecond
       }}>
       <Stack.Screen name="Dashboard" component={Dashboard} />
     </Stack.Navigator>

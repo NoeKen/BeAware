@@ -1,6 +1,6 @@
 // import {ScrollView} from 'native-base';
 import moment from 'moment/moment';
-import {Container, Content} from 'native-base';
+import {Badge, Container, Content} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {FlatList} from 'react-native';
 import {
@@ -32,45 +32,49 @@ const Expenses = ({navigation}) => {
     // console.log('current date', currentDate);
   }, []);
   db.transaction(txn => {
-    txn.executeSql('SELECT * FROM Expenses', [], (txn, res) => {
-      var len = res.rows.length;
-      // console.log('current Date : ', currentDate);
-      if (len > 0) {
-        var oldExpenses = [];
-        // currentDate = new Date()
-        var currentExpenses = [];
-        var amount = 0;
-        var oldAmount = 0;
-        for (let i = 0; i < len; ++i) {
-          // console.log(
-          //   `item ${i} created at : `,
-          //   moment(res.rows.item(i).created_at).format('YYYY-MM-DD'),
-          // );
-          if (
-            moment(res.rows.item(i).created_at).format('YYYY-MM-DD') ===
+    txn.executeSql(
+      'select * from Expenses ORDER BY date(created_at)',
+      [],
+      (txn, res) => {
+        var len = res.rows.length;
+        // console.log('current Date : ', currentDate);
+        if (len > 0) {
+          var oldExpenses = [];
+          // currentDate = new Date()
+          var currentExpenses = [];
+          var amount = 0;
+          var oldAmount = 0;
+          for (let i = 0; i < len; ++i) {
+            // console.log(
+            //   `item ${i} created at : `,
+            //   moment(res.rows.item(i).created_at).format('YYYY-MM-DD'),
+            // );
+            if (
+              moment(res.rows.item(i).created_at).format('YYYY-MM-DD') ===
               currentDate
-          ) {
-            currentExpenses.push(res.rows.item(i));
-            amount += res.rows.item(i).amount;
-          } else if (
-            moment(res.rows.item(i).created_at).format('YYYY-MM-DD') !==
+            ) {
+              currentExpenses.push(res.rows.item(i));
+              amount += res.rows.item(i).amount;
+            } else if (
+              moment(res.rows.item(i).created_at).format('YYYY-MM-DD') !==
               currentDate
-          ) {
-            {
-              oldExpenses.push(res.rows.item(i));
-              oldAmount += res.rows.item(i).amount;
+            ) {
+              {
+                oldExpenses.push(res.rows.item(i));
+                oldAmount += res.rows.item(i).amount;
+              }
             }
+            // console.log(`item ${i}:`, res.rows.item(i));
+            // expenses.push(res.rows.item(i));
           }
-          // console.log(`item ${i}:`, res.rows.item(i));
-          // expenses.push(res.rows.item(i));
+          setOldExpenses(oldExpenses);
+          setExpenses(currentExpenses);
+          setTotalAmount(amount);
+          setOldTotalAmount(oldAmount);
         }
-        setOldExpenses(oldExpenses);
-        setExpenses(currentExpenses);
-        setTotalAmount(amount);
-        setOldTotalAmount(oldAmount);
-      }
-      // return result;
-    });
+        // return result;
+      },
+    );
   });
   //=================================================================================
 
@@ -108,10 +112,25 @@ const Expenses = ({navigation}) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Text style={styles.sectionTitle}>Today</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={styles.sectionTitle}>Today</Text>
+              {expenses.length > 0 ? (
+                <Text style={styles.badge.text}>
+                  {expenses.length < 10
+                    ? '0' + expenses.length
+                    : expenses.length}
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
+            </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text style={styles.title}>{totalAmount}</Text>
-              {expenses.length > 5 ? (
+              {expenses.length > 4 ? (
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate('All Expenses', {items: expenses})
@@ -131,17 +150,26 @@ const Expenses = ({navigation}) => {
             </View>
           </View>
           <View>
-            <FlatList
-              style={{marginBottom: 10}}
-              data={expenses}
-              keyExtractor={item => item.expense_id}
-              renderItem={({item}) => [
-                <ExpenseItem item={item} navigation={navigation} />,
-              ]}
-              scrollEnabled={false}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-            />
+            {expenses.length < 1 ? (
+              <Text>No expenses yet made today</Text>
+            ) : (
+              <FlatList
+                style={{marginBottom: 10}}
+                data={expenses}
+                keyExtractor={item => item.expense_id}
+                renderItem={({item, index}) => [
+                  // console.log('index: ',index),
+                  index < 5 ? (
+                    <ExpenseItem item={item} navigation={navigation} />
+                  ) : (
+                    <Text></Text>
+                  ),
+                ]}
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+              />
+            )}
           </View>
         </View>
         <View style={{padding: 16, marginTop: -45}}>
@@ -151,10 +179,25 @@ const Expenses = ({navigation}) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Text style={styles.sectionTitle}>Olds</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={styles.sectionTitle}>Olds</Text>
+              {oldExpenses.length > 0 ? (
+                <Text style={styles.badge.text}>
+                  {oldExpenses.length < 10
+                    ? '0' + oldExpenses.length
+                    : oldExpenses.length}
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
+            </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text style={styles.title}>{oldTotalAmount}</Text>
-              {oldExpenses.length > 5 ? (
+              {oldExpenses.length > 4 ? (
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate('All Expenses', {items: oldExpenses})
@@ -166,8 +209,6 @@ const Expenses = ({navigation}) => {
                     style={{fontSize: 20}}
                   />
                 </TouchableOpacity>
-              ) : oldExpenses.length < 0 ? (
-                <Text>Nothing to show here</Text>
               ) : (
                 <Text />
               )}
@@ -175,17 +216,25 @@ const Expenses = ({navigation}) => {
           </View>
 
           <View>
-            <FlatList
-              style={{marginBottom: 10}}
-              data={oldExpenses}
-              keyExtractor={item => item.expense_id}
-              renderItem={({item}) => [
-                <ExpenseItem item={item} navigation={navigation} />,
-              ]}
-              scrollEnabled={false}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-            />
+            {oldExpenses.length < 1 ? (
+              <Text style={{color:light.inputBg ,textAlign:'center'}} >No expenditures to today</Text>
+            ) : (
+              <FlatList
+                style={{marginBottom: 10}}
+                data={oldExpenses}
+                keyExtractor={item => item.expense_id}
+                renderItem={({item, index}) => [
+                  index < 5 ? (
+                    <ExpenseItem item={item} navigation={navigation} />
+                  ) : (
+                    <Text></Text>
+                  ),
+                ]}
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+              />
+            )}
           </View>
         </View>
       </Content>
@@ -202,13 +251,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'ubuntu-bold',
     marginEnd: 10,
-    // marginTop: 15,
   },
   sectionTitle: {
     fontSize: 20,
     fontFamily: 'ubuntu-bold',
     marginBottom: 15,
     marginTop: 20,
+    color:light.inactiveTab
   },
   image: {
     flex: 1,
@@ -223,13 +272,10 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 140,
-    // backgroundColor: '#eab07ea9',
-    // marginBottom: 20,
   },
   itemSeparator: {
     height: 10,
     backgroundColor: light.inverseTextColor,
-    // opacity: colorEmphasis.medium,
   },
 
   container: {
@@ -244,8 +290,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 30,
     fontWeight: '800',
-    // color: darkColors.onBackground,
-    // opacity: colorEmphasis.high,
   },
   item: {
     backgroundColor: '#121212',
@@ -253,72 +297,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
   },
-  // messageContainer: {
-  //   // backgroundColor: darkColors.backgroundColor,
-  //   maxWidth: 300,
-  // },
-  // name: {
-  //   fontSize: 16,
-  //   // color: darkColors.primary,
-  //   // opacity: colorEmphasis.high,
-  //   fontWeight: '800',
-  // },
-  // subject: {
-  //   fontSize: 14,
-  //   // color: darkColors.onBackground,
-  //   // opacity: colorEmphasis.high,
-  //   fontWeight: 'bold',
-  //   // textShadowColor: darkColors.secondary,
-  //   textShadowOffset: {width: 1, height: 1},
-  //   textShadowRadius: 4,
-  // },
-  // text: {
-  //   fontSize: 10,
-  //   // color: darkColors.onBackground,
-  //   // opacity: colorEmphasis.medium,
-  // },
-  // avatar: {
-  //   width: 40,
-  //   height: 40,
-  //   backgroundColor: darkColors.onBackground,
-  //   opacity: colorEmphasis.high,
-  //   borderColor: darkColors.primary,
-  //   borderWidth: 1,
-  //   borderRadius: 20,
-  //   marginRight: 7,
-  //   alignSelf: 'center',
-  //   shadowColor: darkColors.secondary,
-  //   shadowOffset: {width: 1, height: 1},
-  //   shadowRadius: 2,
-  //   shadowOpacity: colorEmphasis.high,
-  // },
-  // qaContainer: {
-  //   flex: 1,
-  //   flexDirection: 'row',
-  //   justifyContent: 'flex-end',
-  // },
-
-  // button: {
-  //   width: 80,
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
-  // buttonText: {
-  //   fontWeight: 'bold',
-  //   opacity: 0.8,
-  // },
-  // button1Text: {
-  //   color: light.brandPrimary,
-  // },
-  // button2Text: {
-  //   color: '#086dbb',
-  // },
-  // button3Text: {
-  //   color: '#fe0404',
-  // },
   contentContainerStyle: {
     flexGrow: 1,
     backgroundColor: '#eab07ea9',
+  },
+  badge: {
+    backgroundColor: light.whiteGrey,
+    height: 20,
+    // width:20,
+    text: {
+      fontSize: 8,
+      // color: '#FFC0CB',
+      color: light.brandSecond,
+      fontWeight: 'bold',
+      backgroundColor: light.whiteGrey,
+      marginBottom: 10,
+      marginLeft: 5,
+      padding: 5,
+      borderRadius: 12,
+    },
   },
 });
 export default Expenses;

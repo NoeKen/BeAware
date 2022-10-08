@@ -53,7 +53,8 @@ export default function ExpenseItem({item, navigation}) {
       }}>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('Expense Detail'), console.log('item pressed');
+          navigation.navigate('Expense Detail', {item: item}),
+            console.log('item pressed');
         }}
         style={{
           backgroundColor: light.whiteGrey,
@@ -95,13 +96,14 @@ export default function ExpenseItem({item, navigation}) {
         </View>
         <View
           style={{flex: 0.3, paddingEnd: 5, justifyContent: 'space-between'}}>
-          <Text style={{textAlign: 'right'}}>
-            {[ 
-                // console.log('curent date: ',item.created_at) ,
-            moment(item.created_at).format('YYYY-MM-DD') ===
-            moment(new Date()).format('YYYY-MM-DD')
-              ? moment(item.created_at).format('HH:MM')
-              : moment(item.created_at).format('YYYY-MM-DD')]}
+          <Text style={{textAlign: 'right', color: light.textColor}}>
+            {[
+              // console.log('curent date: ',item.created_at) ,
+              moment(item.created_at).format('YYYY-MM-DD') ===
+              moment(new Date()).format('YYYY-MM-DD')
+                ? moment(item.created_at).format('HH:MM')
+                : moment(item.created_at).format('YYYY-MM-DD'),
+            ]}
             {/* {moment(item.created_at).calendar()} */}
             {/* {moment(item.created_at).format("HH:MM")} */}
           </Text>
@@ -137,7 +139,10 @@ export default function ExpenseItem({item, navigation}) {
             </TouchableOpacity>
           }>
           <View style={{width: 110, height: 150}}>
-            <Text style={{fontSize: 20, marginVertical: 5}}>Options</Text>
+            <Text
+              style={{fontSize: 20, marginVertical: 5, textAlign: 'center'}}>
+              Options
+            </Text>
             <View
               style={{
                 height: 2,
@@ -146,20 +151,20 @@ export default function ExpenseItem({item, navigation}) {
               }}
             />
             <View style={{justifyContent: 'space-evenly', flex: 1}}>
-              <TouchableOpacity
+              <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-evenly',
                   alignItems: 'center',
-                }}>
+                }}
+                // onPress={()=> navigation.navigate('Update Expense')}
+              >
                 <MaterialCommunityIcons
-                  name="plus"
-                  style={{fontSize: 20, color: light.brandSuccess}}
+                  name="pencil"
+                  style={{fontSize: 20, color: light.whiteGrey}}
                 />
-                <Text style={{fontSize: 20, color: light.brandSuccess}}>
-                  edit
-                </Text>
-              </TouchableOpacity>
+                <Text style={{fontSize: 20, color: light.whiteGrey}}>edit</Text>
+              </View>
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',
@@ -169,9 +174,9 @@ export default function ExpenseItem({item, navigation}) {
                 onPress={() => deleteItem()}>
                 <MaterialCommunityIcons
                   name="trash-can"
-                  style={{fontSize: 20, color: light.brandPrimary}}
+                  style={{fontSize: 20, color: light.brandSecond}}
                 />
-                <Text style={{fontSize: 20, color: light.brandPrimary}}>
+                <Text style={{fontSize: 20, color: light.brandSecond}}>
                   delete
                 </Text>
               </TouchableOpacity>
