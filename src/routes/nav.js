@@ -3,6 +3,7 @@ import light from '../constants/theme/light';
 import AllExpenses from '../containers/allExpenses';
 import Dashboard from '../containers/Dashboard';
 import Expenses from '../containers/Expenses';
+import Home from '../containers/Home';
 
 const Stack = createNativeStackNavigator();
 export function ExpensesNav() {
@@ -11,9 +12,10 @@ export function ExpensesNav() {
       screenOptions={{
         // headerShown:false,
         headerTitleStyle: {color: light.brandPrimary},
-        headerBackVisible: false,
+        headerBackVisible: true,
         // statusBarColor:light.brandPrimary
       }}>
+      <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Expenses" component={Expenses} />
       <Stack.Screen name="All Expenses" component={AllExpenses} />
     </Stack.Navigator>

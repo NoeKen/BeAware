@@ -101,7 +101,7 @@ export default function ExpenseItem({item, navigation}) {
               // console.log('curent date: ',item.created_at) ,
               moment(item.created_at).format('YYYY-MM-DD') ===
               moment(new Date()).format('YYYY-MM-DD')
-                ? moment(item.created_at).format('HH:MM')
+                ? moment(item.created_at).format('hh:mm a')
                 : moment(item.created_at).format('YYYY-MM-DD'),
             ]}
             {/* {moment(item.created_at).calendar()} */}

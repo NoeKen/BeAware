@@ -15,6 +15,7 @@ import SQLite from 'react-native-sqlite-2';
 import light from '../constants/theme/light';
 import {getDBConnection, getExpenses} from '../services/db-service';
 import {Container, Content, Input, Tab, Textarea} from 'native-base';
+import { CreateExpense } from '../Services/expensesService';
 
 // const db = openDatabase({
 //   name: 'baAware',location:'default'
@@ -45,37 +46,42 @@ export default function AddExpense({navigation}) {
   }
 
   async function createExpense() {
-    if (expense.amount === '' || expense.title === '') {
-      setError('This field is required');
-      return;
-    }
     try {
-      db.transaction(function (txn) {
-        // txn.executeSql('DROP TABLE IF EXISTS Expenses', []);
-        // txn, executeSql('DROP DATABASE IF EXISTS beAware.db');
-        txn.executeSql(
-          'CREATE TABLE IF NOT EXISTS Expenses(id INTEGER PRIMARY KEY NOT NULL, title VARCHAR(30),amount INTEGER, description VARCHAR(30),created_at DATETIME DEFAULT CURRENT_TIMESTAMP)',
-          [],
-        );
-        txn.executeSql(
-          'INSERT INTO Expenses (title,amount,description) VALUES (:title,:amount,:description)',
-          // 'INSERT INTO Expenses (title,amount,description,created_at) VALUES (:title,:amount,:description,:created_at)',
-          [expense.title, expense.amount, expense.description],
-        );
-        // txn.executeSql('SELECT * FROM `Expenses`', [], function (tx, res) {
-        //         for (let i = 0; i < res.rows.length; ++i) {
-        //           // setTask({...tasks,res.rows,item(i)})
-        //           Alert.alert(`item ${i}:`, res.rows.item(i));
-        //         //   resul.push(res.rows.item(i));
-        //         }
-        //       });
-      });
-      navigation.navigate('Expenses');
-      ToastAndroid.show('task created successfully', ToastAndroid.LONG);
+      CreateExpense(expense,navigation={navigation})
     } catch (error) {
-      setReqError(`An error occurred saving the expense : ${error.message}`);
-      console.log('error occurred: ', error);
+      console.log('error when creating expense : ',error)
     }
+    // if (expense.amount === '' || expense.title === '') {
+    //   setError('This field is required');
+    //   return;
+    // }
+    // try {
+    //   db.transaction(function (txn) {
+    //     // txn.executeSql('DROP TABLE IF EXISTS Expenses', []);
+    //     // txn, executeSql('DROP DATABASE IF EXISTS beAware.db');
+    //     txn.executeSql(
+    //       'CREATE TABLE IF NOT EXISTS Expenses(id INTEGER PRIMARY KEY NOT NULL, title VARCHAR(30),amount INTEGER, description VARCHAR(30),created_at DATETIME DEFAULT CURRENT_TIMESTAMP)',
+    //       [],
+    //     );
+    //     txn.executeSql(
+    //       'INSERT INTO Expenses (title,amount,description) VALUES (:title,:amount,:description)',
+    //       // 'INSERT INTO Expenses (title,amount,description,created_at) VALUES (:title,:amount,:description,:created_at)',
+    //       [expense.title, expense.amount, expense.description],
+    //     );
+    //     // txn.executeSql('SELECT * FROM `Expenses`', [], function (tx, res) {
+    //     //         for (let i = 0; i < res.rows.length; ++i) {
+    //     //           // setTask({...tasks,res.rows,item(i)})
+    //     //           Alert.alert(`item ${i}:`, res.rows.item(i));
+    //     //         //   resul.push(res.rows.item(i));
+    //     //         }
+    //     //       });
+    //   });
+    //   navigation.navigate('Expenses');
+    //   ToastAndroid.show('task created successfully', ToastAndroid.LONG);
+    // } catch (error) {
+    //   setReqError(`An error occurred saving the expense : ${error.message}`);
+    //   console.log('error occurred: ', error);
+    // }
   }
   const [tasks, setTask] = useState([{}]);
 
@@ -155,8 +161,28 @@ export default function AddExpense({navigation}) {
               style={{fontSize: 10, color: light.brandPrimary}}
             />
           </View>
+
           <Input
             placeholder="amount"
+            value={expense.amount}
+            style={styles.input}
+            keyboardType="phone-pad"
+            onChangeText={val => {
+              //   setAmount(val);
+              setExpense({...expense, amount: val});
+            }}
+          />
+          
+          <View style={[styles.inputHeader,{marginTop:20}]}>
+            <Text style={styles.inputHeader.text}>Category :</Text>
+            <MaterialCommunityIcons
+              name="asterisk"
+              style={{fontSize: 10, color: light.brandPrimary}}
+            />
+          </View>
+          
+          <Input
+            placeholder="category"
             value={expense.amount}
             style={styles.input}
             keyboardType="phone-pad"
@@ -204,9 +230,6 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    // justifyContent:'center',
-    // borderWidth:1,
-    // backgroundColor: '#eab07ea9',
   },
   saveButton: {
     backgroundColor: light.brandPrimary,

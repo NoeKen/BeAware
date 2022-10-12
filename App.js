@@ -10,6 +10,7 @@ import SplashScreen from 'react-native-splash-screen';
 
 import routes from './src/routes';
 import { Root } from 'native-base';
+import AddCategory from './src/containers/addCategory';
 // import { initDatabase } from './src/services/db-service';
 
 const App = () => {
@@ -47,6 +48,7 @@ const App = () => {
             {routes}
           </Stack.Screen>
           <Stack.Screen name="Expense Detail" component={ExpenseDetails} options={{headerTintColor:light.brandPrimary}} />
+          <Stack.Screen name="Add Category" component={AddCategory} options={{headerTintColor:light.brandPrimary}} />
         </Stack.Navigator>
         {/* </NativeBaseProvider> */}
       </NavigationContainer>

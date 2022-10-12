@@ -64,9 +64,13 @@ const Expenses = ({navigation}) => {
                 oldAmount += res.rows.item(i).amount;
               }
             }
+            const descDates = currentExpenses.sort((a, b) => {
+              return new Date(b).getTime() - new Date(a).getTime();
+            });
             // console.log(`item ${i}:`, res.rows.item(i));
             // expenses.push(res.rows.item(i));
           }
+          // currentExpenses.sort((a, b) => a.created_at - b.created_at);
           setOldExpenses(oldExpenses);
           setExpenses(currentExpenses);
           setTotalAmount(amount);
@@ -151,7 +155,7 @@ const Expenses = ({navigation}) => {
           </View>
           <View>
             {expenses.length < 1 ? (
-              <Text>No expenses yet made today</Text>
+              <Text style={styles.emptyText} >No expenses yet made today</Text>
             ) : (
               <FlatList
                 style={{marginBottom: 10}}
@@ -217,7 +221,7 @@ const Expenses = ({navigation}) => {
 
           <View>
             {oldExpenses.length < 1 ? (
-              <Text style={{color:light.inputBg ,textAlign:'center'}} >No expenditures to today</Text>
+              <Text style={styles.emptyText}>No expenditures to today</Text>
             ) : (
               <FlatList
                 style={{marginBottom: 10}}
@@ -257,7 +261,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ubuntu-bold',
     marginBottom: 15,
     marginTop: 20,
-    color:light.inactiveTab
+    color: light.inactiveTab,
   },
   image: {
     flex: 1,
@@ -316,6 +320,10 @@ const styles = StyleSheet.create({
       padding: 5,
       borderRadius: 12,
     },
+  },
+  emptyText: {
+    color: light.inputBg,
+    textAlign: 'center',
   },
 });
 export default Expenses;

@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^4.4.5",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-community/picker": "^1.8.1",
     "@react-navigation/bottom-tabs": "^6.3.3",
@@ -20,7 +21,11 @@
     "prop-types": "^15.8.1",
     "react": "17.0.2",
     "react-native": "0.68.0",
+    "react-native-autocomplete-dropdown": "^2.0.7",
+    "react-native-gesture-handler": "^2.7.0",
+    "react-native-image-crop-picker": "^0.38.0",
     "react-native-image-helper": "^0.0.3",
+    "react-native-linear-gradient": "^2.6.2",
     "react-native-paper": "5.0.0-rc.5",
     "react-native-popover-view": "^5.1.2",
     "react-native-push-notification": "^8.1.1",
