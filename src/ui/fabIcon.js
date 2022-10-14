@@ -4,9 +4,11 @@ import {StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import light from '../constants/theme/light';
 
-export default function FabIcon() {
+export default function FabIcon({onPress}) {
   return (
-    <Fab style={styles.fab}>
+    <Fab style={styles.fab}
+      onPress={()=>onPress()}
+    >
       <Icon name="add" style={styles.icon} />
     </Fab>
     // <TouchableOpacity style={styles.container}>

@@ -34,9 +34,9 @@ const AddCategory = ({navigation}) => {
       height: 170,
       cropping: true,
     }).then(img => {
-      // console.log('image path : ', image);
-      console.log('image modificated : ', image.path);
+      console.log('image path : ', img.path );
       setCategory({...category, image: img.path});
+      console.log('image modificated : ', category.image);
       // setBooksAdds(image.path);
       // replaceCreateBook({
       //   ...createBook,
@@ -82,14 +82,14 @@ const AddCategory = ({navigation}) => {
               <TouchableOpacity
                 style={[
                   styles.image,
-                  imgPath == null ? styles.image.empty : {elevation: 10},
+                  category.image == null ? styles.image.empty : {elevation: 10},
                 ]}
                 onPress={() => {
                   pickImage();
                 }}>
                 <Image
                   style={{width: '100%', height: '100%'}}
-                  source={{uri: imgPath}}
+                  source={{uri: category.image}}
                 />
               </TouchableOpacity>,
               <TouchableOpacity style={styles.cancelImage} 

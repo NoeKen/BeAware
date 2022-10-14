@@ -18,10 +18,7 @@ export default function Home({navigation}) {
     },
   ])
   return (
-    <Container style={{paddingHorizontal:16}}>
-      {/* <Text>One</Text> */}
-      <Icon name="add" onPress={() => navigation.navigate('Add Category')} />
-      {/* <Content></Content> */}
+    <Container style={styles.container}>
       <FlatList
         data={data}
         renderItem={item => [
@@ -30,9 +27,13 @@ export default function Home({navigation}) {
           <CategoryItem data={item.item} navigation={navigation} />,
         ]}
       />
-      <FabIcon />
+      <FabIcon onPress={()=>navigation.navigate('Add Category')} />
     </Container>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container:{
+    padding:16
+  }
+});

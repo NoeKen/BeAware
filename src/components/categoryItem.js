@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
   },
   linearGradient: {
     height: '100%',
-
     // paddingLeft: 15,
     // paddingRight: 15,
     // borderRadius: 5,
@@ -68,7 +67,7 @@ const styles = StyleSheet.create({
   textCard:{
     backgroundColor:light.inverseTextColor,
     height:'55%',
-    opacity:0.6,
+    opacity:0.65,
     marginTop:'25%',
     padding:8,
   },
