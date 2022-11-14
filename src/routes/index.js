@@ -4,6 +4,7 @@ import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import light from '../constants/theme/light';
 import AddExpense from '../containers/AddExpense';
+import Dashboard from '../containers/Dashboard';
 import Settings from '../containers/Settings';
 import { DashboardNav, ExpensesNav } from './nav';
 
@@ -53,7 +54,7 @@ export default function routes() {
         }}
       />
       
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Settings"
         component={Settings}
         options={{
@@ -64,7 +65,7 @@ export default function routes() {
           ),
           // tabBarBadge: 3,
         }}
-      /> */}
+      />
       
     </Tab.Navigator>
   );
