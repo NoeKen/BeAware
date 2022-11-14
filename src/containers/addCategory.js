@@ -18,14 +18,15 @@ import {Image} from 'react-native';
 import Spacer from '../ui/Spacer';
 import moment from 'moment';
 import FabIcon from '../ui/fabIcon';
-import { CreateCategory } from '../Services/categoriesService';
+import {CreateCategory} from '../Services/categoriesService';
+import Header from '../components/UI/header';
 
 const AddCategory = ({navigation}) => {
   const [imgPath, setImgPath] = useState(null);
   const [category, setCategory] = useState({
-    name:'',
-    description:'',
-    image:'',
+    name: '',
+    description: '',
+    image: '',
   });
 
   function pickImage() {
@@ -34,7 +35,8 @@ const AddCategory = ({navigation}) => {
       height: 170,
       cropping: true,
     }).then(img => {
-      console.log('image path : ', img.path );
+      console.log('image path : ', img.path);
+      setImgPath(img.path);
       setCategory({...category, image: img.path});
       console.log('image modificated : ', category.image);
       // setBooksAdds(image.path);
@@ -50,27 +52,33 @@ const AddCategory = ({navigation}) => {
   }
 
   function AddCategory() {
-    CreateCategory(category,navigation={navigation})
+    // CreateCategory(category,navigation={navigation})
+    try {
+      CreateCategory(category, (navigation = {navigation}));
+    } catch (error) {
+      console.log('error when creating category : ', error);
+    }
   }
 
   function createCategory() {
     try {
-      CreateCategory(category,navigation={navigation})
+      CreateCategory(category, (navigation = {navigation}));
     } catch (error) {
-      console.log('error when creating category : ',error)
+      console.log('error when creating category : ', error);
     }
   }
 
   return (
     <Container>
+      <Header iLeft={'arrow-back'} title={'Add Category'} />
       <Content>
         <View
           style={{padding: 16, marginTop: 20, justifyContent: 'space-between'}}>
-          {imgPath === null ? (
+          {category.image === '' ? (
             <TouchableOpacity
               style={[
                 styles.image,
-                imgPath == null ? styles.image.empty : {elevation: 10},
+                styles.image.empty,
               ]}
               onPress={() => {
                 pickImage();
@@ -82,7 +90,7 @@ const AddCategory = ({navigation}) => {
               <TouchableOpacity
                 style={[
                   styles.image,
-                  category.image == null ? styles.image.empty : {elevation: 10},
+                  styles.image.provided,
                 ]}
                 onPress={() => {
                   pickImage();
@@ -92,11 +100,11 @@ const AddCategory = ({navigation}) => {
                   source={{uri: category.image}}
                 />
               </TouchableOpacity>,
-              <TouchableOpacity style={styles.cancelImage} 
-                onPress={()=>setImgPath(null)}
-              >
+              <TouchableOpacity
+                style={styles.cancelImage}
+                onPress={() => setImgPath(null)}>
                 <Icon name="close" style={styles.cancelImage.icon} />
-              </TouchableOpacity>
+              </TouchableOpacity>,
             ]
           )}
 
@@ -113,7 +121,7 @@ const AddCategory = ({navigation}) => {
             value={category.name}
             style={styles.input}
             onChangeText={val => {
-              setCategory({...category,name:val})
+              setCategory({...category, name: val});
               //   setTitle(val);
               // setExpense({...expense, title: val});
             }}
@@ -126,7 +134,7 @@ const AddCategory = ({navigation}) => {
             value={category.description}
             style={styles.textarea}
             onChangeText={val => {
-              setCategory({...category,description:val})
+              setCategory({...category, description: val});
               // setExpense({...expense, description: val});
             }}
           />
@@ -134,7 +142,7 @@ const AddCategory = ({navigation}) => {
           <TouchableOpacity
             style={styles.saveButton}
             onPress={async () => {
-              AddCategory()
+              AddCategory();
               // resetForm();
             }}>
             <Text style={styles.saveText}>Save</Text>
@@ -143,12 +151,11 @@ const AddCategory = ({navigation}) => {
             style={styles.cancelButton}
             onPress={() => {
               // resetForm();
-              navigation.goBack()
+              navigation.goBack();
             }}>
             <Text style={styles.cancelText}>Cancel</Text>
           </TouchableOpacity>
         </View>
-        
       </Content>
       {/* <FabIcon/> */}
     </Container>
@@ -169,6 +176,11 @@ const styles = StyleSheet.create({
       borderStyle: 'dashed',
       borderWidth: 1,
       borderColor: light.inactiveTab,
+    },
+    provided: {
+      elevation: 10,
+      shadowOpacity: 0.9,
+      shadowColor: light.textColor,
     },
   },
   saveButton: {
@@ -217,8 +229,8 @@ const styles = StyleSheet.create({
   },
   cancelImage: {
     position: 'absolute',
-    icon:{
-        color: light.brandPrimary,
+    icon: {
+      color: light.brandPrimary,
     },
     elevation: 10,
     shadowColor: light.brandPrimary,

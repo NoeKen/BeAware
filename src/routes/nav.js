@@ -10,10 +10,10 @@ export function ExpensesNav() {
   return (
     <Stack.Navigator
       screenOptions={{
-        // headerShown:false,
+        headerShown:false,
         headerTitleStyle: {color: light.brandPrimary},
         headerBackVisible: true,
-        // statusBarColor:light.brandPrimary
+        statusBarColor:light.brandPrimary
       }}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Expenses" component={Expenses} />
@@ -26,10 +26,10 @@ export function DashboardNav() {
   return (
     <Stack.Navigator
       screenOptions={{
-        // headerShown:false,
+        headerShown:false,
         headerTitleStyle: {color: light.brandPrimary},
         headerBackVisible: false,
-        // statusBarColor:light.brandSecond
+        statusBarColor:light.brandPrimary
       }}>
       <Stack.Screen name="Dashboard" component={Dashboard} />
     </Stack.Navigator>

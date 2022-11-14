@@ -8,5 +8,6 @@ export default{
     inverseTextColor:'#ffffff',
     inactiveTab:'#707070',
     whiteGrey:'#f7f7f7ff',
-    inputBg:'#e91e6216'
+    inputBg:'#e91e6216',
+    placeholder:'#70707060'
 }

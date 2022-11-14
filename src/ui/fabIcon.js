@@ -24,23 +24,4 @@ const styles = StyleSheet.create({
         fontSize:30,
         // color:light.brandSecond,
     },
-  container: {
-    backgroundColor: light.brandPrimary,
-    position: 'absolute',
-    bottom: 10,
-    right: 16,
-    borderRadius: 50,
-    width: 60,
-    height: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 20,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.8,
-    shadowColor: light.textColor,
-    // shadowRadius:5,
-  },
 });

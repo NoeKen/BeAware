@@ -41,14 +41,14 @@ const App = () => {
               // title:false
               headerTitleStyle:{color:light.brandPrimary},
               statusBarColor:light.brandPrimary,
-              orientation:'default'
+              orientation:'portrait'
             }}
             
             >
             {routes}
           </Stack.Screen>
-          <Stack.Screen name="Expense Detail" component={ExpenseDetails} options={{headerTintColor:light.brandPrimary}} />
-          <Stack.Screen name="Add Category" component={AddCategory} options={{headerTintColor:light.brandPrimary}} />
+          <Stack.Screen name="Expense Detail" component={ExpenseDetails} options={{statusBarColor:light.brandPrimary, orientation:'portrait',headerShown: false,}} />
+          <Stack.Screen name="Add Category" component={AddCategory} options={{statusBarColor:light.brandPrimary, orientation:'portrait',headerShown: false,}} />
         </Stack.Navigator>
         {/* </NativeBaseProvider> */}
       </NavigationContainer>

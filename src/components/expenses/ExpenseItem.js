@@ -2,14 +2,16 @@ import moment from 'moment';
 import React from 'react';
 import {View, Text, ToastAndroid} from 'react-native';
 // import {TouchableOpacity} from 'react-native-gesture-handler';
-import light from '../constants/theme/light';
 import Popover from 'react-native-popover-view';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native';
 import SQLite from 'react-native-sqlite-2';
+import light from '../../constants/theme/light';
 
 const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 export default function ExpenseItem({item, navigation}) {
+  const date = new Date(Date.UTC(2012, 11, 20, 3, 0, 0))
+  // console.log(('date: ',item.created_at));
   const deleteItem = async () => {
     try {
       db.transaction(function (txn) {
@@ -101,6 +103,7 @@ export default function ExpenseItem({item, navigation}) {
               // console.log('curent date: ',item.created_at) ,
               moment(item.created_at).format('YYYY-MM-DD') ===
               moment(new Date()).format('YYYY-MM-DD')
+                // ? date.toLocaleDateString('en-us')
                 ? moment(item.created_at).format('hh:mm a')
                 : moment(item.created_at).format('YYYY-MM-DD'),
             ]}

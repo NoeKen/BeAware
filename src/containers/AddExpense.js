@@ -14,8 +14,20 @@ import {
 import SQLite from 'react-native-sqlite-2';
 import light from '../constants/theme/light';
 import {getDBConnection, getExpenses} from '../services/db-service';
-import {Container, Content, Input, Tab, Textarea} from 'native-base';
-import { CreateExpense } from '../Services/expensesService';
+import {
+  Container,
+  Content,
+  Form,
+  Icon,
+  Input,
+  Picker,
+  Tab,
+  Textarea,
+} from 'native-base';
+import {CreateExpense} from '../Services/expensesService';
+import {CategoriesList} from '../Services/categoriesService';
+import moment from 'moment';
+import Header from '../components/UI/header';
 
 // const db = openDatabase({
 //   name: 'baAware',location:'default'
@@ -26,14 +38,35 @@ const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 export default function AddExpense({navigation}) {
   const [error, setError] = useState('');
   const [reqError, setReqError] = useState('');
-  //   const [reset, setRest] = useState(false);
-  //   const [title, setTitle] = useState();
-  //   const [amount, setAmount] = useState();
-  //   const [description, setDescription] = useState();
+  const [categories, setCategories] = useState([]);
+  const [selected, setSelected] = useState();
   const [expense, setExpense] = useState({
     title: '',
     description: '',
     amount: '',
+    category_id: '',
+    created_at : moment(new Date()).format('YYYY-MM-DD','HH:MM')
+  });
+
+  db.transaction(txn => {
+    const cats = txn.executeSql(
+      'select * from Categories',
+      // 'select * from Categories ORDER BY date(created_at)',
+      [],
+      (txn, res) => {
+        var len = res.rows.length;
+        var cat = [];
+        if (len > 0) {
+          for (let i = 0; i < len; ++i) {
+            cat.push(res.rows.item(i));
+            // console.log('<=====> category: <==========> ',res.rows.item(i));
+          }
+        }
+        setCategories(cat);
+        // console.log('categories:',categories);
+        // categories = cat
+      },
+    );
   });
 
   function resetForm() {
@@ -47,77 +80,25 @@ export default function AddExpense({navigation}) {
 
   async function createExpense() {
     try {
-      CreateExpense(expense,navigation={navigation})
+      CreateExpense(expense, (navigation = {navigation}));
     } catch (error) {
-      console.log('error when creating expense : ',error)
+      console.log('error when creating expense : ', error);
     }
-    // if (expense.amount === '' || expense.title === '') {
-    //   setError('This field is required');
-    //   return;
-    // }
-    // try {
-    //   db.transaction(function (txn) {
-    //     // txn.executeSql('DROP TABLE IF EXISTS Expenses', []);
-    //     // txn, executeSql('DROP DATABASE IF EXISTS beAware.db');
-    //     txn.executeSql(
-    //       'CREATE TABLE IF NOT EXISTS Expenses(id INTEGER PRIMARY KEY NOT NULL, title VARCHAR(30),amount INTEGER, description VARCHAR(30),created_at DATETIME DEFAULT CURRENT_TIMESTAMP)',
-    //       [],
-    //     );
-    //     txn.executeSql(
-    //       'INSERT INTO Expenses (title,amount,description) VALUES (:title,:amount,:description)',
-    //       // 'INSERT INTO Expenses (title,amount,description,created_at) VALUES (:title,:amount,:description,:created_at)',
-    //       [expense.title, expense.amount, expense.description],
-    //     );
-    //     // txn.executeSql('SELECT * FROM `Expenses`', [], function (tx, res) {
-    //     //         for (let i = 0; i < res.rows.length; ++i) {
-    //     //           // setTask({...tasks,res.rows,item(i)})
-    //     //           Alert.alert(`item ${i}:`, res.rows.item(i));
-    //     //         //   resul.push(res.rows.item(i));
-    //     //         }
-    //     //       });
-    //   });
-    //   navigation.navigate('Expenses');
-    //   ToastAndroid.show('task created successfully', ToastAndroid.LONG);
-    // } catch (error) {
-    //   setReqError(`An error occurred saving the expense : ${error.message}`);
-    //   console.log('error occurred: ', error);
-    // }
   }
   const [tasks, setTask] = useState([{}]);
 
   useEffect(() => {
-    // console.log('new date: ', new Date());
-    // resetForm();
-    // createTables();
-    // var resul = [];
-    // db.transaction(function (txn) {
-    //   txn.executeSql('DROP TABLE IF EXISTS Expenses', []);
-    //   txn.executeSql(
-    //     'CREATE TABLE IF NOT EXISTS Expenses(expense_id INTEGER PRIMARY KEY NOT NULL, title VARCHAR(30),amount INTEGER, description VARCHAR(30))',
-    //     [],
-    //   );
-    //   txn.executeSql(
-    //     "INSERT INTO Expenses (title,amount,description) VALUES ('manger',5005,'est un concour de danse')",
-    //   );
-    //   txn.executeSql(
-    //     "INSERT INTO Expenses (title,amount,description) VALUES ('LAPTOP',500,'Acheter un laptop')",
-    //   );
-    //   // txn.executeSql('INSERT INTO Users (name,email) VALUES (:name,:email)', ['Julio','kenfaclnoe@gmai.com'])
-    //   txn.executeSql('SELECT * FROM `Expenses`', [], function (tx, res) {
-    //     for (let i = 0; i < res.rows.length; ++i) {
-    //       // setTask({...tasks,res.rows,item(i)})
-    //       console.log(`item ${i}:`, res.rows.item(i));
-    //       resul.push(res.rows.item(i));
-    //     }
-    //   });
-    // });
-    // setTask(resul);
+    // var cat = CategoriesList()
+    // setCategories(CategoriesList());
   }, []);
   //   console.log('tasks: ', tasks);
   return (
     <Container style={{flex: 1}}>
-      <View style={styles.header}>
-        {/* {ToastAndroid.show('plateform: '+Platform.os)} */}
+      {/* <Form> */}
+      {/* </Form> */}
+      <Header title={'New expense'} />
+      {/* {ToastAndroid.show('plateform: '+Platform.os)} */}
+      {/* <View style={styles.header}>
         <MaterialCommunityIcons
           name={Platform.OS == 'android' ? 'arrow-left' : 'chevron-left'}
           style={{fontSize: 25, color: light.brandPrimary, marginEnd: 10}}
@@ -132,7 +113,7 @@ export default function AddExpense({navigation}) {
           }}>
           New expense
         </Text>
-      </View>
+      </View> */}
       <Content style={{}}>
         <View
           style={{padding: 16, marginTop: 40, justifyContent: 'space-between'}}>
@@ -172,25 +153,50 @@ export default function AddExpense({navigation}) {
               setExpense({...expense, amount: val});
             }}
           />
-          
-          <View style={[styles.inputHeader,{marginTop:20}]}>
+
+          <View style={[styles.inputHeader, {marginTop: 20}]}>
+            {/* <View style={{flexDirection:'row'}}> */}
             <Text style={styles.inputHeader.text}>Category :</Text>
             <MaterialCommunityIcons
               name="asterisk"
-              style={{fontSize: 10, color: light.brandPrimary}}
+              style={{fontSize: 10, color: light.brandPrimary, marginEnd: 20}}
             />
+            {/* </View> */}
           </View>
-          
-          <Input
+          <Picker
+            mode="dropdown"
+            iosIcon={<Icon name="arrow-down" />}
+            placeholder="Select your SIM"
+            style={[
+              {height: 50, borderRadius: 10, backgroundColor: light.whiteGrey},
+            ]}
+            placeholderIconColor="#007aff"
+            // style={styles.input}
+            selectedValue={selected}
+            onValueChange={val => {
+              console.log('cat selected: ', val);
+              setSelected(val), setExpense({...expense, category_id: val});
+            }}>
+            <Picker.Item
+              label="Related category"
+              key={-1}
+              value={undefined}
+              style={{color: light.inactiveTab}}
+              color={light.placeholder}
+            />
+            {categories.map(item => {
+              return <Picker.Item label={item.name} value={item.id} />;
+            })}
+          </Picker>
+          {/* <Input
             placeholder="category"
             value={expense.amount}
             style={styles.input}
             keyboardType="phone-pad"
             onChangeText={val => {
               //   setAmount(val);
-              setExpense({...expense, amount: val});
             }}
-          />
+          /> */}
           <Text style={styles.error}>{error}</Text>
           <Text style={styles.inputHeader.text}>Description</Text>
           <Textarea
@@ -214,7 +220,7 @@ export default function AddExpense({navigation}) {
             style={styles.cancelButton}
             onPress={async () => {
               resetForm();
-              navigation.navigate('Expenses');
+              navigation.goBack();
             }}>
             <Text style={styles.cancelText}>Cancel</Text>
           </TouchableOpacity>
