@@ -1,52 +1,20 @@
 import {Container, Content, Icon, View} from 'native-base';
 import React, {useState} from 'react';
-import {FlatList, StyleSheet, Text} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import CategoryItem from '../components/category/categoryItem';
 import FabIcon from '../ui/fabIcon';
 import SQLite from 'react-native-sqlite-2';
 import {useEffect} from 'react';
 import {SafeAreaView} from 'react-native';
 import {ImageBackground} from 'react-native';
+import light from '../constants/theme/light';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { CategoriesList } from '../Services/categoriesService';
 
 const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 export default function Home({navigation}) {
-  const [categories, setCategories] = useState();
-  const [data, setData] = useState([
-    {
-      name: 'Ecole',
-      description: "cette section concerne toutes les depenses liees a l'ecole",
-      image:
-        'file:///storage/emulated/0/Android/data/com.beaware/files/Pictures/f4583258-aa7d-4af6-9a08-53822c7938a3.jpg',
-    },
-    {
-      name: 'travail',
-      description:
-        'cette section concerne toutes les depenses liees au travail',
-      image:
-        'file:///storage/emulated/0/Android/data/com.beaware/files/Pictures/d65a76ec-5872-4e64-a983-c5d9f54c3de8.jpg',
-    },
-  ]);
+  const [categories, setCategories] = useState([]);
 
-  // useEffect(() => {
-  //   db.transaction(txn => {
-  //     txn.executeSql(
-  //       'select * from Categories',
-  //       // 'select * from Categories ORDER BY date(created_at)',
-  //       [],
-  //       (txn, res) => {
-  //         var len = res.rows.length;
-  //         var cat = []
-  //         if (len > 0) {
-  //           for (let i = 0; i < len; ++i) {
-  //               cat.push(res.rows.item(i));
-  //               console.log('<=====> category: <==========> ',res.rows.item(i));
-  //             }
-  //         }
-  //         setCategories(cat)
-  //       }
-  //     );
-  //   });
-  // }, [])
 
   db.transaction(txn => {
     txn.executeSql(
@@ -79,11 +47,25 @@ export default function Home({navigation}) {
           </ImageBackground>
         </View>
       </SafeAreaView>
-      <View style={{paddingHorizontal:8}}>
-        <Text style={{fontWeight:'bold',fontSize:25,marginVertical:12}}>Expenses Groups</Text>
-        {categories?.length === 0 ? (
+      <View style={{paddingHorizontal: 8}}>
+        <View style={{flexDirection:'row',marginVertical: 12,alignItems:'center',justifyContent:'space-between'}}>
+          <Text style={{fontWeight: 'bold', fontSize: 25, }}>
+            Expenses Categories
+          </Text>
+          <TouchableOpacity
+            // style={styles.refreshContainer}
+            onPress={() => CategoriesList()}
+            >
+            <MaterialCommunityIcons
+              name="refresh"
+              style={{fontSize: 25, color: light.brandPrimary,marginEnd:10}}
+            />
+            {/* <Text style={styles.refreshContainer.refreshText}>Refresh</Text> */}
+          </TouchableOpacity>
+        </View>
+        {categories?.length < 1 ? (
           <Text style={styles.emptyText}>
-            No category yet{'\n'}Create one first
+            No category yet.{'\n\n'}Create one first
           </Text>
         ) : (
           <FlatList
@@ -97,7 +79,7 @@ export default function Home({navigation}) {
           />
         )}
       </View>
-        <FabIcon onPress={() => navigation.navigate('Add Category')} />
+      <FabIcon onPress={() => navigation.navigate('Add Category')} />
     </Container>
   );
 }

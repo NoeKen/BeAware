@@ -1,1 +1,22 @@
-{"version":"0.0.1","name":"BeAware","dependencies":{"@react-native-community/masked-view":{"version":"0.1.11"},"@react-navigation/bottom-tabs":{"version":"6.3.3"},"@react-navigation/native-stack":{"version":"6.8.0"},"@react-navigation/native":{"version":"6.0.12"},"native-base":{"version":"3.4.13"},"prop-types":{"version":"15.8.1"},"react-native-gesture-handler":{"version":"2.6.0"},"react-native-router-flux":{"version":"4.3.1"},"react-native-safe-area-context":{"version":"3.3.2"},"react-native-screens":{"version":"3.17.0"},"react-native-sqlite-2":{"version":"3.6.1"},"react-native-sqlite-storage":{"version":"6.0.1"},"react-native-svg":{"version":"12.1.1"},"react-native-vector-icons":{"version":"9.2.0"},"react-native":{"version":"0.68.0"},"react":{"version":"17.0.2"}}}
+{
+  "version": "0.0.1",
+  "name": "BeAware",
+  "dependencies": {
+    "@react-native-community/masked-view": {"version": "0.1.11"},
+    "@react-navigation/bottom-tabs": {"version": "6.3.3"},
+    "@react-navigation/native-stack": {"version": "6.8.0"},
+    "@react-navigation/native": {"version": "6.0.12"},
+    "native-base": {"version": "3.4.13"},
+    "prop-types": {"version": "15.8.1"},
+    "react-native-gesture-handler": {"version": "2.6.0"},
+    "react-native-router-flux": {"version": "4.3.1"},
+    "react-native-safe-area-context": {"version": "3.3.2"},
+    "react-native-screens": {"version": "3.17.0"},
+    "react-native-sqlite-2": {"version": "3.6.1"},
+    "react-native-sqlite-storage": {"version": "6.0.1"},
+    "react-native-svg": {"version": "12.1.1"},
+    "react-native-vector-icons": {"version": "9.2.0"},
+    "react-native": {"version": "0.68.0"},
+    "react": {"version": "17.0.2"}
+  }
+}

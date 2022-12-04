@@ -30,15 +30,16 @@ const styles = StyleSheet.create({
       height: 0,
     },
     backgroundColor: 'white',
-    paddingHorizontal:12
+    paddingHorizontal: 12,
   },
   arrowLeft: {
-      fontSize: 20,
-      color:light.brandPrimary,
+    fontSize: 20,
+    color: light.brandPrimary,
   },
-  title:{
-    fontWeight:'bold',
-    fontSize:20,
-    color:light.brandPrimary,
-  }
+  title: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: light.brandPrimary,
+    alignSelf:'center',
+  },
 });

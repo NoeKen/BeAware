@@ -1,18 +1,12 @@
 // import {ScrollView} from 'native-base';
 import moment from 'moment/moment';
-import {Container, Content} from 'native-base';
-import React, {useEffect, useState} from 'react';
+import { Container } from 'native-base';
+import React, { useEffect, useState } from 'react';
 import {
-  FlatList,
-  ImageBackground,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+  FlatList, StyleSheet,
+  Text, View
 } from 'react-native';
 import SQLite from 'react-native-sqlite-2';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ExpenseItem from '../components/expenses/ExpenseItem';
 import All from '../components/expenses/more';
 import Header from '../components/UI/header';
@@ -88,8 +82,7 @@ const Expenses = ({route, navigation}) => {
         navigation={navigation}
         iLeft={'arrow-back'}
         title={cat.name + ' Expenses'}
-        iconR={'ellipsis-vertical'}
-        // onPress=
+        // iconR={'ellipsis-vertical'}
       />
       {/* <Content> */}
       <View style={{padding: 16}}>
@@ -134,10 +127,8 @@ const Expenses = ({route, navigation}) => {
               keyExtractor={item => item.expense_id}
               renderItem={({item, index}) => [
                 // console.log('index: ',index),
-                index < 5 ? (
+                index < 5 && (
                   <ExpenseItem item={item} navigation={navigation} />
-                ) : (
-                  <Text></Text>
                 ),
               ]}
               scrollEnabled={false}
@@ -198,7 +189,7 @@ const Expenses = ({route, navigation}) => {
           )}
         </View>
       </View>
-      {/* </Content> */}
+      {/* <FabIcon onPress={() => navigation.navigate('AddExpense',{cat:cat})} /> */}
     </Container>
   );
 };

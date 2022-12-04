@@ -9,7 +9,7 @@ import {
   View,
 } from 'native-base';
 import React, {useState} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {Modal, TouchableOpacity} from 'react-native';
 import {StyleSheet} from 'react-native';
 import light from '../constants/theme/light';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -20,16 +20,18 @@ import moment from 'moment';
 import FabIcon from '../ui/fabIcon';
 import {CreateCategory} from '../Services/categoriesService';
 import Header from '../components/UI/header';
+import CameraModal from '../components/category/cameraModal';
 
 const AddCategory = ({navigation}) => {
   const [imgPath, setImgPath] = useState(null);
+  const [isVisible, setVisible] = useState(false);
   const [category, setCategory] = useState({
     name: '',
     description: '',
     image: '',
   });
 
-  function pickImage() {
+  function openGallery() {
     ImagePicker.openPicker({
       width: 300,
       height: 170,
@@ -45,10 +47,23 @@ const AddCategory = ({navigation}) => {
       //   picture: {name: 'picture', type: image.mime, uri: image.path},
       // });
     });
-
-    {
-      // booksAdd != null ? setImagePicked(true) : setImagePicked(false);
-    }
+  }
+  function openCamera() {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 170,
+      cropping: true,
+    }).then(img => {
+      console.log('image path : ', img.path);
+      setImgPath(img.path);
+      setCategory({...category, image: img.path});
+      console.log('image modificated : ', category.image);
+      // setBooksAdds(image.path);
+      // replaceCreateBook({
+      //   ...createBook,
+      //   picture: {name: 'picture', type: image.mime, uri: image.path},
+      // });
+    });
   }
 
   function AddCategory() {
@@ -60,40 +75,39 @@ const AddCategory = ({navigation}) => {
     }
   }
 
-  function createCategory() {
-    try {
-      CreateCategory(category, (navigation = {navigation}));
-    } catch (error) {
-      console.log('error when creating category : ', error);
-    }
-  }
-
   return (
     <Container>
       <Header iLeft={'arrow-back'} title={'Add Category'} />
       <Content>
+        <View>
+          <Modal
+            animationType="fade"
+            transparent
+            visible={isVisible}
+            collapsable={true}
+            onRequestClose={async () => {
+              setVisible(false);
+            }}>
+            <CameraModal setModalVisible={setVisible} openCamera={openCamera} openGallery={openGallery} />
+          </Modal>
+        </View>
         <View
           style={{padding: 16, marginTop: 20, justifyContent: 'space-between'}}>
           {category.image === '' ? (
             <TouchableOpacity
-              style={[
-                styles.image,
-                styles.image.empty,
-              ]}
+              style={[styles.image, styles.image.empty]}
               onPress={() => {
-                pickImage();
+                // openCamera();
+                setVisible(true)
               }}>
               <Icon name="add" style={{color: light.inactiveTab}} />
             </TouchableOpacity>
           ) : (
             [
               <TouchableOpacity
-                style={[
-                  styles.image,
-                  styles.image.provided,
-                ]}
+                style={[styles.image, styles.image.provided]}
                 onPress={() => {
-                  pickImage();
+                  setVisible();
                 }}>
                 <Image
                   style={{width: '100%', height: '100%'}}
