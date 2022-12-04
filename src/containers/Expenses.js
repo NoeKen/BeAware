@@ -3,7 +3,7 @@ import moment from 'moment/moment';
 import { Container } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import {
-  FlatList, StyleSheet,
+  FlatList, SafeAreaView, StyleSheet,
   Text, View
 } from 'react-native';
 import SQLite from 'react-native-sqlite-2';
@@ -68,22 +68,13 @@ const Expenses = ({route, navigation}) => {
 
   return (
     <Container>
-      {/* <SafeAreaView>
-        <View style={styles.header}>
-          <ImageBackground
-            source={require('../../assets/pictures/tirelire.png')}
-            resizeMode="cover"
-            style={styles.image}>
-            <Text style={styles.text}>BeAware</Text>
-          </ImageBackground>
-        </View>
-      </SafeAreaView> */}
-      <Header
-        navigation={navigation}
-        iLeft={'arrow-back'}
-        title={cat.name + ' Expenses'}
-        // iconR={'ellipsis-vertical'}
-      />
+      <SafeAreaView>
+        <Header
+          navigation={navigation}
+          iLeft={'arrow-back'}
+          title={cat.name + ' Expenses'}
+        />
+      </SafeAreaView>
       {/* <Content> */}
       <View style={{padding: 16}}>
         <View
