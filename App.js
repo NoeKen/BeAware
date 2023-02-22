@@ -13,6 +13,7 @@ import AddCategory from './src/containers/addCategory';
 import routes from './src/routes';
 import {Provider} from 'react-redux';
 import configureStore from './src/store';
+import AddAList from './src/containers/addAList';
 
 const App = () => {
   const {persistor, store} = configureStore();
@@ -61,7 +62,7 @@ const App = () => {
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator screenOptions={{statusbar:'red'}} >
               <Stack.Screen
                 name="index"
                 options={{
@@ -90,6 +91,22 @@ const App = () => {
                   statusBarColor: light.brandPrimary,
                   orientation: 'portrait',
                   headerShown: false,
+                  mode: 'modal',
+                }}
+              />
+              <Stack.Screen
+                name="AddAList"
+                component={AddAList}
+                options={{
+                  headerShown: false,
+
+                  title: 'Add AList', 
+                  headerTitleStyle: {color: light.brandPrimary},
+                  headerBackTitle: 'back',
+                  headerBackTitleStyle: {color: light.brandPrimary},
+                  statusBarColor: light.brandLight,
+                  statusBarStyle:'dark'
+                  // navigationBarColor:light.brandPrimary
                 }}
               />
             </Stack.Navigator>

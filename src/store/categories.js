@@ -1,10 +1,10 @@
 export default {
   categories: [],
   category: {
-    id:'',
+    // id:'',
     name: '',
     description: '',
     image: '',
-    created_at:'',
+    // created_at:'',
   },
 };

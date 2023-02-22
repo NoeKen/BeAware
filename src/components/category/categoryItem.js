@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import {Icon, Text} from 'native-base';
 import React from 'react';
 import {useState} from 'react';
@@ -11,9 +12,10 @@ import {
 import light from '../../constants/theme/light';
 import { DeleteItem } from '../../Services/categoriesService';
 
-export default function   CategoryItem({data, navigation}) {
+export default function   CategoryItem({data}) {
   const [del, setDelete] = useState(false);
   // console.log('data:',data);
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       
@@ -52,9 +54,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     elevation: 5,
     shadowOffset: {
-      width: 0,
-      height: 0,
+      width: 5,
+      height: 10,
     },
+    shadowColor: '#000',
+    shadowOpacity: 0.99,
+    shadowRadius: 5,
     marginHorizontal: '2%',
     backgroundColor: 'white',
     height: 90,

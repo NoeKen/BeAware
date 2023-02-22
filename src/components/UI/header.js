@@ -20,7 +20,7 @@ export default function Header({iLeft,title,iconR, navigation, onPress}) {
 
 const styles = StyleSheet.create({
   container: {
-    height: 50,
+    height: 60,
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -30,11 +30,11 @@ const styles = StyleSheet.create({
       height: 0,
     },
     backgroundColor: 'white',
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
   },
   arrowLeft: {
-    fontSize: 20,
-    color: light.brandPrimary,
+    fontSize: 25,
+    color: light.textColor,
   },
   title: {
     fontWeight: 'bold',

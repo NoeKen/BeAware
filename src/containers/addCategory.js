@@ -21,15 +21,16 @@ import FabIcon from '../ui/fabIcon';
 import {CreateCategory} from '../Services/categoriesService';
 import Header from '../components/UI/header';
 import CameraModal from '../components/category/cameraModal';
+import {connect} from 'react-redux';
 
-const AddCategory = ({navigation}) => {
+const AddCategory = ({navigation, category, replaceCategory, addCategory}) => {
   const [imgPath, setImgPath] = useState(null);
   const [isVisible, setVisible] = useState(false);
-  const [category, setCategory] = useState({
-    name: '',
-    description: '',
-    image: '',
-  });
+  // const [category, setCategory] = useState({
+  //   name: '',
+  //   description: '',
+  //   image: '',
+  // });
 
   function openGallery() {
     ImagePicker.openPicker({
@@ -39,7 +40,8 @@ const AddCategory = ({navigation}) => {
     }).then(img => {
       console.log('image path : ', img.path);
       setImgPath(img.path);
-      setCategory({...category, image: img.path});
+      replaceCategory({...category, image: img.path});
+      // setCategory({...category, image: img.path});
       console.log('image modificated : ', category.image);
       // setBooksAdds(image.path);
       // replaceCreateBook({
@@ -56,7 +58,7 @@ const AddCategory = ({navigation}) => {
     }).then(img => {
       console.log('image path : ', img.path);
       setImgPath(img.path);
-      setCategory({...category, image: img.path});
+      replaceCategory({...category, image: img.path});
       console.log('image modificated : ', category.image);
       // setBooksAdds(image.path);
       // replaceCreateBook({
@@ -66,10 +68,12 @@ const AddCategory = ({navigation}) => {
     });
   }
 
-  function AddCategory() {
+  async function AddCategory() {
     // CreateCategory(category,navigation={navigation})
     try {
-      CreateCategory(category, (navigation = {navigation}));
+      await addCategory();
+      replaceCategory({...category, image:'', name:'', description:''});
+      navigation.navigate('Home');
     } catch (error) {
       console.log('error when creating category : ', error);
     }
@@ -88,7 +92,11 @@ const AddCategory = ({navigation}) => {
             onRequestClose={async () => {
               setVisible(false);
             }}>
-            <CameraModal setModalVisible={setVisible} openCamera={openCamera} openGallery={openGallery} />
+            <CameraModal
+              setModalVisible={setVisible}
+              openCamera={openCamera}
+              openGallery={openGallery}
+            />
           </Modal>
         </View>
         <View
@@ -98,7 +106,7 @@ const AddCategory = ({navigation}) => {
               style={[styles.image, styles.image.empty]}
               onPress={() => {
                 // openCamera();
-                setVisible(true)
+                setVisible(true);
               }}>
               <Icon name="add" style={{color: light.inactiveTab}} />
             </TouchableOpacity>
@@ -135,7 +143,7 @@ const AddCategory = ({navigation}) => {
             value={category.name}
             style={styles.input}
             onChangeText={val => {
-              setCategory({...category, name: val});
+              replaceCategory({...category, name: val});
               //   setTitle(val);
               // setExpense({...expense, title: val});
             }}
@@ -148,7 +156,7 @@ const AddCategory = ({navigation}) => {
             value={category.description}
             style={styles.textarea}
             onChangeText={val => {
-              setCategory({...category, description: val});
+              replaceCategory({...category, description: val});
               // setExpense({...expense, description: val});
             }}
           />
@@ -176,7 +184,15 @@ const AddCategory = ({navigation}) => {
   );
 };
 
-export default AddCategory;
+const mapStateToProps = state => ({
+  category: state.categories.category,
+});
+const mapDispatchToProps = dispatch => ({
+  replaceCategory: dispatch.categories.replaceCategory,
+  addCategory: dispatch.categories.addCategory,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddCategory);
 
 const styles = StyleSheet.create({
   image: {

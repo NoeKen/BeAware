@@ -1,5 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import light from '../constants/theme/light';
+import AddAList from '../containers/addAList';
+import AddExpense from '../containers/AddExpense';
 import AllExpenses from '../containers/allExpenses';
 import Dashboard from '../containers/Dashboard';
 import Expenses from '../containers/Expenses';
@@ -11,11 +13,13 @@ export function ExpensesNav() {
     <Stack.Navigator
       screenOptions={{
         headerShown:false,
+        // headerSearchBarOptions:{tintColor:'red'},
         headerTitleStyle: {color: light.brandPrimary},
         headerBackVisible: true,
+        headerBackTitle:'back',
         statusBarColor:light.brandPrimary
       }}>
-      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen options={{headerSearchBarOptions:{barTintColor:'red'}}} name="Home" component={Home} />
       <Stack.Screen name="Expenses" component={Expenses} />
       <Stack.Screen name="All Expenses" component={AllExpenses} />
     </Stack.Navigator>
@@ -32,6 +36,32 @@ export function DashboardNav() {
         statusBarColor:light.brandPrimary
       }}>
       <Stack.Screen name="Dashboard" component={Dashboard} />
+    </Stack.Navigator>
+  );
+}
+export function AddNav() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown:true,
+        headerTitleStyle: {color: light.brandPrimary},
+        animation:'slide_from_bottom',
+        headerBackVisible: true,
+        statusBarColor:light.brandPrimary,
+      }}>
+      <Stack.Screen name="AddExpense" component={AddExpense} options={{
+        title: 'Add Expense',
+        headerTitleStyle: {color: light.brandPrimary},
+        headerBackTitle:'back',
+        headerBackTitleStyle: {color: light.brandPrimary},
+      }} />
+      {/* <Stack.Screen name="AddAList" component={AddAList} options={{
+        title: 'Add AList',
+        headerTitleStyle: {color: light.brandPrimary},
+        headerBackTitle:'back',
+        headerBackTitleStyle: {color: light.brandPrimary},
+        // navigationBarColor:light.brandPrimary
+      }}  /> */}
     </Stack.Navigator>
   );
 }

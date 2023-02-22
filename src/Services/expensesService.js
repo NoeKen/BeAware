@@ -3,9 +3,7 @@ import SQLite from 'react-native-sqlite-2';
 
 const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 
-// export default{
   export async function CreateExpense(expense,{navigation}) {
-    console.log('category_id when creating:',expense.created_at);
     if (expense.amount === '' || expense.title === '' || expense.category_id === undefined) {
       ToastAndroid.show('there is at least one obligated field empty', ToastAndroid.LONG);
       return;
@@ -83,4 +81,30 @@ const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
       );
     });
   }
-// };
+
+  export function deleteExpense(id) {}
+  export function updateExpense(id,expense) {}
+  export function CreateExpenseList(expenses) {
+    if (expense.amount === '' || expense.title === '' || expense.category_id === undefined) {
+      ToastAndroid.show('there is at least one obligated field empty', ToastAndroid.LONG);
+      return;
+    }
+    try {
+      db.transaction(function (txn) {
+        txn.executeSql(
+          'CREATE TABLE IF NOT EXISTS ExpensesList(id INTEGER PRIMARY KEY NOT NULL, title VARCHAR(30),amount INTEGER, category_id INTEGER, description VARCHAR(255),created_at DATETIME )',
+          [],
+        );
+        txn.executeSql(
+          'INSERT INTO Expenses (title,amount,category_id,description,created_at) VALUES (:title,:amount,:category_id,:description,:created_at)',
+          // 'INSERT INTO Expenses (title,amount,description,created_at) VALUES (:title,:amount,:description,:created_at)',
+          [expense.title, expense.amount, expense.category_id, expense.description,expense.created_at],
+        );
+      });
+      navigation.navigate('Home');
+      ToastAndroid.show('task created successfully', ToastAndroid.LONG);
+    } catch (error) {
+      setReqError(`An error occurred saving the expense : ${error.message}`);
+      console.log('error occurred: ', error);
+    }
+  }

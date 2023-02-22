@@ -1,27 +1,17 @@
 // import {Input, TextArea} from 'native-base';
 import moment from 'moment';
-import {
-  Container,
-  Content, Icon,
-  Input,
-  Picker, Textarea
-} from 'native-base';
-import React, { useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity, View
-} from 'react-native';
+import {Container, Content, Icon, Input, Picker, Textarea} from 'native-base';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import SQLite from 'react-native-sqlite-2';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../components/UI/header';
 import light from '../constants/theme/light';
-import { CreateExpense } from '../Services/expensesService';
-
+import {CreateExpense} from '../Services/expensesService';
 
 const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 
- const AddExpense=({navigation}) => {
+const AddExpense = ({navigation}) => {
   const [error, setError] = useState('');
   const [reqError, setReqError] = useState('');
   const [categories, setCategories] = useState([]);
@@ -31,7 +21,7 @@ const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
     description: '',
     amount: '',
     category_id: '',
-    created_at : moment(new Date()).format('YYYY-MM-DD','HH:MM')
+    created_at: moment(new Date()).format('YYYY-MM-DD', 'HH:MM'),
   });
 
   db.transaction(txn => {
@@ -77,10 +67,18 @@ const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
   // }, []);
   return (
     <Container style={{flex: 1}}>
-      <Header title={'New expense'} />
+      {/* <Header title={'New expense'} /> */}
       <Content>
+        <TouchableOpacity
+          style={styles.listButton}
+          onPress={async () => {
+            navigation.navigate('AddAList')
+            // createExpense(), resetForm();
+          }}>
+          <Text style={styles.listText}>Create a list</Text>
+        </TouchableOpacity>
         <View
-          style={{padding: 16, marginTop: 40, justifyContent: 'space-between'}}>
+          style={{padding: 16, marginTop: 10, justifyContent: 'space-between'}}>
           <View style={styles.inputHeader}>
             <Text style={styles.inputHeader.text}>Title :</Text>
             <MaterialCommunityIcons
@@ -126,29 +124,34 @@ const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
           {
             // cat
             <Picker
-            mode="dropdown"
-            iosIcon={<Icon name="arrow-down" />}
-            placeholder="Select a category"
-            style={[
-              {height: 50, borderRadius: 10, backgroundColor: light.whiteGrey},
-            ]}
-            placeholderIconColor="#007aff"
-            selectedValue={selected}
-            onValueChange={val => {
-              console.log('cat selected: ', val);
-              setSelected(val), setExpense({...expense, category_id: val});
-            }}>
-            <Picker.Item
-              label="Related category"
-              key={-1}
-              value={undefined}
-              style={{color: light.inactiveTab}}
-              color={light.placeholder}
-            />
-            {categories.map(item => {
-              return <Picker.Item label={item.name} value={item.id} />;
-            })}
-          </Picker>}
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              placeholder="Select a category"
+              style={[
+                {
+                  height: 50,
+                  borderRadius: 10,
+                  backgroundColor: light.whiteGrey,
+                },
+              ]}
+              placeholderIconColor="#007aff"
+              selectedValue={selected}
+              onValueChange={val => {
+                console.log('cat selected: ', val);
+                setSelected(val), setExpense({...expense, category_id: val});
+              }}>
+              <Picker.Item
+                label="Related category"
+                key={-1}
+                value={undefined}
+                style={{color: light.inactiveTab}}
+                color={light.placeholder}
+              />
+              {categories.map(item => {
+                return <Picker.Item label={item.name} value={item.id} />;
+              })}
+            </Picker>
+          }
           <Text style={styles.error}>{error}</Text>
           <Text style={styles.inputHeader.text}>Description</Text>
           <Textarea
@@ -179,7 +182,7 @@ const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
       </Content>
     </Container>
   );
-}
+};
 
 const styles = StyleSheet.create({
   header: {
@@ -195,6 +198,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
+  listButton: {
+    backgroundColor: light.inverseTextColor,
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginHorizontal: 20,
+    marginTop: 20,
+    borderWidth:1,
+    borderColor: light.brandSecond,
+  },
   cancelButton: {
     alignItems: 'center',
     marginTop: 25,
@@ -206,6 +219,12 @@ const styles = StyleSheet.create({
     color: light.inverseTextColor,
     fontFamily: 'ubuntu-bold',
     fontSize: 20,
+  },
+  listText: {
+    color: light.brandSecond,
+    fontFamily: 'ubuntu-bold',
+    fontSize: 18,
+    fontWeight:'bold'
   },
   cancelText: {
     color: light.inactiveTab,
