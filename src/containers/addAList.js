@@ -15,16 +15,17 @@ import light from '../constants/theme/light';
 import Spacer from '../ui/Spacer';
 
 const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
+  const [totalPrice, setTotalPrice] = useState(0);
   const [items, setItems] = useState({
     title: '',
     created_at: new Date(),
+    total_price: 0,
     list: [],
   });
   const [Item, setItem] = useState({
     name: '',
     price: 0,
   });
-  const [totalPrice, setTotalPrice] = useState(0);
   const [shouldScroll, setShouldScroll] = useState(true);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -43,7 +44,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
             setErrorMessage('Please fill the title and add items to the list');
           } else if (items.title == '' && items.list.length > 0) {
             setError(true);
-            setErrorMessage('Please fill the title');
+            setErrorMessage('Please fill the list title');
           } else if (items.title !== '' && items.list.length === 0) {
             setError(true);
             setErrorMessage('Please add items to the list');
@@ -70,7 +71,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
           </Text>
           <Text
             style={{color: light.brandSecond, fontWeight: '600', fontSize: 20}}>
-            {totalPrice} XCFA
+            {items.total_price} XCFA
           </Text>
         </View>
         <View
@@ -80,7 +81,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
             borderRadius: 25,
             elevation: 10,
             margin: 16,
-            padding: 20,
+            // padding: 20,
           }}>
           <Content scrollEnabled={true} style={{}}>
             <TextInput
@@ -91,8 +92,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
                 borderBottomWidth: 1,
                 textAlign: 'center',
                 fontWeight: 'bold',
-                width: '100%',
-                paddingTop: -20,
+                marginHorizontal:20,
               }}
               value={items.title}
               placeholder="Title list"
@@ -102,14 +102,11 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
             <TouchableOpacity
               style={{
                 position: 'absolute',
-                end: 0,
-                top: 0,
-
-                // bottom:0,
+                end: 20,
+                top: 10,
                 backgroundColor: light.placeholder,
                 borderRadius: 20,
                 padding: 5,
-                // alignSelf:'flex-end'
               }}
               onPress={() => {
                 setEditable(!editable);
@@ -121,7 +118,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
               />
             </TouchableOpacity>
             {items.list.length === 0 ? (
-              <Text style={{color: light.inactiveTab, fontSize: 16,textAlign:'center',marginTop:150}}>
+              <Text style={{color: light.inactiveTab, fontSize: 16,textAlign:'center',marginTop:'100%'}}>
                 Your list will appear here
               </Text>
             ) : (
@@ -134,9 +131,10 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
                       justifyContent: 'space-between',
                       borderBottomWidth: 1,
                       borderBottomColor: light.placeholder,
-                      marginBottom: 5,
-                      paddingVertical: 10,
+                      // marginBottom: 5,
+                      // paddingVertical: 5,
                       overflow: 'scroll',
+                      marginHorizontal:20,
                       // backgroundColor: 'red',
                     }}>
                     <TextInput
@@ -162,6 +160,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
                 );
               })
             )}
+            <Spacer/>
           </Content>
         </View>
         <Spacer />
@@ -173,17 +172,13 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
 
             marginHorizontal: 16,
             alignItems: 'center',
-            // borderWidth: 1,
             marginBottom: 10,
-            // alignItems: 'center',
             justifyContent: 'space-between',
-            // paddingHorizontal: 10,
           }}>
           <View
             style={{
               flexDirection: 'row',
               backgroundColor: 'white',
-              // backgroundColor: light.placeholder,
               borderRadius: 25,
               flex: 0.88,
               overflow: 'hidden',
@@ -192,10 +187,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
                 width: 0,
                 height: -100,
               },
-              // borderWidth:3,
-              // borderColor: light.placeholder,
-              elevation: 10,
-              // shadowColor:'#9a9a9a',
+              elevation: 5,
             }}>
             <TextInput
               placeholder="Name"
@@ -233,36 +225,23 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
               }}
             />
           </View>
-          {/* <TouchableOpacity
-            onPress={() => {
-              Expenses.push(Item),
-                // setItems(Item),
-                console.log(Expenses),
-                setItem({...Item, price: '', name: ''}); 
-            }}
-          >
-            <Text>Send</Text>
-          </TouchableOpacity> */}
           <TouchableOpacity
             style={{
-              // right: 0,
               flex: 0.12,
-              // backgroundColor: 'red',
               alignItems: 'flex-end',
               justifyContent: 'center',
-              // borderWidth:1
             }}
             onPress={() => {
               if (Item.name !== '' && Item.price !== '') {
-                setItems({...items, list: [...items.list, Item]});
+                setItems({...items, total_price: totalPrice + parseInt(Item.price), list: [...items.list, Item]});
                 setTotalPrice(totalPrice + parseInt(Item.price));
                 setError(false);
                 setItem({...Item, price: '', name: ''});
               } else {
                 setError(true);
+                setErrorMessage('Please fill all fields in the input');
               }
             }}>
-            {/* <Image source={require('../../assets/pictures/logo.png')} style={{width: 30, height: 30}} /> */}
             <Icon
               name="send"
               style={{

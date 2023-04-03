@@ -5,7 +5,9 @@ import AddExpense from '../containers/AddExpense';
 import AllExpenses from '../containers/allExpenses';
 import Dashboard from '../containers/Dashboard';
 import Expenses from '../containers/Expenses';
+import expensesList from '../containers/expensesList';
 import Home from '../containers/Home';
+import ListDetails from '../containers/ListDetails';
 
 const Stack = createNativeStackNavigator();
 export function ExpensesNav() {
@@ -36,6 +38,24 @@ export function DashboardNav() {
         statusBarColor:light.brandPrimary
       }}>
       <Stack.Screen name="Dashboard" component={Dashboard} />
+    </Stack.Navigator>
+  );
+}
+
+export function ListNav() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown:false,
+        headerTitleStyle: {color: light.brandPrimary},
+        headerBackVisible: false,
+        statusBarColor:light.brandPrimary
+      }}>
+      <Stack.Screen name="Expenses list" component={expensesList} />
+      <Stack.Screen name="ListDetails" component={ListDetails} options={{
+        presentation: 'modal',
+
+      }} />
     </Stack.Navigator>
   );
 }

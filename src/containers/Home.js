@@ -1,4 +1,4 @@
-import {Container, Content, View} from 'native-base';
+import {Button, Container, Content, View} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {
   FlatList,
@@ -12,6 +12,7 @@ import SQLite from 'react-native-sqlite-2';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {connect} from 'react-redux';
 import CategoryItem from '../components/category/categoryItem';
+import Header from '../components/UI/header';
 import light from '../constants/theme/light';
 import {CategoriesList} from '../Services/categoriesService';
 import FabIcon from '../ui/fabIcon';
@@ -46,18 +47,19 @@ const Home = ({navigation, getCategories}) => {
 
   return (
     <Container style={styles.container}>
-      <Content>
-        <SafeAreaView>
-          <View style={styles.header}>
+      <SafeAreaView>
+        <Header title={'Home'} iconR="menu" />
+        {/* <View style={styles.header}>
             <ImageBackground
               source={require('../../assets/pictures/tirelire.png')}
               resizeMode="cover"
               style={styles.image}>
               <Text style={styles.text}>beAware</Text>
             </ImageBackground>
-          </View>
-        </SafeAreaView>
-        <View style={{paddingHorizontal: 8, flex: 1}}>
+          </View> */}
+      </SafeAreaView>
+      <Content>
+        <View style={{paddingHorizontal: 16, flex: 1}}>
           <View
             style={{
               flexDirection: 'row',
@@ -73,15 +75,15 @@ const Home = ({navigation, getCategories}) => {
               }}>
               Expenses Categories
             </Text>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               // style={styles.refreshContainer}
               onPress={() => getCategories()}>
               <MaterialCommunityIcons
                 name="refresh"
                 style={{fontSize: 25, color: light.brandPrimary, marginEnd: 10}}
               />
-              {/* <Text style={styles.refreshContainer.refreshText}>Refresh</Text> */}
-            </TouchableOpacity>
+              <Text style={styles.refreshContainer.refreshText}>Refresh</Text>
+            </TouchableOpacity> */}
           </View>
           <View>
             {categories?.length < 1 ? (
@@ -104,7 +106,7 @@ const Home = ({navigation, getCategories}) => {
           </View>
         </View>
       </Content>
-        <FabIcon onPress={() => navigation.navigate('Add Category')} />
+      <FabIcon onPress={() => navigation.navigate('Add Category')} />
     </Container>
   );
 };
@@ -127,6 +129,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     marginTop: 150,
+    color: light.inactiveTab,
   },
   image: {
     flex: 1,
