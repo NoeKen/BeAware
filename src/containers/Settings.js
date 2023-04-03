@@ -1,6 +1,7 @@
 import { Container, Content, Icon, Picker, Text, Title, View } from 'native-base';
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
+import Header from '../components/UI/header';
 import light from '../constants/theme/light';
 
 const Settings = () => {
@@ -8,10 +9,13 @@ const Settings = () => {
 
   return (
     <Container>
-      <SafeAreaView style={styles.header}>
+      {/* <SafeAreaView style={styles.header}>
         <Icon name="arrow-back" style={styles.header.icon} />
         <Title style={styles.header.title}>Settings</Title>
-      </SafeAreaView>
+      </SafeAreaView> */}
+
+      <Header title={'Settings'}/>
+      
       <Content style={styles.content}>
         <View style={styles.itemContainer}>
           <Text>Language</Text>

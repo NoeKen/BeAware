@@ -1,7 +1,7 @@
 import { Tab, Text, View } from "native-base";
 import React from "react";
 import { FlatList } from "react-native";
-import ExpenseItem from "../components/ExpenseItem";
+import ExpenseItem from "../components/expenses/ExpenseItem";
 
 const AllExpenses = ({route,navigation})=>{
     const {items} = route.params;

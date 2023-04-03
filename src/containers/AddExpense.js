@@ -1,39 +1,48 @@
 // import {Input, TextArea} from 'native-base';
+import moment from 'moment';
+import {Container, Content, Icon, Input, Picker, Textarea} from 'native-base';
 import React, {useEffect, useState} from 'react';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  ToastAndroid,
-  View,
-  ImageBackground,
-  Platform,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import SQLite from 'react-native-sqlite-2';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Header from '../components/UI/header';
 import light from '../constants/theme/light';
-import {getDBConnection, getExpenses} from '../services/db-service';
-import {Container, Content, Input, Tab, Textarea} from 'native-base';
-import { CreateExpense } from '../Services/expensesService';
-
-// const db = openDatabase({
-//   name: 'baAware',location:'default'
-// });
+import {CreateExpense} from '../Services/expensesService';
 
 const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
-// const db = SQLite.openDatabase('test.db', '1.0', '', 1);
-export default function AddExpense({navigation}) {
+
+const AddExpense = ({navigation}) => {
   const [error, setError] = useState('');
   const [reqError, setReqError] = useState('');
-  //   const [reset, setRest] = useState(false);
-  //   const [title, setTitle] = useState();
-  //   const [amount, setAmount] = useState();
-  //   const [description, setDescription] = useState();
+  const [categories, setCategories] = useState([]);
+  const [selected, setSelected] = useState();
   const [expense, setExpense] = useState({
     title: '',
     description: '',
     amount: '',
+    category_id: '',
+    created_at: moment(new Date()).format('YYYY-MM-DD', 'HH:MM'),
+  });
+
+  db.transaction(txn => {
+    const cats = txn.executeSql(
+      'select * from Categories',
+      // 'select * from Categories ORDER BY date(created_at)',
+      [],
+      (txn, res) => {
+        var len = res.rows.length;
+        var cat = [];
+        if (len > 0) {
+          for (let i = 0; i < len; ++i) {
+            cat.push(res.rows.item(i));
+            // console.log('<=====> category: <==========> ',res.rows.item(i));
+          }
+        }
+        setCategories(cat);
+        // console.log('categories:',categories);
+        // categories = cat
+      },
+    );
   });
 
   function resetForm() {
@@ -47,95 +56,29 @@ export default function AddExpense({navigation}) {
 
   async function createExpense() {
     try {
-      CreateExpense(expense,navigation={navigation})
+      CreateExpense(expense, (navigation = {navigation}));
     } catch (error) {
-      console.log('error when creating expense : ',error)
+      console.log('error when creating expense : ', error);
     }
-    // if (expense.amount === '' || expense.title === '') {
-    //   setError('This field is required');
-    //   return;
-    // }
-    // try {
-    //   db.transaction(function (txn) {
-    //     // txn.executeSql('DROP TABLE IF EXISTS Expenses', []);
-    //     // txn, executeSql('DROP DATABASE IF EXISTS beAware.db');
-    //     txn.executeSql(
-    //       'CREATE TABLE IF NOT EXISTS Expenses(id INTEGER PRIMARY KEY NOT NULL, title VARCHAR(30),amount INTEGER, description VARCHAR(30),created_at DATETIME DEFAULT CURRENT_TIMESTAMP)',
-    //       [],
-    //     );
-    //     txn.executeSql(
-    //       'INSERT INTO Expenses (title,amount,description) VALUES (:title,:amount,:description)',
-    //       // 'INSERT INTO Expenses (title,amount,description,created_at) VALUES (:title,:amount,:description,:created_at)',
-    //       [expense.title, expense.amount, expense.description],
-    //     );
-    //     // txn.executeSql('SELECT * FROM `Expenses`', [], function (tx, res) {
-    //     //         for (let i = 0; i < res.rows.length; ++i) {
-    //     //           // setTask({...tasks,res.rows,item(i)})
-    //     //           Alert.alert(`item ${i}:`, res.rows.item(i));
-    //     //         //   resul.push(res.rows.item(i));
-    //     //         }
-    //     //       });
-    //   });
-    //   navigation.navigate('Expenses');
-    //   ToastAndroid.show('task created successfully', ToastAndroid.LONG);
-    // } catch (error) {
-    //   setReqError(`An error occurred saving the expense : ${error.message}`);
-    //   console.log('error occurred: ', error);
-    // }
   }
   const [tasks, setTask] = useState([{}]);
 
-  useEffect(() => {
-    // console.log('new date: ', new Date());
-    // resetForm();
-    // createTables();
-    // var resul = [];
-    // db.transaction(function (txn) {
-    //   txn.executeSql('DROP TABLE IF EXISTS Expenses', []);
-    //   txn.executeSql(
-    //     'CREATE TABLE IF NOT EXISTS Expenses(expense_id INTEGER PRIMARY KEY NOT NULL, title VARCHAR(30),amount INTEGER, description VARCHAR(30))',
-    //     [],
-    //   );
-    //   txn.executeSql(
-    //     "INSERT INTO Expenses (title,amount,description) VALUES ('manger',5005,'est un concour de danse')",
-    //   );
-    //   txn.executeSql(
-    //     "INSERT INTO Expenses (title,amount,description) VALUES ('LAPTOP',500,'Acheter un laptop')",
-    //   );
-    //   // txn.executeSql('INSERT INTO Users (name,email) VALUES (:name,:email)', ['Julio','kenfaclnoe@gmai.com'])
-    //   txn.executeSql('SELECT * FROM `Expenses`', [], function (tx, res) {
-    //     for (let i = 0; i < res.rows.length; ++i) {
-    //       // setTask({...tasks,res.rows,item(i)})
-    //       console.log(`item ${i}:`, res.rows.item(i));
-    //       resul.push(res.rows.item(i));
-    //     }
-    //   });
-    // });
-    // setTask(resul);
-  }, []);
-  //   console.log('tasks: ', tasks);
+  // useEffect(() => {
+  // }, []);
   return (
     <Container style={{flex: 1}}>
-      <View style={styles.header}>
-        {/* {ToastAndroid.show('plateform: '+Platform.os)} */}
-        <MaterialCommunityIcons
-          name={Platform.OS == 'android' ? 'arrow-left' : 'chevron-left'}
-          style={{fontSize: 25, color: light.brandPrimary, marginEnd: 10}}
-          onPress={() => navigation.goBack()}
-        />
-        <Text
-          style={{
-            alignSelf: 'center',
-            fontWeight: 'bold',
-            fontSize: 20,
-            color: light.brandPrimary,
+      {/* <Header title={'New expense'} /> */}
+      <Content>
+        <TouchableOpacity
+          style={styles.listButton}
+          onPress={async () => {
+            navigation.navigate('AddAList')
+            // createExpense(), resetForm();
           }}>
-          New expense
-        </Text>
-      </View>
-      <Content style={{}}>
+          <Text style={styles.listText}>Create a list</Text>
+        </TouchableOpacity>
         <View
-          style={{padding: 16, marginTop: 40, justifyContent: 'space-between'}}>
+          style={{padding: 16, marginTop: 10, justifyContent: 'space-between'}}>
           <View style={styles.inputHeader}>
             <Text style={styles.inputHeader.text}>Title :</Text>
             <MaterialCommunityIcons
@@ -148,7 +91,6 @@ export default function AddExpense({navigation}) {
             value={expense.title}
             style={styles.input}
             onChangeText={val => {
-              //   setTitle(val);
               setExpense({...expense, title: val});
             }}
           />
@@ -168,29 +110,48 @@ export default function AddExpense({navigation}) {
             style={styles.input}
             keyboardType="phone-pad"
             onChangeText={val => {
-              //   setAmount(val);
               setExpense({...expense, amount: val});
             }}
           />
-          
-          <View style={[styles.inputHeader,{marginTop:20}]}>
+
+          <View style={[styles.inputHeader, {marginTop: 20}]}>
             <Text style={styles.inputHeader.text}>Category :</Text>
             <MaterialCommunityIcons
               name="asterisk"
-              style={{fontSize: 10, color: light.brandPrimary}}
+              style={{fontSize: 10, color: light.brandPrimary, marginEnd: 20}}
             />
           </View>
-          
-          <Input
-            placeholder="category"
-            value={expense.amount}
-            style={styles.input}
-            keyboardType="phone-pad"
-            onChangeText={val => {
-              //   setAmount(val);
-              setExpense({...expense, amount: val});
-            }}
-          />
+          {
+            // cat
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              placeholder="Select a category"
+              style={[
+                {
+                  height: 50,
+                  borderRadius: 10,
+                  backgroundColor: light.whiteGrey,
+                },
+              ]}
+              placeholderIconColor="#007aff"
+              selectedValue={selected}
+              onValueChange={val => {
+                console.log('cat selected: ', val);
+                setSelected(val), setExpense({...expense, category_id: val});
+              }}>
+              <Picker.Item
+                label="Related category"
+                key={-1}
+                value={undefined}
+                style={{color: light.inactiveTab}}
+                color={light.placeholder}
+              />
+              {categories.map(item => {
+                return <Picker.Item label={item.name} value={item.id} />;
+              })}
+            </Picker>
+          }
           <Text style={styles.error}>{error}</Text>
           <Text style={styles.inputHeader.text}>Description</Text>
           <Textarea
@@ -198,7 +159,6 @@ export default function AddExpense({navigation}) {
             value={expense.description}
             style={styles.textarea}
             onChangeText={val => {
-              //   setDescription(val);
               setExpense({...expense, description: val});
             }}
           />
@@ -214,7 +174,7 @@ export default function AddExpense({navigation}) {
             style={styles.cancelButton}
             onPress={async () => {
               resetForm();
-              navigation.navigate('Expenses');
+              navigation.goBack();
             }}>
             <Text style={styles.cancelText}>Cancel</Text>
           </TouchableOpacity>
@@ -222,7 +182,7 @@ export default function AddExpense({navigation}) {
       </Content>
     </Container>
   );
-}
+};
 
 const styles = StyleSheet.create({
   header: {
@@ -238,6 +198,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
+  listButton: {
+    backgroundColor: light.inverseTextColor,
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginHorizontal: 20,
+    marginTop: 20,
+    borderWidth:1,
+    borderColor: light.brandSecond,
+  },
   cancelButton: {
     alignItems: 'center',
     marginTop: 25,
@@ -249,6 +219,12 @@ const styles = StyleSheet.create({
     color: light.inverseTextColor,
     fontFamily: 'ubuntu-bold',
     fontSize: 20,
+  },
+  listText: {
+    color: light.brandSecond,
+    fontFamily: 'ubuntu-bold',
+    fontSize: 18,
+    fontWeight:'bold'
   },
   cancelText: {
     color: light.inactiveTab,
@@ -279,3 +255,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default AddExpense;
