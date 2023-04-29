@@ -117,10 +117,10 @@ const App = () => {
                       headerTitleStyle: {color: light.brandPrimary},
                       headerBackTitle: 'back',
                       headerBackTitleStyle: {color: light.brandPrimary},
-                      statusBarColor: light.brandLight,
-                      statusBarStyle: 'dark',
+                      statusBarColor: light.brandPrimary,
+                      // statusBarStyle: 'dark',
                       // mode: 'modal',
-                      // presentation: 'modal',
+                      presentation: 'transparentModal',
                       // navigationBarColor:light.brandPrimary
                     }}
                   />

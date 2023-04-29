@@ -47,7 +47,7 @@ export default function routes() {
           tabBarLabel: 'Home',
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons
-              name="format-list-bulleted-type"
+              name="home"
               color={color}
               size={size}
             />

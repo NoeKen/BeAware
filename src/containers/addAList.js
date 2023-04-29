@@ -15,7 +15,6 @@ import light from '../constants/theme/light';
 import Spacer from '../ui/Spacer';
 
 const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
-  const [totalPrice, setTotalPrice] = useState(0);
   const [items, setItems] = useState({
     title: '',
     created_at: new Date(),
@@ -39,20 +38,21 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
         title="Add A List"
         iconR={'save'}
         onPress={() => {
-          if (items.title == '' && items.list.length == 0) {
-            setError(true);
-            setErrorMessage('Please fill the title and add items to the list');
-          } else if (items.title == '' && items.list.length > 0) {
-            setError(true);
-            setErrorMessage('Please fill the list title');
-          } else if (items.title !== '' && items.list.length === 0) {
-            setError(true);
-            setErrorMessage('Please add items to the list');
-          } else {
-            replaceExpensesList([...expensesList, items]);
-            setItems({...items, title: '', list: []});
-            setTotalPrice(0);
-          }
+          // if (items.title == '' && items.list.length == 0) {
+          //   setError(true);
+          //   setErrorMessage('Please fill the title and add items to the list');
+          // } else if (items.title == '' && items.list.length > 0) {
+          //   setError(true);
+          //   setErrorMessage('Please fill the list title');
+          // } else if (items.title !== '' && items.list.length === 0) {
+          //   setError(true);
+          //   setErrorMessage('Please add items to the list');
+          // } else {
+          //   replaceExpensesList([...expensesList, items]);
+          //   setItems({...items, title: '', list: [],total_price:0});
+          //   navigation.navigate('List')
+          // }
+            navigation.navigate('List')
         }}
       />
 
@@ -233,8 +233,8 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
             }}
             onPress={() => {
               if (Item.name !== '' && Item.price !== '') {
-                setItems({...items, total_price: totalPrice + parseInt(Item.price), list: [...items.list, Item]});
-                setTotalPrice(totalPrice + parseInt(Item.price));
+                setItems({...items, total_price: items.total_price + parseInt(Item.price), list: [...items.list, Item]});
+                // setTotalPrice(totalPrice + parseInt(Item.price));
                 setError(false);
                 setItem({...Item, price: '', name: ''});
               } else {

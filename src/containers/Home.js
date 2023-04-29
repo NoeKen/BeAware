@@ -1,4 +1,4 @@
-import {Button, Container, Content, View} from 'native-base';
+import {Button, Container, Content, Icon, View} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {
   FlatList,
@@ -16,47 +16,36 @@ import Header from '../components/UI/header';
 import light from '../constants/theme/light';
 import {CategoriesList} from '../Services/categoriesService';
 import FabIcon from '../ui/fabIcon';
+import { useNavigation } from '@react-navigation/native';
 
 const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 //  const Home=({navigation,getCategories,categories})=> {
-const Home = ({navigation, getCategories}) => {
-  const [categories, setCategories] = useState([]);
-
+const Home = ({categories,deleteCategory,deleteCascadeExpenses}) => {
+  // const [categories, setCategories] = useState([]);
+  const navigation= useNavigation()
   useEffect(() => {
-    // getCategories();
-  }, []);
+    categories
+  }, [categories]);
 
-  db.transaction(txn => {
-    txn.executeSql(
-      'select * from Categories',
-      // 'select * from Categories ORDER BY date(created_at)',
-      [],
-      (txn, res) => {
-        var len = res.rows.length;
-        var cat = [];
-        if (len > 0) {
-          for (let i = 0; i < len; ++i) {
-            cat.push(res.rows.item(i));
-            // console.log('<=====> category: <==========> ',res.rows.item(i));
-          }
-        }
-        setCategories(cat);
-      },
-    );
-  });
+  const removeCategory = async () => {
+    await deleteCategory()
+  };
 
   return (
     <Container style={styles.container}>
       <SafeAreaView>
-        <Header title={'Home'} iconR="menu" />
-        {/* <View style={styles.header}>
+        {/* <Header title={'Home'} 
+        // iconR="menu" 
+
+        /> */}
+        <View style={styles.header}>
             <ImageBackground
               source={require('../../assets/pictures/tirelire.png')}
               resizeMode="cover"
               style={styles.image}>
               <Text style={styles.text}>beAware</Text>
             </ImageBackground>
-          </View> */}
+          </View>
       </SafeAreaView>
       <Content>
         <View style={{paddingHorizontal: 16, flex: 1}}>
@@ -75,15 +64,7 @@ const Home = ({navigation, getCategories}) => {
               }}>
               Expenses Categories
             </Text>
-            {/* <TouchableOpacity
-              // style={styles.refreshContainer}
-              onPress={() => getCategories()}>
-              <MaterialCommunityIcons
-                name="refresh"
-                style={{fontSize: 25, color: light.brandPrimary, marginEnd: 10}}
-              />
-              <Text style={styles.refreshContainer.refreshText}>Refresh</Text>
-            </TouchableOpacity> */}
+            <Icon name='refresh' onPress={()=>navigation.refresh()} />
           </View>
           <View>
             {categories?.length < 1 ? (
@@ -96,7 +77,7 @@ const Home = ({navigation, getCategories}) => {
                 // style={{marginBottom: 58, paddingBottom: 50}}
                 disableVirtualization={true}
                 renderItem={({item}) => (
-                  <CategoryItem data={item} key={item.index} />
+                  <CategoryItem data={item} deleteCascadeExpenses={deleteCascadeExpenses} removeCategory={deleteCategory} key={item.index} />
                 )}
                 keyExtractor={item => item.id}
                 horizontal={false}
@@ -117,6 +98,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getCategories: dispatch.categories.getCategories,
+  deleteCategory: dispatch.categories.deleteCategory,
+  deleteCascadeExpenses:dispatch.expenses.deleteCascadeExpenses,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
@@ -135,12 +118,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
-    color: 'white',
+    color: light.brandLight,
     fontSize: 42,
     lineHeight: 170,
     fontWeight: 'bold',
     textAlign: 'center',
     backgroundColor: '#5ad6ec5a',
+    textShadowColor: '#023d5fff',
+    textShadowRadius:5,
+    textShadowOffset:{
+      height: 0,
+      width: 3,
+    }
   },
   header: {
     height: 140,

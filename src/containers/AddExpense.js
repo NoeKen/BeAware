@@ -1,53 +1,32 @@
 // import {Input, TextArea} from 'native-base';
 import moment from 'moment';
 import {Container, Content, Icon, Input, Picker, Textarea} from 'native-base';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import SQLite from 'react-native-sqlite-2';
+import uuid from 'react-native-uuid';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Header from '../components/UI/header';
+import {connect} from 'react-redux';
 import light from '../constants/theme/light';
-import {CreateExpense} from '../Services/expensesService';
 
-const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
+// const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 
-const AddExpense = ({navigation}) => {
+const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
   const [error, setError] = useState('');
   const [reqError, setReqError] = useState('');
-  const [categories, setCategories] = useState([]);
   const [selected, setSelected] = useState();
   const [expense, setExpense] = useState({
+    id: uuid.v4(),
     title: '',
     description: '',
-    amount: '',
+    amount: 0,
     category_id: '',
-    created_at: moment(new Date()).format('YYYY-MM-DD', 'HH:MM'),
-  });
-
-  db.transaction(txn => {
-    const cats = txn.executeSql(
-      'select * from Categories',
-      // 'select * from Categories ORDER BY date(created_at)',
-      [],
-      (txn, res) => {
-        var len = res.rows.length;
-        var cat = [];
-        if (len > 0) {
-          for (let i = 0; i < len; ++i) {
-            cat.push(res.rows.item(i));
-            // console.log('<=====> category: <==========> ',res.rows.item(i));
-          }
-        }
-        setCategories(cat);
-        // console.log('categories:',categories);
-        // categories = cat
-      },
-    );
+    created_at: new Date(),
   });
 
   function resetForm() {
     // setRest(true);
     setExpense({...expense, title: '', description: '', amount: ''});
+    setSelected('related category')
     setError(''), setReqError('');
     // setTitle('');
     // setAmount('');
@@ -56,24 +35,23 @@ const AddExpense = ({navigation}) => {
 
   async function createExpense() {
     try {
-      CreateExpense(expense, (navigation = {navigation}));
+      await replaceExpenses([...expenses,expense]);
+      navigation.navigate('Home');
     } catch (error) {
       console.log('error when creating expense : ', error);
     }
   }
-  const [tasks, setTask] = useState([{}]);
 
   // useEffect(() => {
   // }, []);
   return (
     <Container style={{flex: 1}}>
-      {/* <Header title={'New expense'} /> */}
       <Content>
         <TouchableOpacity
           style={styles.listButton}
           onPress={async () => {
-            navigation.navigate('AddAList')
-            // createExpense(), resetForm();
+            resetForm();
+            navigation.navigate('AddAList');
           }}>
           <Text style={styles.listText}>Create a list</Text>
         </TouchableOpacity>
@@ -122,13 +100,13 @@ const AddExpense = ({navigation}) => {
             />
           </View>
           {
-            // cat
             <Picker
               mode="dropdown"
               iosIcon={<Icon name="arrow-down" />}
               placeholder="Select a category"
               style={[
                 {
+                  color: light.textColor,
                   height: 50,
                   borderRadius: 10,
                   backgroundColor: light.whiteGrey,
@@ -137,7 +115,6 @@ const AddExpense = ({navigation}) => {
               placeholderIconColor="#007aff"
               selectedValue={selected}
               onValueChange={val => {
-                console.log('cat selected: ', val);
                 setSelected(val), setExpense({...expense, category_id: val});
               }}>
               <Picker.Item
@@ -166,7 +143,7 @@ const AddExpense = ({navigation}) => {
           <TouchableOpacity
             style={styles.saveButton}
             onPress={async () => {
-              createExpense(), resetForm();
+              await createExpense(), resetForm();
             }}>
             <Text style={styles.saveText}>Save</Text>
           </TouchableOpacity>
@@ -205,7 +182,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 20,
     marginTop: 20,
-    borderWidth:1,
+    borderWidth: 1,
     borderColor: light.brandSecond,
   },
   cancelButton: {
@@ -224,7 +201,7 @@ const styles = StyleSheet.create({
     color: light.brandSecond,
     fontFamily: 'ubuntu-bold',
     fontSize: 18,
-    fontWeight:'bold'
+    fontWeight: 'bold',
   },
   cancelText: {
     color: light.inactiveTab,
@@ -255,5 +232,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+const mapStateToProps = state => ({
+  expenses: state.expenses.expenses,
+  categories: state.categories.categories,
+});
 
-export default AddExpense;
+const mapDispatchToProps = dispatch => ({
+  replaceExpenses: dispatch.expenses.replaceExpenses,
+});
+export default connect(mapStateToProps, mapDispatchToProps)(AddExpense);

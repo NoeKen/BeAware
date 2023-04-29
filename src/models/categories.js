@@ -52,210 +52,26 @@ export default {
      * @param {obj} rootState
      * @returns {Promise}
      */
-    async addCategory(payload = {}, rootState) {
-      console.log('rootState: ', rootState);
-      if (
-        rootState.categories.category.amount === '' ||
-        rootState.categories.category.title === ''
-      ) {
-        ToastAndroid.show(
-          'there is at least one obligated field empty',
-          ToastAndroid.LONG,
-        );
-        return;
-      }
-      try {
-        db.transaction(function (txn) {
-          // txn.executeSql('DROP TABLE IF EXISTS Categories', []);
-          // txn, executeSql('DROP DATABASE IF EXISTS beAware.db');
-          txn.executeSql(
-            'CREATE TABLE IF NOT EXISTS Categories(id INTEGER PRIMARY KEY NOT NULL, name VARCHAR(30), image VARCHAR(255), description VARCHAR(255),created_at DATETIME DEFAULT CURRENT_TIMESTAMP)',
-            [],
-          );
-          txn.executeSql(
-            'INSERT INTO Categories (name,image,description) VALUES (:name,:image,:description)',
-            // 'INSERT INTO Categories (title,amount,description,created_at) VALUES (:title,:amount,:description,:created_at)',
-            [
-              rootState.categories.category.name,
-              rootState.categories.category.image,
-              rootState.categories.category.description,
-            ],
-          );
-        });
-        // navigation.navigate('Home');
-        ToastAndroid.show('category created successfully', ToastAndroid.LONG);
-        console.log('category created');
-      } catch (error) {
-        // setReqError(`An error occurred saving the category : ${error.message}`);
-        console.error('error occurred: ', error);
-        ToastAndroid.show(
-          'An expected error ocurred when creating category',
-          ToastAndroid.LONG,
-        );
+    async deleteCategory(payload={},rootState ){
+      const tab= rootState.categories.categories;
+      const index = tab.findIndex(item => item.id === payload);
+      if (index !== -1) {
+        tab.splice(index, 1);
+        ToastAndroid.show('Item was successfully deleted',ToastAndroid.LONG);
+        dispatch.categories.replaceCategories(tab)
+        navigation.refresh();
+      } else {
+        ToastAndroid.show('Item was not deleted',ToastAndroid.LONG);
+        console.log(`item with id ${id} was not found`);
       }
     },
-    async getCategories(payload = {}, rootState) {
-      try {
-        db.transaction(txn => {
-          txn.executeSql(
-            'select * from Categories',
-            // 'select * from Categories ORDER BY date(created_at)',
-            [],
-            (txn, res) => {
-              var len = res.rows.length;
-              var cat = [];
-              if (len > 0) {
-                for (let i = 0; i < len; ++i) {
-                  cat.push(res.rows.item(i));
-                  console.log(
-                    '<=====> category: <==========> ',
-                    res.rows.item(i),
-                  );
-                }
-              }
-              dispatch.categories.replaceCategories(cat);
-              // setCategories(cat);
-            },
-          );
-        });
-      } catch (error) {
-        console.error('error occurred: ', error);
-        ToastAndroid.show(
-          'An expected error ocurred when creating category',
-          ToastAndroid.LONG,
-        );
-      }
-    },
-
-    // async doSignup(payload = {}, rootState) {
-    //   try {
-    //     const result = await Api.post(
-    //       'auth/signup',
-    //       rootState.auth.signupInput,
-    //     );
-    //     console.log('registration completed');
-    //     const {data} = result;
-    //     AsyncStorage.setItem('@Auth:token', data.data.token);
-    //     dispatch.auth.replaceCurrentUser(data.data.user);
-    //     dispatch.auth.replaceIsRegistered(true);
-    //     // ToastAndroid.show('Your account has been succesfull created', Toast.LONG)
-    //   } catch (error) {
-    //     alert(error.message);
-    //   }
-    // },
-
-    // async doSignupPerson(payload = {}, rootState) {
-    //   try {
-    //     const result = await Api.post('people', payload);
-    //     // const result=await Api.post('people', rootState.auth.signupPersonInput) ;
-    //     const {data} = result;
-    //     console.log(
-    //       'signupPerson.data =========================================>',
-    //       data,
-    //     );
-    //     // AsyncStorage.setItem('@Auth:token', data.data.token);
-    //     dispatch.auth.replaceSignupPerson(data.data.user);
-    //     dispatch.auth.replaceIsFullRegistration(true);
-    //   } catch (error) {
-    //     console.log('=============== signUp person =====================');
-    //     console.log('error person :', error);
-    //     console.log('=============== signUp person =====================');
-    //     ToastAndroid.show(error.message, ToastAndroid.LONG);
-    //   }
-    // },
-    // async doSignupEnterprise(payload = {}, rootState) {
-    //   try {
-    //     // const result=await Api.post('enterprises', rootState.auth.signupEnterpriseInput) ;
-    //     const result = await Api.post('enterprises', payload);
-    //     const {data} = result;
-    //     // AsyncStorage.setItem('@Auth:token', data.data.token);
-    //     // dispatch.auth.replaceSignupEnterprise(data.data.user);
-    //     dispatch.auth.replaceIsFullRegistration(true);
-    //     ToastAndroid.show('enrollment succed');
-    //   } catch (error) {
-    //     console.log('================= Error Enterprise ===================');
-    //     console.log('Error Enterprise :', error.response);
-    //     console.log('================= Error Enterprise ===================');
-    //     ToastAndroid.show(error.message, ToastAndroid.LONG);
-    //     // Toast.show( {text : error.message, buttonText:'Okay'} )
-    //   }
-    // },
-
-    // async doLogout(payload = {}, rootState) {
-    //   try {
-    //     dispatch.auth.replaceIsLogged(false);
-    //     // AsyncStorage.removeItem('@Auth:token');
-    //     AsyncStorage.clear();
-    //     dispatch.auth.replaceCurrentUser({});
-    //     Api.post('auth/signout', {});
-    //   } catch (error) {
-    //     ToastAndroid.show(error.message, ToastAndroid.LONG);
-    //   }
-    // },
-
-    /* Get a list from the API
-     * @param {obj} data
-     * @returns {Promise}
-     */
-    // async updateUser(payload = {}, rootState) {
-    //   try {
-    //     const response = await Api.put('/api/users/updateMe', {
-    //       ...rootState.auth.currentUser,
-    //     });
-    //     console.log('=====>update user<====', response.data);
-    //     return response;
-    //   } catch (error) {
-    //     console.log('update user', error);
-    //   }
-    // },
   }),
 
   /**
    * Reducers
    */
   reducers: {
-    /**
-     * Replace list in store
-     * @param {obj} state
-     * @param {obj} payload
-     */
-    replace(state, payload) {
-      let newList = null;
-      const {data, headers, page} = payload;
-
-      // Loop data array, saving items in a usable format
-      if (data && typeof data === 'object') {
-        newList = data.map(item => transform(item));
-      }
-
-      // Create our paginated and flat lists
-      const listPaginated =
-        page === 1
-          ? {[page]: newList}
-          : {...state.listPaginated, [page]: newList};
-      const listFlat =
-        Object.keys(listPaginated)
-          .map(k => listPaginated[k])
-          .flat() || [];
-
-      return newList
-        ? {
-            ...state,
-            listPaginated,
-            listFlat,
-            lastSync:
-              page === 1
-                ? {[page]: moment().format()}
-                : {...state.lastSync, [page]: moment().format()},
-            meta: {
-              page,
-              lastPage: parseInt(headers['x-wp-totalpages'], 10) || null,
-              total: parseInt(headers['x-wp-total'], 10) || null,
-            },
-            pagination: pagination(headers['x-wp-totalpages'], '/articles/'),
-          }
-        : initialState;
-    },
+   
 
     /**
      * Save form data
@@ -280,63 +96,7 @@ export default {
       };
     },
 
-    /**
-     * Save form data
-     * @param {obj} state
-     * @param {obj} payload
-     */
-    replaceRegisterBasic(state, payload) {
-      return {
-        ...state,
-        registerBasic: payload,
-      };
-    },
-
-    /**
-     * Save form data
-     * @param {obj} state
-     * @param {obj} payload
-     */
-    replaceSignupInput(state, payload) {
-      return {
-        ...state,
-        signupInput: payload,
-      };
-    },
-    /**
-     * Save form data
-     * @param {obj} state
-     * @param {obj} payload
-     */
-    replaceSignupPerson(state, payload) {
-      return {
-        ...state,
-        signupPersonInput: payload,
-      };
-    },
-    /**
-     * Save form data
-     * @param {obj} state
-     * @param {obj} payload
-     */
-    replaceSignupEnterprise(state, payload) {
-      return {
-        ...state,
-        signupEnterpriseInput: payload,
-      };
-    },
-
-    /**
-     * Save form data
-     * @param {obj} state
-     * @param {obj} payload
-     */
-    replaceCurrentUser(state, payload) {
-      return {
-        ...state,
-        currentUser: payload,
-      };
-    },
+    
     /**
      * Save form data
      * @param {obj} state

@@ -9,6 +9,6 @@ export default{
     inactiveTab:'#707070',
     whiteGrey:'#f7f7f7ff',
     inputBg:'#e91e6216',
-    placeholder:'#e9e9e960',
+    placeholder:'#c5c0c0b5',
     brandLight:'#ffffff'
 }

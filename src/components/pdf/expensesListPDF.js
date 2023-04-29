@@ -12,19 +12,18 @@ import moment from 'moment/moment';
 //   { company: "Laughing Bacchus Winecellars", contact: "Yoshi Tannamuri", country: "Canada" },
 //   { company: "Magazzini Alimentari Riuniti", contact: "Giovanni Rovelli", country: "Italy" },
 // ]
-const createDynamicTable = (array) => {
-  console.log('====================================');
-  console.log('array: ', array.list);
-  console.log('====================================');
+const createDynamicTable = array => {
   var table = '';
   for (let i in array.list) {
     const item = array.list[i];
-    table = table + `
+    table =
+      table +
+      `
     <tr>
       <td>${item.name}</td>
       <td id='price'>${item.price}</td>
     </tr>
-    `
+    `;
   }
   console.log(table);
   const html = `
@@ -59,11 +58,13 @@ const createDynamicTable = (array) => {
         background-color: #dddddd;
       }
       #price{
+        color: ${light.textColor};
+      }
+      #TotalPrice{
         color: ${light.brandSecond};
       }
-      h2{
+      h1{
         color: ${light.brandPrimary};
-        font-size:25px;
         font-weight:bold;
         text-align:center;
         text-style:underline;
@@ -71,8 +72,12 @@ const createDynamicTable = (array) => {
     </style>
     </head>
     <body>
-    <h2>${array.title}</h2>
-    <p>This is the list that you made on ${moment(array.created_at).format('MMMM Do YYYY, h:mm a')}</p>
+    <br/>
+    <br/>
+    <h1>${array.title}</h1>
+    <br/>
+    <br/>
+    <br/>
 
     <table>
       <tr>
@@ -80,14 +85,27 @@ const createDynamicTable = (array) => {
         <th>Price</th>
       </tr>
       ${table}
+      <tr>
+        <th>Total</th>
+        <th id='TotalPrice'>${array.total_price}</th>
+      </tr>
     </table>
-    <div class="watermark">Generated on ${moment(new Date()).format('DD-MM-YYYY')} at ${moment(new Date()).format('HH:MM')} from <h3 style="color: ${light.brandSecond};weight:bold ">beAware app</h3></div>
+    <br/>
+    <p>This is the list that you made on ${moment(array.created_at).format(
+      'MMMM Do YYYY, h:mm a',
+    )}</p>
+    <br/>
+    <div class="watermark">Generated on ${moment(new Date()).format(
+      'DD-MM-YYYY',
+    )} at ${moment(new Date()).format('HH:MM')} from <h3 style="color: ${
+    light.brandSecond
+  };weight:bold ">beAware app</h3></div>
     
     </body>
   </html>
     `;
   return html;
-}
+};
 export async function expensesListPDF(array) {
   const results = await RNHTMLtoPDF.convert({
     html: createDynamicTable(array),

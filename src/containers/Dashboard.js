@@ -2,20 +2,21 @@
 import moment from 'moment/moment';
 import {Container, Content, Icon, Picker, View} from 'native-base';
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {Dimensions, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {DataTable} from 'react-native-paper';
 import SQLite from 'react-native-sqlite-2';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../components/UI/header';
 import light from '../constants/theme/light';
+import {connect} from 'react-redux';
 
 const optionsPerPage = [2, 3, 4];
 const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 
-export default Dashboard = ({navigation}) => {
+const Dashboard = ({navigation,expenses}) => {
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = React.useState(2);
-  const [expenses, setExpenses] = useState([]);
+  // const [expenses, setExpenses] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState();
 
   function GetExpenses() {
@@ -88,64 +89,81 @@ export default Dashboard = ({navigation}) => {
               textStyle={styles.tableHeader}>
               Title
             </DataTable.Title>
-            <DataTable.Title
-              style={{}}
-              textStyle={styles.tableHeader}>
+            <DataTable.Title style={{}} textStyle={styles.tableHeader}>
               Amount
             </DataTable.Title>
-            <DataTable.Title
-              style={{}}
-              textStyle={styles.tableHeader}>
+            <DataTable.Title style={{}} textStyle={styles.tableHeader}>
               Date
             </DataTable.Title>
-            <DataTable.Title
-              style={{}}
-              textStyle={styles.tableHeader}>
+            <DataTable.Title style={{}} textStyle={styles.tableHeader}>
               Descript°
             </DataTable.Title>
           </DataTable.Header>
-          {expenses.map((expense, index) => {
-            return (
-              <DataTable.Row
-                key={expense.id}
-                onPress={() => {
-                  // console.log(`selected account ${expense.title}`);
-                  navigation.navigate('Expense Detail', {item: expense});
-                }}>
-                <DataTable.Cell
-                  style={{
-                    backgroundColor: light.whiteGrey,
-                    marginLeft: -15,
-                    justifyContent: 'center',
-                  }}
-                  textStyle={styles.tableHeader}
-                  numeric>
-                  {index + 1}
-                </DataTable.Cell>
-                <DataTable.Cell
-                  style={[styles.messageColumn, {}]}
-                  accessibilityHint="press"
-                  textStyle={styles.tableValue}>
-                  {expense.title}
-                </DataTable.Cell>
-                
-                <DataTable.Cell textStyle={styles.tableValue}>{expense.amount}</DataTable.Cell>
-                <DataTable.Cell textStyle={styles.tableValue}>
-                  {moment(expense.created_at).calendar('date')}
-                  {/* {moment(expense.created_at).format('YYYY-MM-DD')} */}
-                </DataTable.Cell>
-                <DataTable.Cell textStyle={styles.tableValue}>
-                  {expense.description === '' ? 'empty' : expense.description}
-                </DataTable.Cell>
-              </DataTable.Row>
-            );
-          })}
+          {expenses.length < 1 ? (
+            <View
+              style={{
+                justifyContent: 'center',
+                height: Dimensions.get('screen').height * 0.5,
+              }}>
+              <Text style={{color: light.inactiveTab, textAlign: 'center'}}>
+                All your expenses will appear in this table
+              </Text>
+            </View>
+          ) : (
+            <>
+              {expenses.map((expense, index) => {
+                return (
+                  <DataTable.Row
+                    key={expense.id}
+                    onPress={() => {
+                      // console.log(`selected account ${expense.title}`);
+                      navigation.navigate('Expense Detail', {item: expense});
+                    }}>
+                    <DataTable.Cell
+                      style={{
+                        backgroundColor: light.whiteGrey,
+                        marginLeft: -15,
+                        justifyContent: 'center',
+                      }}
+                      textStyle={styles.tableHeader}
+                      numeric>
+                      {index + 1}
+                    </DataTable.Cell>
+                    <DataTable.Cell
+                      style={[styles.messageColumn, {}]}
+                      accessibilityHint="press"
+                      textStyle={styles.tableValue}>
+                      {expense.title}
+                    </DataTable.Cell>
+
+                    <DataTable.Cell textStyle={styles.tableValue}>
+                      {expense.amount}
+                    </DataTable.Cell>
+                    <DataTable.Cell textStyle={styles.tableValue}>
+                      {moment(expense.created_at).calendar('date')}
+                      {/* {moment(expense.created_at).format('YYYY-MM-DD')} */}
+                    </DataTable.Cell>
+                    <DataTable.Cell textStyle={styles.tableValue}>
+                      {expense.description === ''
+                        ? 'empty'
+                        : expense.description}
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                );
+              })}
+            </>
+          )}
         </DataTable>
       </Content>
     </Container>
   );
 };
 
+const mapStateToProps = state => ({
+  expenses: state.expenses.expenses,
+});
+
+export default connect(mapStateToProps, {})(Dashboard);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -153,13 +171,13 @@ const styles = StyleSheet.create({
   content: {
     padding: 12,
   },
-  tableHeader:{
-    color: light.brandPrimary, 
-    fontSize: 16
+  tableHeader: {
+    color: light.brandPrimary,
+    fontSize: 16,
   },
-  tableValue:{
-    fontSize:14,
-    marginLeft:5
+  tableValue: {
+    fontSize: 14,
+    marginLeft: 5,
   },
   refreshContainer: {
     flexDirection: 'row',

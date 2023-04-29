@@ -17,7 +17,7 @@ import {
 
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNPrint from 'react-native-print';
-import { expensesListPDF } from '../components/pdf/expensesPDF';
+import { expensesListPDF } from '../components/pdf/ListsPDF';
 import light from '../constants/theme/light';
 
 export default function RNPrintExample() {

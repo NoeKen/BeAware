@@ -4,10 +4,11 @@ import React from 'react';
 import {View, Text, SafeAreaView, FlatList, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import ListItem from '../components/expenses/listItem';
-import {expensesListPDF} from '../components/pdf/expensesPDF';
+import {AllListPDF, expensesListPDF} from '../components/pdf/ListsPDF';
 import Header from '../components/UI/header';
 import light from '../constants/theme/light';
 import Spacer from '../ui/Spacer';
+import FabIcon from '../ui/fabIcon';
 
 const ExpensesList = ({expensesList,navigation}) => {
   return (
@@ -16,7 +17,7 @@ const ExpensesList = ({expensesList,navigation}) => {
         <Header
           title="Expenses List"
           iconR={'print'}
-          onPress={() => expensesListPDF(expensesList[0])}
+          onPress={() => AllListPDF(expensesList)}
         />
       </SafeAreaView>
       {expensesList.length < 1 ? 
@@ -29,6 +30,7 @@ const ExpensesList = ({expensesList,navigation}) => {
           return <ListItem item={item.item} navigation={navigation} />;
         }}
       />}
+      <FabIcon onPress={() => navigation.navigate('AddAList')} />
     </Container>
   );
 };

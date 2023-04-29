@@ -22,10 +22,18 @@ import {CreateCategory} from '../Services/categoriesService';
 import Header from '../components/UI/header';
 import CameraModal from '../components/category/cameraModal';
 import {connect} from 'react-redux';
+import uuid from 'react-native-uuid';
 
-const AddCategory = ({navigation, category, replaceCategory, addCategory}) => {
+const AddCategory = ({navigation, categories, replaceCategories}) => {
   const [imgPath, setImgPath] = useState(null);
   const [isVisible, setVisible] = useState(false);
+  const [category, setCategory] = useState({
+    id: uuid.v4(),
+    image: '',
+    name: '',
+    description: '',
+    created_at : new Date()
+  });
   // const [category, setCategory] = useState({
   //   name: '',
   //   description: '',
@@ -39,8 +47,8 @@ const AddCategory = ({navigation, category, replaceCategory, addCategory}) => {
       cropping: true,
     }).then(img => {
       console.log('image path : ', img.path);
-      setImgPath(img.path);
-      replaceCategory({...category, image: img.path});
+      setCategory({...category, image: img.path});
+      // replaceCategory({...category, image: img.path});
       // setCategory({...category, image: img.path});
       console.log('image modificated : ', category.image);
       // setBooksAdds(image.path);
@@ -57,8 +65,8 @@ const AddCategory = ({navigation, category, replaceCategory, addCategory}) => {
       cropping: true,
     }).then(img => {
       console.log('image path : ', img.path);
-      setImgPath(img.path);
-      replaceCategory({...category, image: img.path});
+      setCategory({...category, image: img.path});
+      // replaceCategory({...category, image: img.path});
       console.log('image modificated : ', category.image);
       // setBooksAdds(image.path);
       // replaceCreateBook({
@@ -71,8 +79,11 @@ const AddCategory = ({navigation, category, replaceCategory, addCategory}) => {
   async function AddCategory() {
     // CreateCategory(category,navigation={navigation})
     try {
-      await addCategory();
-      replaceCategory({...category, image:'', name:'', description:''});
+      // await addCategory();
+      console.log('====================================');
+      console.log('category: ',category);
+      console.log('====================================');
+      await replaceCategories([...categories, category]);
       navigation.navigate('Home');
     } catch (error) {
       console.log('error when creating category : ', error);
@@ -143,7 +154,7 @@ const AddCategory = ({navigation, category, replaceCategory, addCategory}) => {
             value={category.name}
             style={styles.input}
             onChangeText={val => {
-              replaceCategory({...category, name: val});
+              setCategory({...category, name: val});
               //   setTitle(val);
               // setExpense({...expense, title: val});
             }}
@@ -156,7 +167,7 @@ const AddCategory = ({navigation, category, replaceCategory, addCategory}) => {
             value={category.description}
             style={styles.textarea}
             onChangeText={val => {
-              replaceCategory({...category, description: val});
+              setCategory({...category, description: val});
               // setExpense({...expense, description: val});
             }}
           />
@@ -185,10 +196,10 @@ const AddCategory = ({navigation, category, replaceCategory, addCategory}) => {
 };
 
 const mapStateToProps = state => ({
-  category: state.categories.category,
+  categories: state.categories.categories,
 });
 const mapDispatchToProps = dispatch => ({
-  replaceCategory: dispatch.categories.replaceCategory,
+  replaceCategories: dispatch.categories.replaceCategories,
   addCategory: dispatch.categories.addCategory,
 });
 
