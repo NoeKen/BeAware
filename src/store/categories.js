@@ -7,4 +7,5 @@ export default {
     image: '',
     // created_at:'',
   },
+  selectedCategory:{},
 };

@@ -1,46 +1,65 @@
 import { useNavigation } from '@react-navigation/native';
-import {Icon, Text} from 'native-base';
-import React from 'react';
-import {useState} from 'react';
+import { Icon, Text } from 'native-base';
+import React, { useState } from 'react';
 import {
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 // import LinearGradient from 'react-native-linear-gradient';
 import light from '../../constants/theme/light';
-import { DeleteItem } from '../../Services/categoriesService';
+import CModal from '../UI/modal';
 
-export default function   CategoryItem({data}) {
+export default function CategoryItem({
+  data,
+  removeCategory,
+  deleteCascadeExpenses,
+}) {
+  const [modalVisible, setModalVisible] = useState(false);
   const [del, setDelete] = useState(false);
   // console.log('data:',data);
   const navigation = useNavigation();
+  const deleteCategory = async () => {
+    await deleteCascadeExpenses(data.id);
+    await removeCategory(data.id);
+    navigation.replace('index');
+  };
+
   return (
     <View style={styles.container}>
-      
       <TouchableOpacity
-        onPress={() => navigation.navigate('Expenses',{cat:data})}
+        onPress={() =>{ setDelete(false), navigation.navigate('Expenses', {cat: data})}}
         onLongPress={() => {
-          console.log('long pressed: ', del), setDelete(!del);
+          setDelete(!del);
         }}>
+        <CModal
+          setModalVisible={setModalVisible}
+          modalVisible={modalVisible}
+          title={'Delete Category'}
+          text={`You are going to delete one category ('${data.name}'). \n This will also delete all his expenses`}
+          deleCategory={deleteCategory}
+        />
         <ImageBackground
           source={{uri: data.image}}
           style={styles.imageBackground}>
           <View style={styles.textCard}>
-            <Text
-              numberOfLines={1}
-              style={[styles.textValue, styles.name]}>
+            <Text numberOfLines={1} style={[styles.textValue, styles.name]}>
               {data.name}
             </Text>
-            <Text numberOfLines={1} style={styles.description}>{data.description}</Text>
+            <Text numberOfLines={1} style={styles.description}>
+              {data.description}
+            </Text>
           </View>
         </ImageBackground>
       </TouchableOpacity>
       {del == true ? (
-        <TouchableOpacity style={styles.delete}
-          onPress={()=> DeleteItem(data)}
-        >
+        <TouchableOpacity
+          style={styles.delete}
+          onPress={
+            () => setModalVisible(!modalVisible)
+            //  deleteCategory()
+          }>
           <Icon name="close" style={styles.delete.icon} />
         </TouchableOpacity>
       ) : null}
@@ -64,7 +83,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: 90,
     borderRadius: 10,
-    marginBottom:5,
+    marginBottom: 5,
 
     // shadowColor:light.brandPrimary,
   },
@@ -87,13 +106,13 @@ const styles = StyleSheet.create({
     backgroundColor: light.inverseTextColor,
     height: '55%',
     opacity: 0.65,
-    marginTop: '26%',
+    marginTop: '28%',
     padding: 8,
-    paddingTop:-2
+    paddingTop: -2,
   },
   description: {
-    fontSize:14,
-    marginTop:-5
+    fontSize: 14,
+    marginTop: -5,
   },
   name: {
     color: light.textColor,
@@ -101,20 +120,20 @@ const styles = StyleSheet.create({
     fontSize: 22,
   },
   delete: {
-    width:25,
-    height:25,
+    width: 25,
+    height: 25,
     position: 'absolute',
-    elevation:25,
+    elevation: 25,
     top: 0,
     right: 0,
     backgroundColor: light.inverseTextColor,
     borderRadius: 15,
-    alignItems:'center',
-    justifyContent:'center',
-    icon:{
-      color: light.inactiveTab,
+    alignItems: 'center',
+    justifyContent: 'center',
+    icon: {
+      color: light.brandPrimary,
       fontSize: 22,
-      fontWeight:'bold'
-    }
+      fontWeight: 'bold',
+    },
   },
 });

@@ -23,6 +23,9 @@ target 'BeAware' do
 
   pod 'RNPopoverMenu', :path => '../node_modules/react-native-popover-menu'
 
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+
   target 'BeAwareTests' do
     inherit! :complete
     # Pods for testing

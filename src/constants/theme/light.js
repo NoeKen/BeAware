@@ -1,14 +1,18 @@
 export default{
-    //Colors
-    brandPrimary: '#00cef3',
-    // brandSecond: '#bc5174',
-    brandSecond: '#e91e63',
+    // brandPrimary: '#da8608',
+    brandPrimary: '#2A8C82',
+    // brandPrimary: '#00cef3',
+    // brandSecond: '#da8608',
+    brandSecond: '#216e57',
+    // brandSecond: '#e91e63',
     brandSuccess: '#03ad6c',
     textColor: '#000000',
-    inverseTextColor:'#ffffff',
+    inverseTextColor:'#F4FBFA',
+    // inactiveTab:'#F4FBFA',
     inactiveTab:'#707070',
-    whiteGrey:'#f7f7f7ff',
+    whiteGrey:'#F4FBFA',
     inputBg:'#e91e6216',
-    placeholder:'#e9e9e960',
-    brandLight:'#ffffff'
+    placeholder:'#c5c0c0b5',
+    brandLight:'#ffffff',
+    brandDanger:'#ff0000',
 }

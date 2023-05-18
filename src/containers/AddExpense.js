@@ -1,53 +1,48 @@
 // import {Input, TextArea} from 'native-base';
 import moment from 'moment';
 import {Container, Content, Icon, Input, Picker, Textarea} from 'native-base';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import SQLite from 'react-native-sqlite-2';
+import uuid from 'react-native-uuid';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Header from '../components/UI/header';
+import {connect} from 'react-redux';
 import light from '../constants/theme/light';
-import {CreateExpense} from '../Services/expensesService';
+import Header from '../components/UI/header';
+import {v4 as uuidv4} from 'uuid';
+import {generateUniqueID} from '../Services/expensesService';
+// import {v4 as uuid } from 'uuid';
 
-const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
+// const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 
-const AddExpense = ({navigation}) => {
-  const [error, setError] = useState('');
+const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
+  const [titleError, setTitleError] = useState(false);
+  const [amountError, setAmountError] = useState(false);
+  const [categoryError, setCategoryError] = useState(false);
+  const [error, setError] = useState('This field is required');
   const [reqError, setReqError] = useState('');
-  const [categories, setCategories] = useState([]);
   const [selected, setSelected] = useState();
+
   const [expense, setExpense] = useState({
+    // id: generateUniqueID(),
+    id: null,
     title: '',
     description: '',
-    amount: '',
+    amount: 0,
     category_id: '',
-    created_at: moment(new Date()).format('YYYY-MM-DD', 'HH:MM'),
-  });
-
-  db.transaction(txn => {
-    const cats = txn.executeSql(
-      'select * from Categories',
-      // 'select * from Categories ORDER BY date(created_at)',
-      [],
-      (txn, res) => {
-        var len = res.rows.length;
-        var cat = [];
-        if (len > 0) {
-          for (let i = 0; i < len; ++i) {
-            cat.push(res.rows.item(i));
-            // console.log('<=====> category: <==========> ',res.rows.item(i));
-          }
-        }
-        setCategories(cat);
-        // console.log('categories:',categories);
-        // categories = cat
-      },
-    );
+    created_at: null,
   });
 
   function resetForm() {
     // setRest(true);
-    setExpense({...expense, title: '', description: '', amount: ''});
+    setExpense({
+      ...expense,
+      id: null,
+      title: '',
+      description: '',
+      amount: '',
+      created_at: null,
+    });
+    // setSelected('related category');
     setError(''), setReqError('');
     // setTitle('');
     // setAmount('');
@@ -55,25 +50,46 @@ const AddExpense = ({navigation}) => {
   }
 
   async function createExpense() {
-    try {
-      CreateExpense(expense, (navigation = {navigation}));
-    } catch (error) {
-      console.log('error when creating expense : ', error);
+    // const MY_NAMESPACE =
+    if (expense.title === '') {
+      setTitleError(true);
+    }
+    if (expense.amount === '') {
+      setAmountError(true);
+    }
+    if (expense.category_id === '') {
+      setCategoryError(true);
+    }
+    if (
+      expense.title !== '' &&
+      expense.amount !== '' &&
+      expense.category_id !== ''
+    ) {
+      setTitleError(false);
+      setAmountError(false);
+      setCategoryError(false);
+      try {
+        setExpense({...expense, id: uuid.v4(), created_at: new Date()});
+        await replaceExpenses([...expenses, expense]);
+        resetForm()
+        navigation.goBack();
+      } catch (error) {
+        console.log('error when creating expense : ', error);
+      }
     }
   }
-  const [tasks, setTask] = useState([{}]);
 
   // useEffect(() => {
   // }, []);
   return (
     <Container style={{flex: 1}}>
-      {/* <Header title={'New expense'} /> */}
+      <Header title={'Add Expense'} />
       <Content>
         <TouchableOpacity
           style={styles.listButton}
           onPress={async () => {
-            navigation.navigate('AddAList')
-            // createExpense(), resetForm();
+            resetForm();
+            navigation.navigate('AddAList');
           }}>
           <Text style={styles.listText}>Create a list</Text>
         </TouchableOpacity>
@@ -92,9 +108,10 @@ const AddExpense = ({navigation}) => {
             style={styles.input}
             onChangeText={val => {
               setExpense({...expense, title: val});
+              val !== '' &&setTitleError(false)
             }}
           />
-          <Text style={styles.error}>{error}</Text>
+          {titleError && <Text style={styles.error}>This field is required</Text>}
 
           <View style={styles.inputHeader}>
             <Text style={styles.inputHeader.text}>Amount :</Text>
@@ -110,9 +127,16 @@ const AddExpense = ({navigation}) => {
             style={styles.input}
             keyboardType="phone-pad"
             onChangeText={val => {
-              setExpense({...expense, amount: val});
+              setExpense({
+                ...expense,
+                amount: val,
+                id: uuid.v4(),
+                created_at: new Date(),
+              });
+              val !== ''&& setAmountError(false)
             }}
           />
+          {amountError && <Text style={styles.error}>This field is required</Text>}
 
           <View style={[styles.inputHeader, {marginTop: 20}]}>
             <Text style={styles.inputHeader.text}>Category :</Text>
@@ -122,23 +146,23 @@ const AddExpense = ({navigation}) => {
             />
           </View>
           {
-            // cat
             <Picker
               mode="dropdown"
               iosIcon={<Icon name="arrow-down" />}
               placeholder="Select a category"
               style={[
                 {
+                  color: light.textColor,
                   height: 50,
                   borderRadius: 10,
                   backgroundColor: light.whiteGrey,
                 },
               ]}
-              placeholderIconColor="#007aff"
+              placeholderIconColor={light.brandPrimary}
               selectedValue={selected}
               onValueChange={val => {
-                console.log('cat selected: ', val);
                 setSelected(val), setExpense({...expense, category_id: val});
+                setCategoryError(false)
               }}>
               <Picker.Item
                 label="Related category"
@@ -152,7 +176,7 @@ const AddExpense = ({navigation}) => {
               })}
             </Picker>
           }
-          <Text style={styles.error}>{error}</Text>
+          {categoryError && <Text style={styles.error}>This field is required</Text>}
           <Text style={styles.inputHeader.text}>Description</Text>
           <Textarea
             placeholder="expense description"
@@ -166,7 +190,7 @@ const AddExpense = ({navigation}) => {
           <TouchableOpacity
             style={styles.saveButton}
             onPress={async () => {
-              createExpense(), resetForm();
+              await createExpense();
             }}>
             <Text style={styles.saveText}>Save</Text>
           </TouchableOpacity>
@@ -193,19 +217,25 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     backgroundColor: light.brandPrimary,
+    elevation: 10,
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 20,
+    shadowOffset: {
+      height: -5,
+      width: 0,
+    },
+    shadowRadius: 1,
   },
   listButton: {
-    backgroundColor: light.inverseTextColor,
+    backgroundColor: 'transparent',
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
     marginHorizontal: 20,
     marginTop: 20,
-    borderWidth:1,
+    borderWidth: 1,
     borderColor: light.brandSecond,
   },
   cancelButton: {
@@ -213,18 +243,22 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   error: {
-    color: light.brandPrimary,
+    color: 'red',
+    marginBottom: 10,
+    marginHorizontal: 10,
+    marginTop: 5,
   },
   saveText: {
     color: light.inverseTextColor,
     fontFamily: 'ubuntu-bold',
     fontSize: 20,
+    fontWeight: 'bold',
   },
   listText: {
     color: light.brandSecond,
     fontFamily: 'ubuntu-bold',
     fontSize: 18,
-    fontWeight:'bold'
+    fontWeight: 'bold',
   },
   cancelText: {
     color: light.inactiveTab,
@@ -255,5 +289,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+const mapStateToProps = state => ({
+  expenses: state.expenses.expenses,
+  categories: state.categories.categories,
+});
 
-export default AddExpense;
+const mapDispatchToProps = dispatch => ({
+  replaceExpenses: dispatch.expenses.replaceExpenses,
+});
+export default connect(mapStateToProps, mapDispatchToProps)(AddExpense);
