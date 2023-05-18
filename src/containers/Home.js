@@ -64,9 +64,9 @@ const Home = ({allCategories, deleteCategory, deleteCascadeExpenses}) => {
               }}>
               Expenses Categories
             </Text>
-            <TouchableOpacity onPress={() => navigation.replace('index')}>
+            {/* <TouchableOpacity onPress={() => navigation.replace('index')}>
               <Icon name="refresh" style={styles.reloadIcon} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
           <View>
             {categories?.length < 1 ? (
@@ -145,5 +145,6 @@ const styles = StyleSheet.create({
   reloadIcon: {
     color: light.brandSecond,
     fontWeight: 'bold',
+    fontSize: 18,
   },
 });

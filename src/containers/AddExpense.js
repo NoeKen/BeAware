@@ -8,30 +8,41 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {connect} from 'react-redux';
 import light from '../constants/theme/light';
 import Header from '../components/UI/header';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
+import {generateUniqueID} from '../Services/expensesService';
 // import {v4 as uuid } from 'uuid';
 
 // const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 
 const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
-  const [error, setError] = useState('');
+  const [titleError, setTitleError] = useState(false);
+  const [amountError, setAmountError] = useState(false);
+  const [categoryError, setCategoryError] = useState(false);
+  const [error, setError] = useState('This field is required');
   const [reqError, setReqError] = useState('');
   const [selected, setSelected] = useState();
- 
+
   const [expense, setExpense] = useState({
-    id: uuidv4(),
-    // id: uuid.v4(),
+    // id: generateUniqueID(),
+    id: null,
     title: '',
     description: '',
     amount: 0,
     category_id: '',
-    created_at: new Date().toISOString(),
+    created_at: null,
   });
 
   function resetForm() {
     // setRest(true);
-    setExpense({...expense, title: '', description: '', amount: ''});
-    setSelected('related category')
+    setExpense({
+      ...expense,
+      id: null,
+      title: '',
+      description: '',
+      amount: '',
+      created_at: null,
+    });
+    // setSelected('related category');
     setError(''), setReqError('');
     // setTitle('');
     // setAmount('');
@@ -39,12 +50,25 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
   }
 
   async function createExpense() {
-    // const MY_NAMESPACE = 
-    try {
-      await replaceExpenses([...expenses,expense]);
-      navigation.navigate('Home');
-    } catch (error) {
-      console.log('error when creating expense : ', error);
+    // const MY_NAMESPACE =
+    if (expense.title === '') {
+      setTitleError(true);
+      throw new Error();
+    } else if (expense.amount === '') {
+      setAmountError(true);
+    } else if (expense.category_id === '') {
+      setCategoryError(true);
+    } else {
+      setTitleError(false);
+      setAmountError(false);
+      setCategoryError(false);
+      try {
+        setExpense({...expense, id: uuid.v4(), created_at: new Date()});
+        await replaceExpenses([...expenses, expense]);
+        navigation.navigate('Home');
+      } catch (error) {
+        console.log('error when creating expense : ', error);
+      }
     }
   }
 
@@ -52,7 +76,7 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
   // }, []);
   return (
     <Container style={{flex: 1}}>
-    <Header title={'Add Expense'} />
+      <Header title={'Add Expense'} />
       <Content>
         <TouchableOpacity
           style={styles.listButton}
@@ -77,9 +101,10 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
             style={styles.input}
             onChangeText={val => {
               setExpense({...expense, title: val});
+              // val===''?setTitleError(true):setTitleError(false);
             }}
           />
-          <Text style={styles.error}>{error}</Text>
+          {titleError && <Text style={styles.error}>{error}</Text>}
 
           <View style={styles.inputHeader}>
             <Text style={styles.inputHeader.text}>Amount :</Text>
@@ -95,9 +120,16 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
             style={styles.input}
             keyboardType="phone-pad"
             onChangeText={val => {
-              setExpense({...expense, amount: val});
+              setExpense({
+                ...expense,
+                amount: val,
+                id: uuid.v4(),
+                created_at: new Date(),
+              });
+              // val===''?setAmountError(true):setAmountError(false);
             }}
           />
+          {amountError && <Text style={styles.error}>{error}</Text>}
 
           <View style={[styles.inputHeader, {marginTop: 20}]}>
             <Text style={styles.inputHeader.text}>Category :</Text>
@@ -136,7 +168,7 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
               })}
             </Picker>
           }
-          <Text style={styles.error}>{error}</Text>
+          {categoryError && <Text style={styles.error}>{error}</Text>}
           <Text style={styles.inputHeader.text}>Description</Text>
           <Textarea
             placeholder="expense description"
@@ -177,16 +209,16 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     backgroundColor: light.brandPrimary,
-    elevation:10,
+    elevation: 10,
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 20,
-    shadowOffset:{
+    shadowOffset: {
       height: -5,
       width: 0,
     },
-    shadowRadius:1
+    shadowRadius: 1,
   },
   listButton: {
     backgroundColor: 'transparent',
@@ -203,7 +235,10 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   error: {
-    color: light.brandPrimary,
+    color: light.brandDanger,
+    marginBottom: 10,
+    marginHorizontal: 10,
+    marginTop: 5,
   },
   saveText: {
     color: light.inverseTextColor,

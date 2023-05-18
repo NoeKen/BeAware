@@ -2,7 +2,7 @@
 import moment from 'moment/moment';
 import {Container} from 'native-base';
 import React, {useEffect, useState} from 'react';
-import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {FlatList, SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import {getCatExpenses} from '../Services/expensesService';
 import Header from '../components/UI/header';
@@ -50,6 +50,8 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
       //   return new Date(b).getTime() - new Date(a).getTime();
       // });
     });
+    oldExpenses.sort((a, b) => moment(b.created_at).diff(moment(a.created_at)));
+    currentExpenses.sort((a, b) => moment(b.created_at).diff(moment(a.created_at)));
     setOldExpenses(oldExpenses);
     setCurExpenses(currentExpenses);
     setTotalAmount(amount);
@@ -57,17 +59,17 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
   }
 
   return (
-    <Container>
-      <SafeAreaView>
+    <>
+    <SafeAreaView>
         <Header
           navigation={navigation}
           iLeft={'arrow-back'}
-          title={cat.name + ' Expenses'}
+          title={`- ${cat.name}-  ` + ' Expenses'}
           // iconR={'add-circle'}
           // onPress={() => navigation.navigate('AddExpense')}
         />
       </SafeAreaView>
-      {/* <Content> */}
+    <ScrollView>
       <View style={{padding: 16}}>
         <View
           style={{
@@ -191,8 +193,9 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
           )}
         </View>
       </View>
+    </ScrollView>
       <FabIcon onPress={() => navigation.navigate('AddExpense',{cat:cat})} />
-    </Container>
+    </>
   );
 };
 

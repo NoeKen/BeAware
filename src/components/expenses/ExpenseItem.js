@@ -12,10 +12,6 @@ export default function ExpenseItem({
   navigation,
   getExpenses,
 }) {
-  // const date = new Date().toLocaleString()
-  // console.log('====================================');
-  // console.log('new date: ' ,moment( date).format('HH:mm:ss'));
-  // console.log('====================================');
   async function removeItem() {
     await deleteExpense(item.id);
     navigation.replace('index');
@@ -27,6 +23,7 @@ export default function ExpenseItem({
         flexDirection: 'row',
         left: 0,
         flex: 1,
+        height: 62,
         backgroundColor: light.brandPrimary,
         justifyContent: 'space-between',
         marginVertical: 5,
@@ -42,7 +39,7 @@ export default function ExpenseItem({
         }}
         style={{
           backgroundColor: light.whiteGrey,
-          height: 60,
+          height: 57,
           borderRadius: 8,
           padding: 8,
           flexDirection: 'row',
@@ -62,7 +59,7 @@ export default function ExpenseItem({
               color: light.textColor,
               fontFamily: 'ubuntu-bold',
               fontSize: 18,
-              fontWeight:'bold',
+              fontWeight: 'bold',
             }}
             numberOfLines={1}>
             {item.title}
