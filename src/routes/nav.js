@@ -16,12 +16,12 @@ export function ExpensesNav() {
       screenOptions={{
         headerShown:false,
         // headerSearchBarOptions:{tintColor:'red'},
-        headerTitleStyle: {color: light.brandPrimary},
+        headerTitleStyle: {color: light.brandSecond},
         headerBackVisible: true,
         headerBackTitle:'back',
         statusBarColor:light.brandPrimary
       }}>
-      <Stack.Screen options={{headerSearchBarOptions:{barTintColor:'red'}}} name="Home" component={Home} />
+      <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Expenses" component={Expenses} />
       <Stack.Screen name="All Expenses" component={AllExpenses} />
     </Stack.Navigator>
@@ -33,7 +33,7 @@ export function DashboardNav() {
     <Stack.Navigator
       screenOptions={{
         headerShown:false,
-        headerTitleStyle: {color: light.brandPrimary},
+        headerTitleStyle: {color: light.brandSecond},
         headerBackVisible: false,
         statusBarColor:light.brandPrimary
       }}>
@@ -47,7 +47,7 @@ export function ListNav() {
     <Stack.Navigator
       screenOptions={{
         headerShown:false,
-        headerTitleStyle: {color: light.brandPrimary},
+        headerTitleStyle: {color: light.brandSecond},
         headerBackVisible: false,
         statusBarColor:light.brandPrimary
       }}>
@@ -63,15 +63,15 @@ export function AddNav() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown:true,
-        headerTitleStyle: {color: light.brandPrimary},
+        headerShown:false,
+        headerTitleStyle: {color: light.brandSecond},
         animation:'slide_from_bottom',
         headerBackVisible: true,
         statusBarColor:light.brandPrimary,
       }}>
       <Stack.Screen name="AddExpense" component={AddExpense} options={{
         title: 'Add Expense',
-        headerTitleStyle: {color: light.brandPrimary},
+        headerTitleStyle: {color: light.brandSecond},
         headerBackTitle:'back',
         headerBackTitleStyle: {color: light.brandPrimary},
       }} />

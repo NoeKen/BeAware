@@ -3,7 +3,7 @@ import React from 'react';
 import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import light from '../../constants/theme/light';
 
-const CModal = ({setModalVisible, modalVisible, text, title, deleCategory}) => {
+const CModal = ({setModalVisible,navigation, modalVisible, text, title, deleCategory}) => {
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -53,6 +53,7 @@ const CModal = ({setModalVisible, modalVisible, text, title, deleCategory}) => {
                 onPress={async () => {
                   setModalVisible(!modalVisible);
                   await deleCategory();
+                  navigation.replace('index');
                 }}>
                 <Text
                   style={{

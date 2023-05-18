@@ -7,6 +7,9 @@ import uuid from 'react-native-uuid';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {connect} from 'react-redux';
 import light from '../constants/theme/light';
+import Header from '../components/UI/header';
+import { v4 as uuidv4 } from 'uuid';
+// import {v4 as uuid } from 'uuid';
 
 // const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 
@@ -14,13 +17,15 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
   const [error, setError] = useState('');
   const [reqError, setReqError] = useState('');
   const [selected, setSelected] = useState();
+ 
   const [expense, setExpense] = useState({
-    id: uuid.v4(),
+    id: uuidv4(),
+    // id: uuid.v4(),
     title: '',
     description: '',
     amount: 0,
     category_id: '',
-    created_at: new Date(),
+    created_at: new Date().toISOString(),
   });
 
   function resetForm() {
@@ -34,6 +39,7 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
   }
 
   async function createExpense() {
+    // const MY_NAMESPACE = 
     try {
       await replaceExpenses([...expenses,expense]);
       navigation.navigate('Home');
@@ -46,6 +52,7 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
   // }, []);
   return (
     <Container style={{flex: 1}}>
+    <Header title={'Add Expense'} />
       <Content>
         <TouchableOpacity
           style={styles.listButton}
@@ -112,7 +119,7 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
                   backgroundColor: light.whiteGrey,
                 },
               ]}
-              placeholderIconColor="#007aff"
+              placeholderIconColor={light.brandPrimary}
               selectedValue={selected}
               onValueChange={val => {
                 setSelected(val), setExpense({...expense, category_id: val});
@@ -170,13 +177,19 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     backgroundColor: light.brandPrimary,
+    elevation:10,
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 20,
+    shadowOffset:{
+      height: -5,
+      width: 0,
+    },
+    shadowRadius:1
   },
   listButton: {
-    backgroundColor: light.inverseTextColor,
+    backgroundColor: 'transparent',
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
@@ -196,6 +209,7 @@ const styles = StyleSheet.create({
     color: light.inverseTextColor,
     fontFamily: 'ubuntu-bold',
     fontSize: 20,
+    fontWeight: 'bold',
   },
   listText: {
     color: light.brandSecond,

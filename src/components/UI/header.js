@@ -5,7 +5,7 @@ import {StyleSheet, TouchableOpacity} from 'react-native';
 import {View, Text} from 'react-native';
 import light from '../../constants/theme/light';
 
-export default function Header({iLeft, title, iconR, onPress}) {
+export default function Header({iLeft, title, iconR,CStyles, onPress}) {
   const navigation= useNavigation();
   return (
     <View style={styles.container}>
@@ -21,7 +21,7 @@ export default function Header({iLeft, title, iconR, onPress}) {
       </Text>
         {/* show the right icon if it is provided, else show et whitespace */}
         <TouchableOpacity onPress={onPress}>
-          {iconR && <Icon name={iconR} style={styles.arrowLeft} />}
+          {iconR && <Icon name={iconR} style={[styles.arrowLeft,{...CStyles}]} />}
         </TouchableOpacity>
     </View>
   );

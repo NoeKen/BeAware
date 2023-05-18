@@ -3,12 +3,12 @@ import {Container, Content, Text, View} from 'native-base';
 import React, { useEffect } from 'react';
 import {StyleSheet} from 'react-native';
 import light from '../constants/theme/light';
-import SQLite from 'react-native-sqlite-2';
+// import SQLite from 'react-native-sqlite-2';
 import {useState} from 'react';
 import Header from '../components/UI/header';
 import { getCategory } from '../Services/categoriesService';
 
-const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
+
 export default function ExpenseDetails({route, navigation}) {
   const {item,categories} = route.params;
   const [category, setCategory] = useState(getCategory(categories, item.category_id));
@@ -26,7 +26,7 @@ export default function ExpenseDetails({route, navigation}) {
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionContainer.key}>Amount :</Text>
           <Text style={styles.sectionContainer.value.text}>
-            {item?.amount} F
+            {item?.amount} XCFA
           </Text>
         </View>
         <View style={styles.sectionContainer}>

@@ -37,22 +37,23 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
         iLeft={'arrow-back'}
         title="Add A List"
         iconR={'save'}
+        CStyles={{color:items.title == '' || items.list.length == 0?light.inactiveTab:light.brandPrimary}}
         onPress={() => {
-          // if (items.title == '' && items.list.length == 0) {
-          //   setError(true);
-          //   setErrorMessage('Please fill the title and add items to the list');
-          // } else if (items.title == '' && items.list.length > 0) {
-          //   setError(true);
-          //   setErrorMessage('Please fill the list title');
-          // } else if (items.title !== '' && items.list.length === 0) {
-          //   setError(true);
-          //   setErrorMessage('Please add items to the list');
-          // } else {
-          //   replaceExpensesList([...expensesList, items]);
-          //   setItems({...items, title: '', list: [],total_price:0});
-          //   navigation.navigate('List')
-          // }
+          if (items.title == '' && items.list.length == 0) {
+            setError(true);
+            setErrorMessage('Please fill the title and add items to the list');
+          } else if (items.title == '' && items.list.length > 0) {
+            setError(true);
+            setErrorMessage('Please fill the list title');
+          } else if (items.title !== '' && items.list.length === 0) {
+            setError(true);
+            setErrorMessage('Please add items to the list');
+          } else {
+            replaceExpensesList([...expensesList, items]);
+            setItems({...items, title: '', list: [],total_price:0});
             navigation.navigate('List')
+          }
+            // navigation.navigate('List')
         }}
       />
 
@@ -99,7 +100,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
               placeholderTextColor={light.inactiveTab}
               onChangeText={text => setItems({...items, title: text})}
             />
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 position: 'absolute',
                 end: 20,
@@ -116,7 +117,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
                 type="Ionicons"
                 style={{color: light.inactiveTab, fontSize: 20}}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             {items.list.length === 0 ? (
               <Text style={{color: light.inactiveTab, fontSize: 16,textAlign:'center',marginTop:'100%'}}>
                 Your list will appear here
@@ -256,7 +257,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
         {error ? (
           <Text
             style={{
-              color: 'red',
+              color: light.brandDanger,
               fontSize: 15,
               textAlign: 'center',
               marginTop: -10,

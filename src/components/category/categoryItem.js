@@ -23,13 +23,13 @@ export default function CategoryItem({
   const deleteCategory = async () => {
     await deleteCascadeExpenses(data.id);
     await removeCategory(data.id);
-    navigation.navigate('Add Category');
+    navigation.replace('index');
   };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Expenses', {cat: data})}
+        onPress={() =>{ setDelete(false), navigation.navigate('Expenses', {cat: data})}}
         onLongPress={() => {
           setDelete(!del);
         }}>
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     icon: {
-      color: light.inactiveTab,
+      color: light.brandPrimary,
       fontSize: 22,
       fontWeight: 'bold',
     },

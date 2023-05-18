@@ -82,12 +82,12 @@ const createDynamicTable = array => {
     <table>
       <tr>
         <th>Label</th>
-        <th>Price</th>
+        <th>Price (XCFA)</th>
       </tr>
       ${table}
       <tr>
         <th>Total</th>
-        <th id='TotalPrice'>${array.total_price}</th>
+        <th id='TotalPrice'>${array.total_price} XCFA</th>
       </tr>
     </table>
     <br/>

@@ -1,12 +1,10 @@
 import moment from 'moment';
 import {ToastAndroid} from 'react-native';
-import SQLite from 'react-native-sqlite-2';
 import Config from '../constants/config';
 import {getFeaturedImageUrl} from '../lib/images';
 import {stripHtml, ucfirst} from '../lib/string';
 import initialState from '../store/expenses';
 
-const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 // const navigation = useNavigation();
 
 /**
@@ -54,8 +52,15 @@ export default {
       const tab = rootState.expenses.expenses;
       console.log('array', tab, 'id', payload);
       const index = tab.findIndex(item => item.id === payload);
+      // const index = tab.map((item, index) => {
+      //   if (item.id === payload) {
+      //     console.log('index in map: ', index);
+      //     return index;
+      //   }
+      // });
+      // console.log('index to delete', index);
       if (index !== -1) {
-        tab.splice(index, 1);
+        // tab.splice(index, 1);
         ToastAndroid.show('Item was successfully deleted', ToastAndroid.LONG);
         dispatch.expenses.replaceExpenses(tab);
         // navigation.reset();
@@ -72,7 +77,7 @@ export default {
           tab.splice(index, 1);
         }
       });
-      dispatch.expenses.replaceExpenses(tab)
+      dispatch.expenses.replaceExpenses(tab);
     },
     // async addExpensesList(payload = {}, rootState) {
     //   console.log('rootState: ', rootState);

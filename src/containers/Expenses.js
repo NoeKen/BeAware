@@ -9,6 +9,7 @@ import Header from '../components/UI/header';
 import ExpenseItem from '../components/expenses/ExpenseItem';
 import All from '../components/expenses/more';
 import light from '../constants/theme/light';
+import FabIcon from '../ui/fabIcon';
 
 const date = moment(date).format('YYYY-MM-DD');
 
@@ -62,8 +63,8 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
           navigation={navigation}
           iLeft={'arrow-back'}
           title={cat.name + ' Expenses'}
-          iconR={'add-circle'}
-          onPress={() => navigation.navigate('AddExpense')}
+          // iconR={'add-circle'}
+          // onPress={() => navigation.navigate('AddExpense')}
         />
       </SafeAreaView>
       {/* <Content> */}
@@ -89,21 +90,21 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
             )}
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={styles.title}>{totalAmount}</Text>
-            {curExpenses.length > 4 ? (
-              <All
-                onPress={() =>
-                  navigation.navigate('All Expenses', {items: expenses})
-                }
-              />
-            ) : (
-              curExpenses.length < 0 && (
-                <Text style={styles.emptyText}>Nothing to show here</Text>
-              )
-            )}
+            <Text style={styles.title}>{totalAmount} XCFA</Text>
           </View>
         </View>
         <View>
+          {curExpenses.length > 4 ? (
+            <All
+              onPress={() =>
+                navigation.navigate('All Expenses', {items: curExpenses})
+              }
+            />
+          ) : (
+            curExpenses.length < 0 && (
+              <Text style={styles.emptyText}>Nothing to show here</Text>
+            )
+          )}
           {curExpenses.length < 1 ? (
             <Text style={styles.emptyText}>No expenditures made today</Text>
           ) : (
@@ -116,7 +117,6 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
                 index < 5 && (
                   <ExpenseItem
                     item={item}
-                    expenses={expenses}
                     categories={categories}
                     navigation={navigation}
                     deleteExpense={deleteExpense}
@@ -155,7 +155,7 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
             )}
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={styles.title}>{oldTotalAmount}</Text>
+            <Text style={styles.title}>{oldTotalAmount} XCFA</Text>
             {oldExpenses.length > 4 && (
               <All
                 onPress={() =>
@@ -191,7 +191,7 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
           )}
         </View>
       </View>
-      {/* <FabIcon onPress={() => navigation.navigate('AddExpense',{cat:cat})} /> */}
+      <FabIcon onPress={() => navigation.navigate('AddExpense',{cat:cat})} />
     </Container>
   );
 };
@@ -204,15 +204,15 @@ const styles = StyleSheet.create({
     color: light.brandPrimary,
     fontSize: 20,
     fontFamily: 'ubuntu-bold',
-    marginEnd: 10,
+    fontWeight: '900',
   },
   sectionTitle: {
     fontSize: 20,
     fontFamily: 'ubuntu-bold',
-    // fontWeight:'900',
+    fontWeight: '900',
     marginBottom: 15,
     marginTop: 20,
-    color: light.inactiveTab,
+    color: light.textColor,
   },
   image: {
     flex: 1,

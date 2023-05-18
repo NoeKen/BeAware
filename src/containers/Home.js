@@ -8,7 +8,6 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import SQLite from 'react-native-sqlite-2';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {connect} from 'react-redux';
 import CategoryItem from '../components/category/categoryItem';
@@ -16,36 +15,37 @@ import Header from '../components/UI/header';
 import light from '../constants/theme/light';
 import {CategoriesList} from '../Services/categoriesService';
 import FabIcon from '../ui/fabIcon';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
-const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 //  const Home=({navigation,getCategories,categories})=> {
-const Home = ({categories,deleteCategory,deleteCascadeExpenses}) => {
-  // const [categories, setCategories] = useState([]);
-  const navigation= useNavigation()
-  useEffect(() => {
-    categories
-  }, [categories]);
+const Home = ({allCategories, deleteCategory, deleteCascadeExpenses}) => {
+  const [categories, setCategories] = useState([]);
 
-  const removeCategory = async () => {
-    await deleteCategory()
-  };
+  const navigation = useNavigation();
+  useEffect(() => {
+    getCategories(allCategories);
+  }, [allCategories]);
+
+  function getCategories(cats) {
+    const categories = [];
+    cats.map(cat => {
+      categories.push(cat);
+    });
+    setCategories(categories);
+  }
 
   return (
-    <Container style={styles.container}>
+    <>
       <SafeAreaView>
-        {/* <Header title={'Home'} 
-        // iconR="menu" 
-
-        /> */}
-        <View style={styles.header}>
-            <ImageBackground
-              source={require('../../assets/pictures/tirelire.png')}
-              resizeMode="cover"
-              style={styles.image}>
-              <Text style={styles.text}>beAware</Text>
-            </ImageBackground>
-          </View>
+        <Header title={'Home'}  />
+        {/* <View style={styles.header}>
+          <ImageBackground
+            source={require('../../assets/pictures/tirelire.png')}
+            resizeMode="cover"
+            style={styles.image}>
+            <Text style={styles.text}>beAware</Text>
+          </ImageBackground>
+        </View> */}
       </SafeAreaView>
       <Content>
         <View style={{paddingHorizontal: 16, flex: 1}}>
@@ -59,12 +59,14 @@ const Home = ({categories,deleteCategory,deleteCascadeExpenses}) => {
             <Text
               style={{
                 fontWeight: 'bold',
-                fontSize: 25,
-                color: light.inactiveTab,
+                fontSize: 20,
+                color: light.textColor,
               }}>
               Expenses Categories
             </Text>
-            <Icon name='refresh' onPress={()=>navigation.refresh()} />
+            <TouchableOpacity onPress={() => navigation.replace('index')}>
+              <Icon name="refresh" style={styles.reloadIcon} />
+            </TouchableOpacity>
           </View>
           <View>
             {categories?.length < 1 ? (
@@ -77,7 +79,12 @@ const Home = ({categories,deleteCategory,deleteCascadeExpenses}) => {
                 // style={{marginBottom: 58, paddingBottom: 50}}
                 disableVirtualization={true}
                 renderItem={({item}) => (
-                  <CategoryItem data={item} deleteCascadeExpenses={deleteCascadeExpenses} removeCategory={deleteCategory} key={item.index} />
+                  <CategoryItem
+                    data={item}
+                    deleteCascadeExpenses={deleteCascadeExpenses}
+                    removeCategory={deleteCategory}
+                    key={item.index}
+                  />
                 )}
                 keyExtractor={item => item.id}
                 horizontal={false}
@@ -88,18 +95,19 @@ const Home = ({categories,deleteCategory,deleteCascadeExpenses}) => {
         </View>
       </Content>
       <FabIcon onPress={() => navigation.navigate('Add Category')} />
-    </Container>
+    </>
   );
 };
 
 const mapStateToProps = state => ({
-  categories: state.categories.categories,
+  allCategories: state.categories.categories,
 });
 
 const mapDispatchToProps = dispatch => ({
   getCategories: dispatch.categories.getCategories,
   deleteCategory: dispatch.categories.deleteCategory,
-  deleteCascadeExpenses:dispatch.expenses.deleteCascadeExpenses,
+  deleteCascadeExpenses: dispatch.expenses.deleteCascadeExpenses,
+  replaceSelectedCategory: dispatch.categories.replaceSelectedCategory
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
@@ -125,13 +133,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: '#5ad6ec5a',
     textShadowColor: '#023d5fff',
-    textShadowRadius:5,
-    textShadowOffset:{
+    textShadowRadius: 5,
+    textShadowOffset: {
       height: 0,
       width: 3,
-    }
+    },
   },
   header: {
     height: 140,
+  },
+  reloadIcon: {
+    color: light.brandSecond,
+    fontWeight: 'bold',
   },
 });

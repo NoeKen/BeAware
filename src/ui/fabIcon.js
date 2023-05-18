@@ -18,10 +18,13 @@ export default function FabIcon({onPress}) {
 }
 
 const styles = StyleSheet.create({
-    fab:{backgroundColor: light.brandPrimary},
+    fab:{
+      backgroundColor: light.brandPrimary,
+      elevation:10
+    },
     icon:{
         fontWeight:'bold',
         fontSize:30,
-        // color:light.brandSecond,
+        color:light.whiteGrey,
     },
 });

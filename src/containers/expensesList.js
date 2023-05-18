@@ -17,6 +17,9 @@ const ExpensesList = ({expensesList,navigation}) => {
         <Header
           title="Expenses List"
           iconR={'print'}
+          CStyles={{
+            color: light.brandPrimary
+          }}
           onPress={() => AllListPDF(expensesList)}
         />
       </SafeAreaView>

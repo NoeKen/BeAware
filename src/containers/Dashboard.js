@@ -4,14 +4,14 @@ import {Container, Content, Icon, Picker, View} from 'native-base';
 import React, {useState} from 'react';
 import {Dimensions, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {DataTable} from 'react-native-paper';
-import SQLite from 'react-native-sqlite-2';
+// import SQLite from 'react-native-sqlite-2';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../components/UI/header';
 import light from '../constants/theme/light';
 import {connect} from 'react-redux';
 
 const optionsPerPage = [2, 3, 4];
-const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
+// const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 
 const Dashboard = ({navigation,expenses}) => {
   const [page, setPage] = useState(0);
@@ -54,7 +54,7 @@ const Dashboard = ({navigation,expenses}) => {
   }
 
   React.useEffect(() => {
-    GetExpenses();
+    // GetExpenses();
     // console.log('expense: ', expenses[0].title);
     setPage(0);
   }, [itemsPerPage]);
@@ -63,15 +63,16 @@ const Dashboard = ({navigation,expenses}) => {
     <Container style={styles.container}>
       <Header title={'Dashboard'} />
       <Content style={styles.content}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.refreshContainer}
-          onPress={() => GetExpenses()}>
+          // onPress={() => GetExpenses()}
+          >
           <MaterialCommunityIcons
             name="table-refresh"
             style={{fontSize: 20, color: light.brandPrimary}}
           />
           <Text style={styles.refreshContainer.refreshText}>Refresh</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <DataTable>
           <DataTable.Header
             style={{
@@ -172,7 +173,8 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   tableHeader: {
-    color: light.brandPrimary,
+    color: light.brandSecond,
+    // textShadowColor: light.brandPrimary,
     fontSize: 16,
   },
   tableValue: {

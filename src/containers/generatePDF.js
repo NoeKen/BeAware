@@ -65,9 +65,6 @@ export default function RNPrintExample() {
       fileName: 'test',
       base64: true,
     });
-    console.log('====================================');
-    console.log('pdf:',results);
-    console.log('====================================');
     await RNPrint.print({filePath: results.filePath});
   }
 

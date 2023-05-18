@@ -1,28 +1,22 @@
 import {
   Container,
   Content,
-  Fab,
   Icon,
   Input,
   Text,
   Textarea,
-  View,
+  View
 } from 'native-base';
-import React, {useState} from 'react';
-import {Modal, TouchableOpacity} from 'react-native';
-import {StyleSheet} from 'react-native';
-import light from '../constants/theme/light';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, { useState } from 'react';
+import { Image, Modal, StyleSheet, TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import {Image} from 'react-native';
-import Spacer from '../ui/Spacer';
-import moment from 'moment';
-import FabIcon from '../ui/fabIcon';
-import {CreateCategory} from '../Services/categoriesService';
+import uuid from 'react-native-uuid';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { connect } from 'react-redux';
 import Header from '../components/UI/header';
 import CameraModal from '../components/category/cameraModal';
-import {connect} from 'react-redux';
-import uuid from 'react-native-uuid';
+import light from '../constants/theme/light';
+import Spacer from '../ui/Spacer';
 
 const AddCategory = ({navigation, categories, replaceCategories}) => {
   const [imgPath, setImgPath] = useState(null);
@@ -135,7 +129,7 @@ const AddCategory = ({navigation, categories, replaceCategories}) => {
               </TouchableOpacity>,
               <TouchableOpacity
                 style={styles.cancelImage}
-                onPress={() => setImgPath(null)}>
+                onPress={() => setCategory({...category, image: ''})}>
                 <Icon name="close" style={styles.cancelImage.icon} />
               </TouchableOpacity>,
             ]
@@ -213,16 +207,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 20,
     overflow: 'hidden',
+    backgroundColor:light.whiteGrey,
     empty: {
-      borderStyle: 'dashed',
-      borderWidth: 1,
-      borderColor: light.inactiveTab,
+      // borderStyle: 'dashed',
+      // borderWidth: 1,
+      // borderColor: light.inactiveTab,
     },
     provided: {
       elevation: 10,
       shadowOpacity: 0.9,
       shadowColor: light.textColor,
     },
+    elevation: 10,
+    shadowOpacity: 0.9,
+    shadowColor: light.textColor,
   },
   saveButton: {
     backgroundColor: light.brandPrimary,

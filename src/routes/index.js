@@ -43,7 +43,7 @@ export default function routes() {
         component={ExpensesNav}
         options={{
           headerShown: false,
-          headerTitleStyle: {color: light.brandPrimary},
+          // headerTitleStyle: {color: light.brandSecond},
           tabBarLabel: 'Home',
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons
@@ -60,7 +60,7 @@ export default function routes() {
         options={{
           tabBarLabel: 'AddExpenseNav',
           headerShown: false,
-          headerTitleStyle: {color: light.brandPrimary},
+          // headerTitleStyle: {color: light.brandSecond},
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons name="plus" color={color} size={size} />
           ),

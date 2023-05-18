@@ -26,6 +26,7 @@ const ListDetails = ({route}) => {
           iLeft={'arrow-back'}
           title={item.title + ' list'}
           iconR={'print'}
+          CStyles={{color:light.brandPrimary}}
           onPress={() => expensesListPDF(item)}
         />
       </SafeAreaView>
@@ -89,7 +90,7 @@ const ListDetails = ({route}) => {
 
               <Text
                 style={{
-                  color: light.brandSecond,
+                  color: light.textColor,
                   fontSize: 16,
                   fontWeight: '900',
                 }}>

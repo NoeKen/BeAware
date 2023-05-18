@@ -18,6 +18,7 @@ export default function ExpenseItem({
   // console.log('====================================');
   async function removeItem() {
     await deleteExpense(item.id);
+    navigation.replace('index');
     getExpenses();
   }
   return (
@@ -61,6 +62,7 @@ export default function ExpenseItem({
               color: light.textColor,
               fontFamily: 'ubuntu-bold',
               fontSize: 18,
+              fontWeight:'bold',
             }}
             numberOfLines={1}>
             {item.title}
@@ -78,7 +80,12 @@ export default function ExpenseItem({
         </View>
         <View
           style={{flex: 0.3, paddingEnd: 5, justifyContent: 'space-between'}}>
-          <Text style={{textAlign: 'right', color: light.textColor}}>
+          <Text
+            style={{
+              textAlign: 'right',
+              fontWeight: 'bold',
+              color: light.textColor,
+            }}>
             {[
               moment(item.created_at).format('YYYY-MM-DD') ===
               moment(new Date()).format('YYYY-MM-DD')
@@ -93,7 +100,7 @@ export default function ExpenseItem({
               fontFamily: 'ubuntu-bold',
               fontSize: 16,
               overflow: 'hidden',
-              // fontWeight:'bold'
+              fontWeight: 'bold',
             }}
             numberOfLines={1}>
             {item.amount}
