@@ -1,19 +1,20 @@
 import moment from 'moment';
 import {Container, Content, Text, View} from 'native-base';
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import light from '../constants/theme/light';
 // import SQLite from 'react-native-sqlite-2';
 import {useState} from 'react';
 import Header from '../components/UI/header';
-import { getCategory } from '../Services/categoriesService';
+import {getCategory} from '../Services/categoriesService';
+import {connect} from 'react-redux';
 
-
-export default function ExpenseDetails({route, navigation}) {
-  const {item,categories} = route.params;
-  const [category, setCategory] = useState(getCategory(categories, item.category_id));
+function ExpenseDetails({route, navigation, categories}) {
+  const {item} = route.params;
+  const [category, setCategory] = useState(
+    getCategory(categories, item.category_id),
+  );
   console.log('item pressed has this date: ', category);
- 
 
   return (
     <Container>
@@ -33,12 +34,13 @@ export default function ExpenseDetails({route, navigation}) {
           <Text style={styles.sectionContainer.key}>Category :</Text>
           <Text style={styles.sectionContainer.value.text}>
             {category?.name}
+            {/* montre */}
           </Text>
         </View>
         <View style={styles.descriptionContainer}>
           <Text style={styles.descriptionContainer.key}>Description :</Text>
           <Text style={styles.descriptionContainer.value}>
-            {item.description == ''
+            {item?.description == ''
               ? 'No description provided '
               : item?.description}
           </Text>
@@ -62,6 +64,11 @@ export default function ExpenseDetails({route, navigation}) {
     </Container>
   );
 }
+
+const mapStateToProps = state => ({
+  categories: state.categories.categories,
+});
+export default connect(mapStateToProps, {})(ExpenseDetails);
 const styles = StyleSheet.create({
   container: {
     padding: 20,

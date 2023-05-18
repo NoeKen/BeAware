@@ -2,7 +2,14 @@
 import moment from 'moment/moment';
 import {Container} from 'native-base';
 import React, {useEffect, useState} from 'react';
-import {FlatList, SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {getCatExpenses} from '../Services/expensesService';
 import Header from '../components/UI/header';
@@ -51,7 +58,9 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
       // });
     });
     oldExpenses.sort((a, b) => moment(b.created_at).diff(moment(a.created_at)));
-    currentExpenses.sort((a, b) => moment(b.created_at).diff(moment(a.created_at)));
+    currentExpenses.sort((a, b) =>
+      moment(b.created_at).diff(moment(a.created_at)),
+    );
     setOldExpenses(oldExpenses);
     setCurExpenses(currentExpenses);
     setTotalAmount(amount);
@@ -60,7 +69,7 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
 
   return (
     <>
-    <SafeAreaView>
+      <SafeAreaView>
         <Header
           navigation={navigation}
           iLeft={'arrow-back'}
@@ -69,132 +78,138 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
           // onPress={() => navigation.navigate('AddExpense')}
         />
       </SafeAreaView>
-    <ScrollView>
-      <View style={{padding: 16}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
+      <ScrollView>
+        <View style={{padding: 16}}>
           <View
             style={{
               flexDirection: 'row',
+              justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Text style={styles.sectionTitle}>Today</Text>
-            {curExpenses.length > 0 && (
-              <Text style={styles.badge.text}>
-                {curExpenses.length < 10
-                  ? '0' + curExpenses.length
-                  : curExpenses.length}
-              </Text>
-            )}
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={styles.sectionTitle}>Today</Text>
+              {curExpenses.length > 0 && (
+                <Text style={styles.badge.text}>
+                  {curExpenses.length < 10
+                    ? '0' + curExpenses.length
+                    : curExpenses.length}
+                </Text>
+              )}
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={styles.title}>{totalAmount} XCFA</Text>
+            </View>
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={styles.title}>{totalAmount} XCFA</Text>
-          </View>
-        </View>
-        <View>
-          {curExpenses.length > 4 ? (
-            <All
-              onPress={() =>
-                navigation.navigate('All Expenses', {items: curExpenses})
-              }
-            />
-          ) : (
-            curExpenses.length < 0 && (
-              <Text style={styles.emptyText}>Nothing to show here</Text>
-            )
-          )}
-          {curExpenses.length < 1 ? (
-            <Text style={styles.emptyText}>No expenditures made today</Text>
-          ) : (
-            <FlatList
-              style={{marginBottom: 10}}
-              data={curExpenses}
-              keyExtractor={item => item.expense_id}
-              renderItem={({item, index}) => [
-                // console.log('index: ',index),
-                index < 5 && (
-                  <ExpenseItem
-                    item={item}
-                    categories={categories}
-                    navigation={navigation}
-                    deleteExpense={deleteExpense}
-                    getExpenses={getExpenses}
-                  />
-                ),
-              ]}
-              scrollEnabled={false}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-            />
-          )}
-        </View>
-      </View>
-      <View style={{padding: 16, marginTop: -45}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Text style={styles.sectionTitle}>Olds</Text>
-            {oldExpenses.length > 0 ? (
-              <Text style={styles.badge.text}>
-                {oldExpenses.length < 10
-                  ? '0' + oldExpenses.length
-                  : oldExpenses.length}
-              </Text>
-            ) : (
-              <Text style={styles.badge.text}>0</Text>
-            )}
-          </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={styles.title}>{oldTotalAmount} XCFA</Text>
-            {oldExpenses.length > 4 && (
+          <View>
+            {curExpenses.length > 4 ? (
               <All
                 onPress={() =>
-                  navigation.navigate('All Expenses', {items: oldExpenses})
+                  navigation.navigate('All Expenses', {
+                    items: curExpenses,
+                    title: "Today's Expenditures",
+                  })
                 }
+              />
+            ) : (
+              curExpenses.length < 0 && (
+                <Text style={styles.emptyText}>Nothing to show here</Text>
+              )
+            )}
+            {curExpenses.length < 1 ? (
+              <Text style={styles.emptyText}>No expenditures made today</Text>
+            ) : (
+              <FlatList
+                style={{marginBottom: 10}}
+                data={curExpenses}
+                keyExtractor={item => item.expense_id}
+                renderItem={({item, index}) => [
+                  // console.log('index: ',index),
+                  index < 5 && (
+                    <ExpenseItem
+                      item={item}
+                      categories={categories}
+                      navigation={navigation}
+                      deleteExpense={deleteExpense}
+                      getExpenses={getExpenses}
+                    />
+                  ),
+                ]}
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
               />
             )}
           </View>
         </View>
+        <View style={{padding: 16, marginTop: -45}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={styles.sectionTitle}>Olds</Text>
+              {oldExpenses.length > 0 ? (
+                <Text style={styles.badge.text}>
+                  {oldExpenses.length < 10
+                    ? '0' + oldExpenses.length
+                    : oldExpenses.length}
+                </Text>
+              ) : (
+                <Text style={styles.badge.text}>0</Text>
+              )}
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={styles.title}>{oldTotalAmount} XCFA</Text>
+              {oldExpenses.length > 4 && (
+                <All
+                  onPress={() =>
+                    navigation.navigate('All Expenses', {
+                      items: oldExpenses,
+                      title: 'past expenditures',
+                    })
+                  }
+                />
+              )}
+            </View>
+          </View>
 
-        <View>
-          {oldExpenses.length < 1 ? (
-            <Text style={styles.emptyText}>No expenditures made</Text>
-          ) : (
-            <FlatList
-              style={{marginBottom: 10}}
-              data={oldExpenses}
-              keyExtractor={item => item.expense_id}
-              renderItem={({item, index}) =>
-                index < 5 && (
-                  <ExpenseItem
-                    item={item}
-                    navigation={navigation}
-                    deleteExpense={deleteExpense}
-                    getExpenses={getExpenses}
-                  />
-                )
-              }
-              scrollEnabled={false}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-            />
-          )}
+          <View>
+            {oldExpenses.length < 1 ? (
+              <Text style={styles.emptyText}>No expenditures made</Text>
+            ) : (
+              <FlatList
+                style={{marginBottom: 10}}
+                data={oldExpenses}
+                keyExtractor={item => item.expense_id}
+                renderItem={({item, index}) =>
+                  index < 5 && (
+                    <ExpenseItem
+                      item={item}
+                      navigation={navigation}
+                      deleteExpense={deleteExpense}
+                      getExpenses={getExpenses}
+                    />
+                  )
+                }
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+              />
+            )}
+          </View>
         </View>
-      </View>
-    </ScrollView>
-      <FabIcon onPress={() => navigation.navigate('AddExpense',{cat:cat})} />
+      </ScrollView>
+      <FabIcon onPress={() => navigation.navigate('AddExpense', {cat: cat})} />
     </>
   );
 };

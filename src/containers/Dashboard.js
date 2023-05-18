@@ -155,6 +155,7 @@ const Dashboard = ({navigation,expenses}) => {
             </>
           )}
         </DataTable>
+        <View style={{height:40}} />
       </Content>
     </Container>
   );

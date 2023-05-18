@@ -86,7 +86,7 @@ export default function ExpenseItem({
             {[
               moment(item.created_at).format('YYYY-MM-DD') ===
               moment(new Date()).format('YYYY-MM-DD')
-                ? moment(item.created_at).format('HH:mm:ss')
+                ? moment(item.created_at).format('hh:mm:ss a')
                 : moment(item.created_at).format('YYYY-MM-DD'),
             ]}
           </Text>
