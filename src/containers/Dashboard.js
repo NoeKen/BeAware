@@ -13,7 +13,7 @@ import {connect} from 'react-redux';
 const optionsPerPage = [2, 3, 4];
 // const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 
-const Dashboard = ({navigation,expenses}) => {
+const Dashboard = ({navigation,expenses,replaceSelectedCategory}) => {
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = React.useState(2);
   // const [expenses, setExpenses] = useState([]);
@@ -96,9 +96,9 @@ const Dashboard = ({navigation,expenses}) => {
             <DataTable.Title style={{}} textStyle={styles.tableHeader}>
               Date
             </DataTable.Title>
-            <DataTable.Title style={{}} textStyle={styles.tableHeader}>
+            {/* <DataTable.Title style={{}} textStyle={styles.tableHeader}>
               Descript°
-            </DataTable.Title>
+            </DataTable.Title> */}
           </DataTable.Header>
           {expenses.length < 1 ? (
             <View
@@ -118,6 +118,7 @@ const Dashboard = ({navigation,expenses}) => {
                     key={expense.id}
                     onPress={() => {
                       // console.log(`selected account ${expense.title}`);
+                      replaceSelectedCategory()
                       navigation.navigate('Expense Detail', {item: expense});
                     }}>
                     <DataTable.Cell
@@ -144,11 +145,11 @@ const Dashboard = ({navigation,expenses}) => {
                       {moment(expense.created_at).calendar('date')}
                       {/* {moment(expense.created_at).format('YYYY-MM-DD')} */}
                     </DataTable.Cell>
-                    <DataTable.Cell textStyle={styles.tableValue}>
+                    {/* <DataTable.Cell textStyle={styles.tableValue}>
                       {expense.description === ''
                         ? 'empty'
                         : expense.description}
-                    </DataTable.Cell>
+                    </DataTable.Cell> */}
                   </DataTable.Row>
                 );
               })}
@@ -165,7 +166,11 @@ const mapStateToProps = state => ({
   expenses: state.expenses.expenses,
 });
 
-export default connect(mapStateToProps, {})(Dashboard);
+const mapDispatchToProps =(dispatch)=>({
+  replaceSelectedCategory: dispatch.categories.replaceSelectedCategory
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
