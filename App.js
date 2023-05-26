@@ -1,7 +1,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {useEffect} from 'react';
-import {StyleSheet} from 'react-native';
+import {StatusBar, StyleSheet} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import light from './src/constants/theme/light';
 import ExpenseDetails from './src/containers/Expense details';
@@ -17,7 +17,9 @@ import AddAList from './src/containers/addAList';
 import RNPrintExample from './src/containers/generatePDF';
 import expensesList from './src/containers/expensesList';
 import PushNotification from 'react-native-push-notification';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import About from './src/containers/about';
+import Webview from './src/containers/webView';
 
 const App = () => {
   const {persistor, store} = configureStore();
@@ -53,7 +55,7 @@ const App = () => {
             console.log('The permission is granted');
             break;
           case RESULTS.BLOCKED:
-            console.log('The permission is denied and not requestable anymore');
+            console.log('The permission is denied and not rerequestable anymore');
             break;
         }
       })
@@ -76,8 +78,9 @@ const App = () => {
       <GestureHandlerRootView style={{flex: 1}}>
         <Provider store={store}>
           <PersistGate persistor={persistor}>
+            <StatusBar backgroundColor={light.brandPrimary} />
             <NavigationContainer>
-              <Stack.Navigator screenOptions={{statusbar: 'red'}}>
+              <Stack.Navigator>
                 <Stack.Screen
                   name="index"
                   options={{
@@ -107,6 +110,16 @@ const App = () => {
                     headerShown: false,
                   }}
                 />
+                <Stack.Screen
+                  name="About"
+                  component={About}
+                  options={{
+                    statusBarColor: light.brandPrimary,
+                    orientation: 'portrait',
+                    headerShown: false,
+                    presentation: 'fullScreenModal',
+                  }}
+                />
                 <Stack.Group screenOptions={{presentation: 'transparentModal'}}>
                   <Stack.Screen
                     name="AddAList"
@@ -120,12 +133,29 @@ const App = () => {
                       statusBarColor: light.brandPrimary,
                       // statusBarStyle: 'dark',
                       // mode: 'modal',
-                      presentation: 'transparentModal',
+                      presentation: 'fullScreenModal',
                       // navigationBarColor:light.brandPrimary
                     }}
                   />
                 </Stack.Group>
-                <Stack.Screen name="Generate PDF" component={RNPrintExample} />
+                <Stack.Screen
+                  name="Generate PDF"
+                  component={RNPrintExample}
+                  options={{
+                    statusBarColor: light.brandPrimary,
+                    orientation: 'portrait',
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="Webview"
+                  component={Webview}
+                  options={{
+                    statusBarColor: light.brandPrimary,
+                    orientation: 'portrait',
+                    headerShown: false,
+                  }}
+                />
               </Stack.Navigator>
             </NavigationContainer>
           </PersistGate>

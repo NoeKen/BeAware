@@ -64,7 +64,8 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
             flex: 1,
             justifyContent: 'space-between',
             marginHorizontal: 16,
-            marginTop: 10,
+            marginTop: 5,
+            paddingVertical:14
           }}>
           <Text
             style={{color: light.textColor, fontWeight: '600', fontSize: 20}}>

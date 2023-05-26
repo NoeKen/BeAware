@@ -16,10 +16,12 @@ import light from '../constants/theme/light';
 import {CategoriesList} from '../Services/categoriesService';
 import FabIcon from '../ui/fabIcon';
 import {useNavigation} from '@react-navigation/native';
+import MenuModal from '../components/UI/menuModal';
 
 //  const Home=({navigation,getCategories,categories})=> {
 const Home = ({allCategories, deleteCategory, deleteCascadeExpenses}) => {
   const [categories, setCategories] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const navigation = useNavigation();
   useEffect(() => {
@@ -37,7 +39,22 @@ const Home = ({allCategories, deleteCategory, deleteCascadeExpenses}) => {
   return (
     <>
       <SafeAreaView>
-        <Header title={'Home'}  />
+        <Header
+          title={'Home'}
+          iconR={'information-circle'}
+          CStyles={{color: light.brandPrimary}}
+          onPress={() => {
+            // setModalVisible(!modalVisible), 
+            navigation.navigate('About')
+            // console.log('menu button pressed');
+          }}
+        />
+        <MenuModal
+          // doLogout={doLogout}
+          setModalVisible={setModalVisible}
+          modalVisible={modalVisible}
+          // setIisLoading={setIsLoading}
+        />
         {/* <View style={styles.header}>
           <ImageBackground
             source={require('../../assets/pictures/tirelire.png')}
@@ -107,7 +124,7 @@ const mapDispatchToProps = dispatch => ({
   getCategories: dispatch.categories.getCategories,
   deleteCategory: dispatch.categories.deleteCategory,
   deleteCascadeExpenses: dispatch.expenses.deleteCascadeExpenses,
-  replaceSelectedCategory: dispatch.categories.replaceSelectedCategory
+  replaceSelectedCategory: dispatch.categories.replaceSelectedCategory,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

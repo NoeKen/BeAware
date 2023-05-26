@@ -231,7 +231,8 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     alignItems: 'center',
-    marginTop: 25,
+    marginTop: 10,
+    paddingVertical: 14,
   },
   error: {
     color: light.brandPrimary,
