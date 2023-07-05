@@ -51,23 +51,14 @@ export default {
     async deleteExpense(payload = {}, rootState) {
       const tab = rootState.expenses.expenses;
       console.log('array', tab, 'id', payload);
-      const index = tab.findIndex(item => item.id === payload);
-      // const index = tab.map((item, index) => {
-      //   if (item.id === payload) {
-      //     console.log('index in map: ', index);
-      //     return index;
-      //   }
-      // });
-      // console.log('index to delete', index);
-      if (index !== -1) {
-        // tab.splice(index, 1);
-        ToastAndroid.show('Item was successfully deleted', ToastAndroid.LONG);
-        dispatch.expenses.replaceExpenses(tab);
-        // navigation.reset();
-      } else {
-        ToastAndroid.show('Item was not deleted', ToastAndroid.LONG);
-        console.log(`item with id ${id} was not found`);
-      }
+      // const index = tab.findIndex(item => item.id === payload);
+      tab.map((item, index) => {
+        if (item.id === payload) {
+          tab.splice(index, 1);
+          ToastAndroid.show('Item was successfully deleted', ToastAndroid.LONG);
+        }
+      });
+      dispatch.expenses.replaceExpenses(tab);
     },
 
     async deleteCascadeExpenses(payload = {}, rootState) {

@@ -1,12 +1,19 @@
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {Icon} from 'native-base';
 import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {View, Text} from 'react-native';
 import light from '../../constants/theme/light';
 
-export default function Header({iLeft, title, iconR,CStyles, onPress}) {
-  const navigation= useNavigation();
+export default function Header({
+  iLeft,
+  title,
+  iconR,
+  CStyles,
+  onPress,
+  amount,
+}) {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       {iLeft && (
@@ -19,10 +26,19 @@ export default function Header({iLeft, title, iconR,CStyles, onPress}) {
       <Text numberOfLines={1} style={styles.title}>
         {title}
       </Text>
-        {/* show the right icon if it is provided, else show et whitespace */}
-        <TouchableOpacity onPress={onPress}>
-          {iconR && <Icon name={iconR} style={[styles.arrowLeft,{...CStyles}]} />}
-        </TouchableOpacity>
+      {/* show the right icon if it is provided, else show et whitespace */}
+      <View style={{flexDirection:'row'}} >
+        {iconR && (
+          <TouchableOpacity onPress={onPress}>
+            <Icon name={iconR} style={[styles.arrowLeft, {...CStyles}]} />
+          </TouchableOpacity>
+        )}
+        {amount ? (
+          <Text style={{color: '#da8608', fontWeight: 'bold'}}>{amount}F</Text>
+        ) : (
+          <Text></Text>
+        )}
+      </View>
     </View>
   );
 }

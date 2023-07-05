@@ -14,7 +14,7 @@ import light from '../constants/theme/light';
 import RemixIcon from 'react-native-remix-icon';
 
 const About = ({navigation}) => {
-  const [uri, setUrl] = useState('https://www.ultradominon.com/ds/');
+  // const [uri, setUrl] = useState('https://www.ultradominon.com/ds/');
   return (
     <>
       <SafeAreaView>

@@ -1,6 +1,7 @@
 import {Container, Content, Icon} from 'native-base';
 import React, {useState} from 'react';
 import {
+  FlatList,
   Image,
   ScrollView,
   Text,
@@ -22,6 +23,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
     list: [],
   });
   const [Item, setItem] = useState({
+    id: '',
     name: '',
     price: 0,
   });
@@ -37,7 +39,12 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
         iLeft={'arrow-back'}
         title="Add A List"
         iconR={'save'}
-        CStyles={{color:items.title == '' || items.list.length == 0?light.inactiveTab:light.brandPrimary}}
+        CStyles={{
+          color:
+            items.title == '' || items.list.length == 0
+              ? light.inactiveTab
+              : light.brandPrimary,
+        }}
         onPress={() => {
           if (items.title == '' && items.list.length == 0) {
             setError(true);
@@ -50,10 +57,10 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
             setErrorMessage('Please add items to the list');
           } else {
             replaceExpensesList([...expensesList, items]);
-            setItems({...items, title: '', list: [],total_price:0});
-            navigation.navigate('List')
+            setItems({...items, title: '', list: [], total_price: 0});
+            navigation.navigate('List');
           }
-            // navigation.navigate('List')
+          // navigation.navigate('List')
         }}
       />
 
@@ -65,7 +72,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
             justifyContent: 'space-between',
             marginHorizontal: 16,
             marginTop: 5,
-            paddingVertical:14
+            paddingVertical: 14,
           }}>
           <Text
             style={{color: light.textColor, fontWeight: '600', fontSize: 20}}>
@@ -85,22 +92,23 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
             margin: 16,
             // padding: 20,
           }}>
-          <Content scrollEnabled={true} style={{}}>
-            <TextInput
-              style={{
-                borderBottomColor: light.brandSecond,
-                color: light.inactiveTab,
-                fontSize: 20,
-                borderBottomWidth: 1,
-                textAlign: 'center',
-                fontWeight: 'bold',
-                marginHorizontal:20,
-              }}
-              value={items.title}
-              placeholder="Title list"
-              placeholderTextColor={light.inactiveTab}
-              onChangeText={text => setItems({...items, title: text})}
-            />
+          <TextInput
+            style={{
+              borderBottomColor: light.brandSecond,
+              color: light.inactiveTab,
+              fontSize: 20,
+              borderBottomWidth: 1,
+              textAlign: 'center',
+              fontWeight: 'bold',
+              marginHorizontal: 20,
+            }}
+            value={items.title}
+            placeholder="Title list"
+            placeholderTextColor={light.inactiveTab}
+            onChangeText={text => setItems({...items, title: text})}
+          />
+          <View
+            style={{}}>
             {/* <TouchableOpacity
               style={{
                 position: 'absolute',
@@ -119,51 +127,52 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
                 style={{color: light.inactiveTab, fontSize: 20}}
               />
             </TouchableOpacity> */}
-            {items.list.length === 0 ? (
-              <Text style={{color: light.inactiveTab, fontSize: 16,textAlign:'center',marginTop:'100%'}}>
-                Your list will appear here
-              </Text>
-            ) : (
-              items.list.map((elt, index) => {
+
+            <FlatList
+              data={items.list}
+              keyExtractor={(item)=>item.id}
+              renderItem={(elt,index) => {
                 return (
                   <View
-                    key={index}
+                    // key={index}
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                       borderBottomWidth: 1,
                       borderBottomColor: light.placeholder,
                       // marginBottom: 5,
-                      // paddingVertical: 5,
+                      paddingVertical: 5,
                       overflow: 'scroll',
-                      marginHorizontal:20,
+                      marginHorizontal: 20,
                       // backgroundColor: 'red',
                     }}>
-                    <TextInput
+                    <Text
                       style={{
                         color: light.inactiveTab,
                         fontSize: 16,
                         fontWeight: '600',
                       }}
-                      editable={editable}
-                      value={elt.name}
-                    />
+                      // editable={editable}
+                      // value={'notre'}
+                      // value=
+                    // >jlwf</Text>
+                    >{elt.name}</Text>
 
-                    <TextInput
+                    <Text
                       style={{
                         color: light.brandSecond,
                         fontSize: 16,
                         fontWeight: '600',
                       }}
-                      editable={editable}
-                      value={elt.price}
-                    />
+                      // editable={editable}
+                      // value={elt.price}
+                    >{elt.price}</Text>
                   </View>
                 );
-              })
-            )}
-            <Spacer/>
-          </Content>
+              }}
+            />
+            <Spacer />
+          </View>
         </View>
         <Spacer />
         <View
@@ -235,7 +244,11 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
             }}
             onPress={() => {
               if (Item.name !== '' && Item.price !== '') {
-                setItems({...items, total_price: items.total_price + parseInt(Item.price), list: [...items.list, Item]});
+                setItems({
+                  ...items,
+                  total_price: items.total_price + parseInt(Item.price),
+                  list: [...items.list, Item],
+                });
                 // setTotalPrice(totalPrice + parseInt(Item.price));
                 setError(false);
                 setItem({...Item, price: '', name: ''});

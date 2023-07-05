@@ -74,6 +74,7 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
           navigation={navigation}
           iLeft={'arrow-back'}
           title={`- ${cat.name}-  ` + ' Expenses'}
+          amount={totalAmount + oldTotalAmount}
           // iconR={'add-circle'}
           // onPress={() => navigation.navigate('AddExpense')}
         />
@@ -101,11 +102,20 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
               )}
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.title}>{totalAmount} XCFA</Text>
+              <Text
+                style={[
+                  styles.title,
+                  {
+                    color:
+                      totalAmount < 0 ? light.brandDanger : light.brandPrimary,
+                  },
+                ]}>
+                {totalAmount} XCFA
+              </Text>
+              
             </View>
           </View>
-          <View>
-            {curExpenses.length > 4 ? (
+            {curExpenses.length > 4 && (
               <All
                 onPress={() =>
                   navigation.navigate('All Expenses', {
@@ -114,11 +124,8 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
                   })
                 }
               />
-            ) : (
-              curExpenses.length < 0 && (
-                <Text style={styles.emptyText}>Nothing to show here</Text>
-              )
             )}
+          <View>
             {curExpenses.length < 1 ? (
               <Text style={styles.emptyText}>No expenditures made today</Text>
             ) : (

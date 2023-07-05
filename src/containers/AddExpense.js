@@ -57,13 +57,14 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
     if (expense.amount === '') {
       setAmountError(true);
     }
-    if (expense.category_id === '') {
+    if (expense.category_id === undefined || expense.category_id === 0) {
       setCategoryError(true);
     }
     if (
       expense.title !== '' &&
       expense.amount !== '' &&
-      expense.category_id !== ''
+      expense.category_id !== undefined &&
+      expense.category_id !== 0
     ) {
       setTitleError(false);
       setAmountError(false);
@@ -71,7 +72,7 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
       try {
         setExpense({...expense, id: uuid.v4(), created_at: new Date()});
         await replaceExpenses([...expenses, expense]);
-        resetForm()
+        resetForm();
         navigation.goBack();
       } catch (error) {
         console.log('error when creating expense : ', error);
@@ -102,16 +103,25 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
               style={{fontSize: 10, color: light.brandPrimary}}
             />
           </View>
+          <Text style={styles.labelDescription}>
+            {'\t'}
+            <Text style={{color: light.brandDanger}}>(</Text>Add the title of
+            this expense
+            <Text style={{color: light.brandDanger}}>)</Text>
+          </Text>
           <Input
             placeholder="title"
+            placeholderTextColor={light.placeholder}
             value={expense.title}
             style={styles.input}
             onChangeText={val => {
               setExpense({...expense, title: val});
-              val !== '' &&setTitleError(false)
+              val !== '' && setTitleError(false);
             }}
           />
-          {titleError && <Text style={styles.error}>This field is required</Text>}
+          {titleError && (
+            <Text style={styles.error}>This field is required</Text>
+          )}
 
           <View style={styles.inputHeader}>
             <Text style={styles.inputHeader.text}>Amount :</Text>
@@ -120,9 +130,15 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
               style={{fontSize: 10, color: light.brandPrimary}}
             />
           </View>
-
+          <Text style={styles.labelDescription}>
+            {'\t'}
+            <Text style={{color: light.brandDanger}}>(</Text>Add the coast of
+            this expense
+            <Text style={{color: light.brandDanger}}>)</Text>
+          </Text>
           <Input
             placeholder="amount"
+            placeholderTextColor={light.placeholder}
             value={expense.amount}
             style={styles.input}
             keyboardType="phone-pad"
@@ -133,18 +149,26 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
                 id: uuid.v4(),
                 created_at: new Date(),
               });
-              val !== ''&& setAmountError(false)
+              val !== '' && setAmountError(false);
             }}
           />
-          {amountError && <Text style={styles.error}>This field is required</Text>}
+          {amountError && (
+            <Text style={styles.error}>This field is required</Text>
+          )}
 
-          <View style={[styles.inputHeader, {marginTop: 20}]}>
+          <View style={[styles.inputHeader]}>
             <Text style={styles.inputHeader.text}>Category :</Text>
             <MaterialCommunityIcons
               name="asterisk"
               style={{fontSize: 10, color: light.brandPrimary, marginEnd: 20}}
             />
           </View>
+          <Text style={styles.labelDescription}>
+            {'\t'}
+            <Text style={{color: light.brandDanger}}>(</Text>Select or create
+            the category in which you want to add this expense
+            <Text style={{color: light.brandDanger}}>)</Text>
+          </Text>
           {
             <Picker
               mode="dropdown"
@@ -162,24 +186,41 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
               selectedValue={selected}
               onValueChange={val => {
                 setSelected(val), setExpense({...expense, category_id: val});
-                setCategoryError(false)
+                setCategoryError(false);
+                if (val === 0) {
+                  navigation.navigate('Add Category');
+                }
               }}>
               <Picker.Item
                 label="Related category"
                 key={-1}
                 value={undefined}
-                style={{color: light.inactiveTab}}
                 color={light.placeholder}
               />
               {categories.map(item => {
                 return <Picker.Item label={item.name} value={item.id} />;
               })}
+              <Picker.Item
+                label="Create category"
+                key={-1}
+                value={0}
+                color={light.brandPrimary}
+              />
             </Picker>
           }
-          {categoryError && <Text style={styles.error}>This field is required</Text>}
+          {categoryError && (
+            <Text style={styles.error}>This field is required</Text>
+          )}
           <Text style={styles.inputHeader.text}>Description</Text>
+          <Text style={styles.labelDescription}>
+            {'\t'}
+            <Text style={{color: light.brandDanger}}>(</Text>Add more details
+            about this expense
+            <Text style={{color: light.brandDanger}}>)</Text>
+          </Text>
           <Textarea
             placeholder="expense description"
+            placeholderTextColor={light.placeholder}
             value={expense.description}
             style={styles.textarea}
             onChangeText={val => {
@@ -244,7 +285,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   error: {
-    color: 'red',
+    color: light.brandDanger,
     marginBottom: 10,
     marginHorizontal: 10,
     marginTop: 5,
@@ -269,7 +310,7 @@ const styles = StyleSheet.create({
   },
   inputHeader: {
     flexDirection: 'row',
-    marginBottom: 10,
+    marginTop: 10,
     text: {
       fontWeight: 'bold',
       color: light.textColor,
@@ -288,6 +329,11 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
+  },
+  labelDescription: {
+    fontSize: 10,
+    marginBottom: 10,
+    color: light.inactiveTab,
   },
 });
 const mapStateToProps = state => ({

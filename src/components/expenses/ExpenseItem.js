@@ -4,6 +4,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import Popover from 'react-native-popover-view';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import light from '../../constants/theme/light';
+import DeviceInfo from 'react-native-device-info';
 
 export default function ExpenseItem({
   item,
@@ -12,18 +13,22 @@ export default function ExpenseItem({
   navigation,
   getExpenses,
 }) {
+
+  const device = DeviceInfo.getDeviceType();
+
   async function removeItem() {
     await deleteExpense(item.id);
     navigation.replace('index');
     getExpenses();
   }
+
   return (
     <View
       style={{
         flexDirection: 'row',
         left: 0,
         flex: 1,
-        height: 62,
+        height: device === 'Handset' ? 62: 72,
         backgroundColor: light.brandPrimary,
         justifyContent: 'space-between',
         marginVertical: 5,
@@ -39,7 +44,7 @@ export default function ExpenseItem({
         }}
         style={{
           backgroundColor: light.whiteGrey,
-          height: 57,
+          height: device === 'Handset' ? 57: 65,
           borderRadius: 8,
           padding: 8,
           flexDirection: 'row',
@@ -92,7 +97,7 @@ export default function ExpenseItem({
           </Text>
           <Text
             style={{
-              color: light.brandPrimary,
+              color: item.amount>0?light.brandPrimary:light.brandDanger,
               alignSelf: 'flex-end',
               fontFamily: 'ubuntu-bold',
               fontSize: 16,
@@ -124,7 +129,7 @@ export default function ExpenseItem({
           <View style={{width: 110, height: 150}}>
             <Text
               style={{
-                fontSize: 20,
+                fontSize: 18,
                 marginVertical: 5,
                 textAlign: 'center',
                 color: light.textColor,
@@ -142,31 +147,33 @@ export default function ExpenseItem({
               <View
                 style={{
                   flexDirection: 'row',
-                  justifyContent: 'space-evenly',
+                  justifyContent: 'space-between',
                   alignItems: 'center',
+                  paddingHorizontal:12,
                 }}
                 // onPress={()=> navigation.navigate('Update Expense')}
               >
                 <MaterialCommunityIcons
                   name="pencil"
-                  style={{fontSize: 20, color: light.placeholder}}
+                  style={{fontSize: 15, color: light.placeholder}}
                 />
-                <Text style={{fontSize: 20, color: light.placeholder}}>
-                  edit
+                <Text style={{fontSize: 15, color: light.placeholder}}>
+                  update
                 </Text>
               </View>
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',
-                  justifyContent: 'space-evenly',
+                  justifyContent: 'space-between',
                   alignItems: 'center',
+                  paddingHorizontal:12
                 }}
                 onPress={() => removeItem()}>
                 <MaterialCommunityIcons
                   name="trash-can"
-                  style={{fontSize: 20, color: light.brandSecond}}
+                  style={{fontSize: 18, color: light.brandDanger}}
                 />
-                <Text style={{fontSize: 20, color: light.brandSecond}}>
+                <Text style={{fontSize: 18, color: light.brandDanger}}>
                   delete
                 </Text>
               </TouchableOpacity>

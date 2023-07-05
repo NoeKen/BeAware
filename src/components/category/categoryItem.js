@@ -1,15 +1,20 @@
-import { useNavigation } from '@react-navigation/native';
-import { Icon, Text } from 'native-base';
-import React, { useState } from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {Icon, Text} from 'native-base';
+import React, {useState} from 'react';
 import {
   ImageBackground,
+  Platform,
   StyleSheet,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 // import LinearGradient from 'react-native-linear-gradient';
 import light from '../../constants/theme/light';
 import CModal from '../UI/modal';
+import {getColorCode, random_rgba} from '../../Services/getRandomColor';
+import DeviceInfo from 'react-native-device-info';
+
+const devise =  DeviceInfo.getDeviceType();
 
 export default function CategoryItem({
   data,
@@ -26,10 +31,14 @@ export default function CategoryItem({
     navigation.replace('index');
   };
 
+  console.log('device: ',devise)
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        onPress={() =>{ setDelete(false), navigation.navigate('Expenses', {cat: data})}}
+        onPress={() => {
+          setDelete(false), navigation.navigate('Expenses', {cat: data});
+        }}
         onLongPress={() => {
           setDelete(!del);
         }}>
@@ -40,18 +49,35 @@ export default function CategoryItem({
           text={`You are going to delete one category ('${data.name}'). \n This will also delete all his expenses`}
           deleCategory={deleteCategory}
         />
-        <ImageBackground
-          source={{uri: data.image}}
-          style={styles.imageBackground}>
-          <View style={styles.textCard}>
-            <Text numberOfLines={1} style={[styles.textValue, styles.name]}>
-              {data.name}
-            </Text>
-            <Text numberOfLines={1} style={styles.description}>
-              {data.description}
-            </Text>
-          </View>
-        </ImageBackground>
+        {data.image !=='' ? (
+          <ImageBackground
+            source={{uri: data.image}}
+            style={styles.imageBackground}>
+            <View style={styles.textCard}>
+              <Text numberOfLines={1} style={[styles.textValue, styles.name]}>
+                {data?.name}
+              </Text>
+              <Text numberOfLines={1} style={styles.description}>
+                {data?.description}
+              </Text>
+            </View>
+          </ImageBackground>
+        ) : (
+          <ImageBackground
+            source={require('../../../assets/pictures/bg.jpeg')}
+            style={styles.imageBackground}>
+            <View style={{backgroundColor:random_rgba()}}>
+              <View style={styles.textCard}>
+                <Text numberOfLines={1} style={[styles.textValue, styles.name]}>
+                  {data?.name}
+                </Text>
+                <Text numberOfLines={1} style={styles.description}>
+                  {data?.description}
+                </Text>
+              </View>
+            </View>
+          </ImageBackground>
+        )}
       </TouchableOpacity>
       {del == true ? (
         <TouchableOpacity
@@ -69,7 +95,7 @@ export default function CategoryItem({
 
 const styles = StyleSheet.create({
   container: {
-    width: '46%',
+    width:'46%' ,
     marginTop: 10,
     elevation: 5,
     shadowOffset: {
@@ -81,10 +107,9 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     marginHorizontal: '2%',
     backgroundColor: 'white',
-    height: 90,
+    height: (devise === 'Handset' )? 90: 150,
     borderRadius: 10,
     marginBottom: 5,
-
     // shadowColor:light.brandPrimary,
   },
   imageBackground: {
@@ -103,7 +128,7 @@ const styles = StyleSheet.create({
     // width: 350,
   },
   textCard: {
-    backgroundColor: light.inverseTextColor,
+    backgroundColor: light.whiteGrey,
     height: '55%',
     opacity: 0.65,
     marginTop: '28%',

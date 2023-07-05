@@ -122,29 +122,6 @@ export default {
      * @param {obj} state
      * @param {obj} payload
      */
-    replaceIsRegistered(state, payload) {
-      return {
-        ...state,
-        isRegistered: payload,
-      };
-    },
-
-    /**
-     * Save form data
-     * @param {obj} state
-     * @param {obj} payload
-     */
-    replaceIsFullRegistration(state, payload) {
-      return {
-        ...state,
-        isFullRegistration: payload,
-      };
-    },
-    /**
-     * Save form data
-     * @param {obj} state
-     * @param {obj} payload
-     */
     replaceDeviceToken(state, payload) {
       return {
         ...state,

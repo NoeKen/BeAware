@@ -5,14 +5,14 @@ import {
   Input,
   Text,
   Textarea,
-  View
+  View,
 } from 'native-base';
-import React, { useState } from 'react';
-import { Image, Modal, StyleSheet, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import {Image, Modal, StyleSheet, TouchableOpacity} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import uuid from 'react-native-uuid';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Header from '../components/UI/header';
 import CameraModal from '../components/category/cameraModal';
 import light from '../constants/theme/light';
@@ -22,22 +22,17 @@ const AddCategory = ({navigation, categories, replaceCategories}) => {
   const [imgPath, setImgPath] = useState(null);
   const [isVisible, setVisible] = useState(false);
   const [category, setCategory] = useState({
-    id: uuid.v4(),
+    id: '',
     image: '',
     name: '',
     description: '',
-    created_at : new Date()
+    created_at: new Date(),
   });
-  // const [category, setCategory] = useState({
-  //   name: '',
-  //   description: '',
-  //   image: '',
-  // });
 
   function openGallery() {
     ImagePicker.openPicker({
-      width: 300,
-      height: 170,
+      // width: 300,
+      height: 450,
       cropping: true,
     }).then(img => {
       console.log('image path : ', img.path);
@@ -45,40 +40,38 @@ const AddCategory = ({navigation, categories, replaceCategories}) => {
       // replaceCategory({...category, image: img.path});
       // setCategory({...category, image: img.path});
       console.log('image modificated : ', category.image);
-      // setBooksAdds(image.path);
-      // replaceCreateBook({
-      //   ...createBook,
-      //   picture: {name: 'picture', type: image.mime, uri: image.path},
-      // });
     });
   }
   function openCamera() {
     ImagePicker.openCamera({
-      width: 300,
-      height: 170,
+      // width: 300,
+      height: 450,
       cropping: true,
     }).then(img => {
       console.log('image path : ', img.path);
       setCategory({...category, image: img.path});
       // replaceCategory({...category, image: img.path});
       console.log('image modificated : ', category.image);
-      // setBooksAdds(image.path);
-      // replaceCreateBook({
-      //   ...createBook,
-      //   picture: {name: 'picture', type: image.mime, uri: image.path},
-      // });
     });
   }
 
   async function AddCategory() {
-    // CreateCategory(category,navigation={navigation})
     try {
       // await addCategory();
       console.log('====================================');
-      console.log('category: ',category);
+      console.log('category: ', category);
       console.log('====================================');
-      await replaceCategories([...categories, category]);
-      navigation.navigate('Home');
+      await replaceCategories([
+        ...categories, category
+        // {
+        //   id: category.id,
+        //   name: category.name,
+        //   image: category.image,
+        //   description: category.description,
+        //   created_at: category.created_at,
+        // },
+      ]);
+      navigation.goBack();
     } catch (error) {
       console.log('error when creating category : ', error);
     }
@@ -145,10 +138,11 @@ const AddCategory = ({navigation, categories, replaceCategories}) => {
           </View>
           <Input
             placeholder="name"
+            placeholderTextColor={light.placeholder}
             value={category.name}
             style={styles.input}
             onChangeText={val => {
-              setCategory({...category, name: val});
+              setCategory({...category, name: val, id: uuid.v4()});
               //   setTitle(val);
               // setExpense({...expense, title: val});
             }}
@@ -158,6 +152,7 @@ const AddCategory = ({navigation, categories, replaceCategories}) => {
           <Text style={styles.inputHeader.text}>Description</Text>
           <Textarea
             placeholder="expense description"
+            placeholderTextColor={light.placeholder}
             value={category.description}
             style={styles.textarea}
             onChangeText={val => {
@@ -169,7 +164,7 @@ const AddCategory = ({navigation, categories, replaceCategories}) => {
           <TouchableOpacity
             style={styles.saveButton}
             onPress={async () => {
-              AddCategory();
+              await AddCategory();
               // resetForm();
             }}>
             <Text style={styles.saveText}>Save</Text>
@@ -194,7 +189,7 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
   replaceCategories: dispatch.categories.replaceCategories,
-  addCategory: dispatch.categories.addCategory,
+  // addCategory: dispatch.categories.addCategory,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddCategory);
@@ -207,7 +202,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 20,
     overflow: 'hidden',
-    backgroundColor:light.whiteGrey,
+    backgroundColor: light.whiteGrey,
     empty: {
       // borderStyle: 'dashed',
       // borderWidth: 1,

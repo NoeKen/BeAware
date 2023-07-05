@@ -1,8 +1,14 @@
 // import { Picker } from '@react-native-community/picker';
 import moment from 'moment/moment';
 import {Container, Content, Icon, Picker, View} from 'native-base';
-import React, {useState} from 'react';
-import {Dimensions, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  Alert,
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {DataTable} from 'react-native-paper';
 // import SQLite from 'react-native-sqlite-2';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,49 +19,24 @@ import {connect} from 'react-redux';
 const optionsPerPage = [2, 3, 4];
 // const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
 
-const Dashboard = ({navigation,expenses,replaceSelectedCategory}) => {
+const Dashboard = ({navigation, expenses,deleteExpense, replaceSelectedCategory}) => {
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = React.useState(2);
   // const [expenses, setExpenses] = useState([]);
-  const [selectedLanguage, setSelectedLanguage] = useState();
+  const [dashExpenses, setDashExpenses] = useState([]);
 
-  function GetExpenses() {
-    db.transaction(txn => {
-      txn.executeSql('SELECT * FROM Expenses', [], (txn, res) => {
-        var len = res.rows.length;
-        // console.log('current Date : ', currentDate);
-        if (len > 0) {
-          var expenses = [];
-          var amount = 0;
-          for (let i = 0; i < len; ++i) {
-            // if (
-            //   moment(res.rows.item(i).created_at).format('YYYY-MM-DD') ===
-            //     currentDate
-            // ) {
-            //   currentExpenses.push(res.rows.item(i));
-            //   amount += res.rows.item(i).amount;
-            // } else if (
-            //   moment(res.rows.item(i).created_at).format('YYYY-MM-DD') !==
-            //     currentDate
-            // ) {
-            //   {
-            //   }
-            // }
-            expenses.push(res.rows.item(i));
-            amount += res.rows.item(i).amount;
-            // console.log(`item ${i}:`, res.rows.item(i));
-            // expenses.push(res.rows.item(i));
-          }
-          setExpenses(expenses);
-        }
-        // return result;
-      });
-    });
+  async function removeItem(id) {
+    console.log('id to delete:', id);
+    await deleteExpense(id);
+    navigation.replace('Dashboard');
+    // getExpenses();
   }
 
+  useEffect(()=>{
+    setDashExpenses(expenses)
+  },[expenses])
+
   React.useEffect(() => {
-    // GetExpenses();
-    // console.log('expense: ', expenses[0].title);
     setPage(0);
   }, [itemsPerPage]);
 
@@ -100,7 +81,7 @@ const Dashboard = ({navigation,expenses,replaceSelectedCategory}) => {
               Descript°
             </DataTable.Title> */}
           </DataTable.Header>
-          {expenses.length < 1 ? (
+          {dashExpenses.length < 1 ? (
             <View
               style={{
                 justifyContent: 'center',
@@ -118,9 +99,19 @@ const Dashboard = ({navigation,expenses,replaceSelectedCategory}) => {
                     key={expense.id}
                     onPress={() => {
                       // console.log(`selected account ${expense.title}`);
-                      replaceSelectedCategory()
+                      replaceSelectedCategory();
                       navigation.navigate('Expense Detail', {item: expense});
-                    }}>
+                    }}
+                    onLongPress={() =>
+                      Alert.alert('Delete item', 'Are you sure you want to delete this item?', [
+                        {
+                          text: 'No',
+                          onPress: () => console.log('Cancel Pressed'),
+                          style: 'cancel',
+                        },
+                        {text: 'Yes', onPress: () => removeItem(expense.id)},
+                      ])
+                    }>
                     <DataTable.Cell
                       style={{
                         backgroundColor: light.whiteGrey,
@@ -156,7 +147,7 @@ const Dashboard = ({navigation,expenses,replaceSelectedCategory}) => {
             </>
           )}
         </DataTable>
-        <View style={{height:40}} />
+        <View style={{height: 40}} />
       </Content>
     </Container>
   );
@@ -166,9 +157,10 @@ const mapStateToProps = state => ({
   expenses: state.expenses.expenses,
 });
 
-const mapDispatchToProps =(dispatch)=>({
-  replaceSelectedCategory: dispatch.categories.replaceSelectedCategory
-})
+const mapDispatchToProps = dispatch => ({
+  deleteExpense: dispatch.expenses.deleteExpense,
+  replaceSelectedCategory: dispatch.categories.replaceSelectedCategory,
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
 const styles = StyleSheet.create({
