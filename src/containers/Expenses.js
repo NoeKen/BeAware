@@ -80,24 +80,20 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
         />
       </SafeAreaView>
       <ScrollView>
-        <View style={{padding: 16}}>
+        <View style={{}}>
           <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
+            style={styles.sectionHeader}>
             <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
               <Text style={styles.sectionTitle}>Today</Text>
-              {curExpenses.length > 0 && (
+              {curExpenses?.length > 0 && (
                 <Text style={styles.badge.text}>
-                  {curExpenses.length < 10
-                    ? '0' + curExpenses.length
-                    : curExpenses.length}
+                  {curExpenses?.length < 10
+                    ? '0' + curExpenses?.length
+                    : curExpenses?.length}
                 </Text>
               )}
             </View>
@@ -114,8 +110,7 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
               </Text>
               
             </View>
-          </View>
-            {curExpenses.length > 4 && (
+            {curExpenses?.length > 4 && (
               <All
                 onPress={() =>
                   navigation.navigate('All Expenses', {
@@ -125,12 +120,13 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
                 }
               />
             )}
-          <View>
-            {curExpenses.length < 1 ? (
+          </View>
+          <View style={{paddingBottom:20,}}>
+            {curExpenses?.length < 1 ? (
               <Text style={styles.emptyText}>No expenditures made today</Text>
             ) : (
               <FlatList
-                style={{marginBottom: 10}}
+                // style={{paddingBottom: 20}}
                 data={curExpenses}
                 keyExtractor={item => item.expense_id}
                 renderItem={({item, index}) => [
@@ -152,50 +148,53 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
             )}
           </View>
         </View>
-        <View style={{padding: 16, marginTop: -45}}>
+        <View style={{marginTop: -20}}>
           <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
+            style={[styles.sectionHeader]}>
             <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <Text style={styles.sectionTitle}>Olds</Text>
-              {oldExpenses.length > 0 ? (
+              <Text style={styles.sectionTitle}>Past</Text>
+              {oldExpenses?.length > 0 && (
                 <Text style={styles.badge.text}>
-                  {oldExpenses.length < 10
-                    ? '0' + oldExpenses.length
-                    : oldExpenses.length}
+                  {oldExpenses?.length < 10
+                    ? '0' + oldExpenses?.length
+                    : oldExpenses?.length}
                 </Text>
-              ) : (
-                <Text style={styles.badge.text}>0</Text>
               )}
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.title}>{oldTotalAmount} XCFA</Text>
-              {oldExpenses.length > 4 && (
-                <All
-                  onPress={() =>
-                    navigation.navigate('All Expenses', {
-                      items: oldExpenses,
-                      title: 'past expenditures',
-                    })
-                  }
-                />
-              )}
+              <Text
+                style={[
+                  styles.title,
+                  {
+                    color:
+                      oldTotalAmount < 0 ? light.brandDanger : light.brandPrimary,
+                  },
+                ]}>
+                {oldTotalAmount} XCFA
+              </Text>
+              
             </View>
+            {oldExpenses?.length > 4 && (
+              <All
+                onPress={() =>
+                  navigation.navigate('All Expenses', {
+                      items: oldExpenses,
+                      title: 'Past expenditures',
+                    })
+                }
+              />
+            )}
           </View>
-
           <View>
-            {oldExpenses.length < 1 ? (
-              <Text style={styles.emptyText}>No expenditures made</Text>
+            {oldExpenses?.length < 1 ? (
+              <Text style={styles.emptyText}>Your passed expenditures will appear there</Text>
             ) : (
               <FlatList
-                style={{marginBottom: 10}}
+                // style={{marginBottom: 10}}
                 data={oldExpenses}
                 keyExtractor={item => item.expense_id}
                 renderItem={({item, index}) =>
@@ -231,6 +230,14 @@ const styles = StyleSheet.create({
     fontFamily: 'ubuntu-bold',
     fontWeight: '900',
   },
+  sectionHeader:{
+    // flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    // marginHorizontal:16,
+    marginBottom: 15,
+    backgroundColor: light.brandLight
+  },
   sectionTitle: {
     fontSize: 20,
     fontFamily: 'ubuntu-bold',
@@ -238,9 +245,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     marginTop: 20,
     color: light.textColor,
-  },
-  image: {
-    flex: 1,
   },
   text: {
     color: 'white',
@@ -276,10 +280,6 @@ const styles = StyleSheet.create({
     height: 80,
     flexDirection: 'row',
     padding: 10,
-  },
-  contentContainerStyle: {
-    flexGrow: 1,
-    backgroundColor: '#eab07ea9',
   },
   badge: {
     backgroundColor: light.whiteGrey,

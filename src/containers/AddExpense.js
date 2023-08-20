@@ -51,20 +51,20 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
 
   async function createExpense() {
     // const MY_NAMESPACE =
-    if (expense.title === '') {
+    if (expense?.title === '') {
       setTitleError(true);
     }
-    if (expense.amount === '') {
+    if (expense?.amount === '') {
       setAmountError(true);
     }
-    if (expense.category_id === undefined || expense.category_id === 0) {
+    if (expense?.category_id === undefined || expense?.category_id === 0) {
       setCategoryError(true);
     }
     if (
-      expense.title !== '' &&
-      expense.amount !== '' &&
-      expense.category_id !== undefined &&
-      expense.category_id !== 0
+      expense?.title !== '' &&
+      expense?.amount !== '' &&
+      expense?.category_id !== undefined &&
+      expense?.category_id !== 0
     ) {
       setTitleError(false);
       setAmountError(false);
@@ -73,7 +73,8 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
         setExpense({...expense, id: uuid.v4(), created_at: new Date()});
         await replaceExpenses([...expenses, expense]);
         resetForm();
-        navigation.goBack();
+        navigation.navigate("Expense");
+        return 0
       } catch (error) {
         console.log('error when creating expense : ', error);
       }
@@ -147,7 +148,8 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
                 ...expense,
                 amount: val,
                 id: uuid.v4(),
-                created_at: new Date(),
+                created_at: "2023-05-25",
+                // created_at: new Date(),
               });
               val !== '' && setAmountError(false);
             }}

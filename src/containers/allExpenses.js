@@ -26,7 +26,7 @@ const AllExpenses = ({route, navigation}) => {
             navigation={navigation}
           />,
         ]}
-        style={{paddingHorizontal: 16, paddingBottom: 16, flex: 1}}
+        style={{ paddingBottom: 16, flex: 1}}
         key={item => item.id}
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}

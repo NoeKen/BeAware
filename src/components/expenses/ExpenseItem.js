@@ -1,10 +1,12 @@
 import moment from 'moment';
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Popover from 'react-native-popover-view';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import light from '../../constants/theme/light';
 import DeviceInfo from 'react-native-device-info';
+
+const device = DeviceInfo.getDeviceType();
 
 export default function ExpenseItem({
   item,
@@ -14,7 +16,6 @@ export default function ExpenseItem({
   getExpenses,
 }) {
 
-  const device = DeviceInfo.getDeviceType();
 
   async function removeItem() {
     await deleteExpense(item.id);
@@ -23,18 +24,7 @@ export default function ExpenseItem({
   }
 
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        left: 0,
-        flex: 1,
-        height: device === 'Handset' ? 62: 72,
-        backgroundColor: light.brandPrimary,
-        justifyContent: 'space-between',
-        marginVertical: 5,
-        borderRadius: 10,
-        overflow: 'hidden',
-      }}>
+    <>
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('Expense Detail', {
@@ -42,17 +32,7 @@ export default function ExpenseItem({
             categories: categories,
           });
         }}
-        style={{
-          backgroundColor: light.whiteGrey,
-          height: device === 'Handset' ? 57: 65,
-          borderRadius: 8,
-          padding: 8,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          flex: 0.85,
-          borderTopEndRadius: 30,
-          borderBottomRightRadius: 30,
-        }}>
+        style={styles.touchableContainer}>
         <View
           style={{
             flex: 0.7,
@@ -105,24 +85,19 @@ export default function ExpenseItem({
               fontWeight: 'bold',
             }}
             numberOfLines={1}>
-            {item.amount}
+            {item?.amount} XCFA
           </Text>
         </View>
       </TouchableOpacity>
       <View
-        style={{
-          flex: 0.15,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: light.brandPrimary,
-          //   borderWidth: 1,
-        }}>
+        style={styles.moreContainer}>
         <Popover
           // isVisible={true}
+          
           from={
-            <TouchableOpacity>
+            <TouchableOpacity onPressOut={()=> console.log('pressed out')} style={{backgroundColor:light.brandPrimary, width:'100%', alignItems:'center'}} >
               <Text style={{color: light.inverseTextColor, fontWeight: 'bold'}}>
-                more..
+                more...
               </Text>
             </TouchableOpacity>
           }>
@@ -180,12 +155,46 @@ export default function ExpenseItem({
             </View>
           </View>
         </Popover>
-        {/* <TouchableOpacity>
-          <Text style={{color: light.inverseTextColor, fontWeight: 'bold'}}>
-            more..
-          </Text>
-        </TouchableOpacity> */}
       </View>
-    </View>
+    </>
   );
 }
+
+const styles = StyleSheet.create({
+  touchableContainer:{
+    backgroundColor: light.brandLight,
+    height: device === 'Handset' ? 57: 65,
+    // borderRadius: 8,
+    padding: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+    elevation:10,
+    // flex: 0.85,
+    // borderTopEndRadius: 30,
+    // borderBottomRightRadius: 30,
+  },
+  moreContainer:{
+    // flex: 0.15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: light.brandPrimary,
+    marginBottom: 10,
+    //   borderWidth: 1,
+  }
+})
+
+// View
+//       style={{
+//         flexDirection: 'row',
+//         left: 0,
+//         flex: 1,
+//         height: device === 'Handset' ? 62: 72,
+//         backgroundColor: light.brandPrimary,
+//         justifyContent: 'space-between',
+//         marginVertical: 5,
+//         borderRadius: 10,
+//         overflow: 'hidden',
+//         elevation:10,
+//         marginHorizontal: 16
+//       }}

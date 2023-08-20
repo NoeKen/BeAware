@@ -1,5 +1,6 @@
 export default{
     // brandPrimary: '#da8608',
+    // brandPrimary: '#d0e0df',
     brandPrimary: '#2A8C82',
     // brandPrimary: '#00cef3',
     // brandSecond: '#da8608',

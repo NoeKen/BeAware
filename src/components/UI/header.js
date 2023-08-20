@@ -11,7 +11,7 @@ export default function Header({
   iconR,
   CStyles,
   onPress,
-  amount,
+  amount = 0,
 }) {
   const navigation = useNavigation();
   return (
@@ -27,7 +27,7 @@ export default function Header({
         {title}
       </Text>
       {/* show the right icon if it is provided, else show et whitespace */}
-      <View style={{flexDirection:'row'}} >
+      <View style={{flexDirection: 'row'}}>
         {iconR && (
           <TouchableOpacity onPress={onPress}>
             <Icon name={iconR} style={[styles.arrowLeft, {...CStyles}]} />
@@ -35,9 +35,7 @@ export default function Header({
         )}
         {amount ? (
           <Text style={{color: '#da8608', fontWeight: 'bold'}}>{amount}F</Text>
-        ) : (
-          <Text></Text>
-        )}
+        ) : null}
       </View>
     </View>
   );
@@ -60,11 +58,12 @@ const styles = StyleSheet.create({
   arrowLeft: {
     fontSize: 25,
     color: light.textColor,
+    color: light.brandPrimary,
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 20,
     color: light.brandPrimary,
+    fontSize: 20,
     alignSelf: 'center',
   },
 });
