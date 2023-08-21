@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
 } from 'react-native';
 import {DataTable} from 'react-native-paper';
 // import SQLite from 'react-native-sqlite-2';
@@ -15,15 +16,27 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Header from '../components/UI/header';
 import light from '../constants/theme/light';
 import {connect} from 'react-redux';
+import {BarChart, LineChart, PieChart} from 'react-native-gifted-charts';
 
-const optionsPerPage = [2, 3, 4];
-// const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
-
-const Dashboard = ({navigation, expenses,deleteExpense, replaceSelectedCategory}) => {
+const Dashboard = ({
+  navigation,
+  expenses,
+  deleteExpense,
+  categories,
+  replaceSelectedCategory,
+}) => {
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = React.useState(2);
   // const [expenses, setExpenses] = useState([]);
   const [dashExpenses, setDashExpenses] = useState([]);
+  const dimension = useWindowDimensions();
+  console.log('categories', dashExpenses);
+
+  const barData = [
+    {value: 54, text: '54%'},
+    {value: 40, text: '30%'},
+    {value: 20, text: '26%'},
+  ];
 
   async function removeItem(id) {
     console.log('id to delete:', id);
@@ -32,9 +45,36 @@ const Dashboard = ({navigation, expenses,deleteExpense, replaceSelectedCategory}
     // getExpenses();
   }
 
-  useEffect(()=>{
-    setDashExpenses(expenses)
-  },[expenses])
+  function transformData() {
+    var cats = [];
+    categories?.map(category => {
+      var temp = {id: '', label: '', value: 0};
+      expenses?.map(expense => {
+        if (expense?.category_id === category.id) {
+          var formatNumber = 0
+            if (expense.amount >= 1000000) {
+              formatNumber = (expense.amount/ 1000000).toFixed(2) + 'M';
+            } else if (expense.amount >= 1000) {
+              formatNumber = (expense.amount / 1000).toFixed(1) + 'K';
+            } else {
+              return expense.amount;
+            }
+          
+          console.log('formatNmber:', formatNumber)
+          temp.id = category.id;
+          temp.label = category.name;
+          temp.value +=parseInt(expense.amount);
+        }
+      });
+      cats.push(temp);
+    });
+    return cats;
+  }
+  const yAxisLabels = dashExpenses.map(item => `${item.value} (${item.label.length} chars)`);
+
+  useEffect(() => {
+    setDashExpenses(transformData());
+  }, [expenses]);
 
   React.useEffect(() => {
     setPage(0);
@@ -43,17 +83,35 @@ const Dashboard = ({navigation, expenses,deleteExpense, replaceSelectedCategory}
   return (
     <Container style={styles.container}>
       <Header title={'Dashboard'} />
+      <View
+        style={{
+          // height: 320,
+          width:'100%',
+          elevation: 10,
+          maxHeight:400,
+          // backgroundColor: '#333340',
+          // flexDirection: 'column',
+          padding: 16,
+          overflow: 'scroll',
+
+          // alignItems: 'center',
+          // justifyContent: 'center',
+        }}>
+        <BarChart
+          data={dashExpenses}
+          barWidth={20}
+          roundedTop
+          noOfSections={5}
+          barBorderRadius={2}
+          isAnimated
+          autoShiftLabels
+          frontColor={'rgba(3, 96, 112, 1)'}
+          yAxisLabelWidth={50}
+          yAxisLabels={yAxisLabels}
+          disablePress
+        />
+      </View>
       <Content style={styles.content}>
-        {/* <TouchableOpacity
-          style={styles.refreshContainer}
-          // onPress={() => GetExpenses()}
-          >
-          <MaterialCommunityIcons
-            name="table-refresh"
-            style={{fontSize: 20, color: light.brandPrimary}}
-          />
-          <Text style={styles.refreshContainer.refreshText}>Refresh</Text>
-        </TouchableOpacity> */}
         <DataTable>
           <DataTable.Header
             style={{
@@ -61,9 +119,7 @@ const Dashboard = ({navigation, expenses,deleteExpense, replaceSelectedCategory}
               alignItems: 'center',
               backgroundColor: light.whiteGrey,
             }}>
-            <DataTable.Title
-              // style={{justifyContent: 'center'}}
-              textStyle={styles.tableHeader}>
+            <DataTable.Title textStyle={styles.tableHeader}>
               Num
             </DataTable.Title>
             <DataTable.Title
@@ -77,11 +133,8 @@ const Dashboard = ({navigation, expenses,deleteExpense, replaceSelectedCategory}
             <DataTable.Title style={{}} textStyle={styles.tableHeader}>
               Date
             </DataTable.Title>
-            {/* <DataTable.Title style={{}} textStyle={styles.tableHeader}>
-              Descript°
-            </DataTable.Title> */}
           </DataTable.Header>
-          {dashExpenses.length < 1 ? (
+          {expenses?.length < 1 ? (
             <View
               style={{
                 justifyContent: 'center',
@@ -93,24 +146,27 @@ const Dashboard = ({navigation, expenses,deleteExpense, replaceSelectedCategory}
             </View>
           ) : (
             <>
-              {expenses.map((expense, index) => {
+              {expenses?.map((expense, index) => {
                 return (
                   <DataTable.Row
                     key={expense.id}
                     onPress={() => {
-                      // console.log(`selected account ${expense.title}`);
                       replaceSelectedCategory();
                       navigation.navigate('Expense Detail', {item: expense});
                     }}
                     onLongPress={() =>
-                      Alert.alert('Delete item', 'Are you sure you want to delete this item?', [
-                        {
-                          text: 'No',
-                          onPress: () => console.log('Cancel Pressed'),
-                          style: 'cancel',
-                        },
-                        {text: 'Yes', onPress: () => removeItem(expense.id)},
-                      ])
+                      Alert.alert(
+                        'Delete item',
+                        'Are you sure you want to delete this item?',
+                        [
+                          {
+                            text: 'No',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                          },
+                          {text: 'Yes', onPress: () => removeItem(expense.id)},
+                        ],
+                      )
                     }>
                     <DataTable.Cell
                       style={{
@@ -128,19 +184,12 @@ const Dashboard = ({navigation, expenses,deleteExpense, replaceSelectedCategory}
                       textStyle={styles.tableValue}>
                       {expense.title}
                     </DataTable.Cell>
-
                     <DataTable.Cell textStyle={styles.tableValue}>
                       {expense.amount}
                     </DataTable.Cell>
                     <DataTable.Cell textStyle={styles.tableValue}>
                       {moment(expense.created_at).calendar('date')}
-                      {/* {moment(expense.created_at).format('YYYY-MM-DD')} */}
                     </DataTable.Cell>
-                    {/* <DataTable.Cell textStyle={styles.tableValue}>
-                      {expense.description === ''
-                        ? 'empty'
-                        : expense.description}
-                    </DataTable.Cell> */}
                   </DataTable.Row>
                 );
               })}
@@ -155,6 +204,7 @@ const Dashboard = ({navigation, expenses,deleteExpense, replaceSelectedCategory}
 
 const mapStateToProps = state => ({
   expenses: state.expenses.expenses,
+  categories: state.categories.categories,
 });
 
 const mapDispatchToProps = dispatch => ({

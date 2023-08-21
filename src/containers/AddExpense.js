@@ -1,18 +1,12 @@
 // import {Input, TextArea} from 'native-base';
-import moment from 'moment';
 import {Container, Content, Icon, Input, Picker, Textarea} from 'native-base';
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import uuid from 'react-native-uuid';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {connect} from 'react-redux';
-import light from '../constants/theme/light';
 import Header from '../components/UI/header';
-import {v4 as uuidv4} from 'uuid';
-import {generateUniqueID} from '../Services/expensesService';
-// import {v4 as uuid } from 'uuid';
-
-// const db = SQLite.openDatabase('beAware.db', '1.0', '', 1);
+import light from '../constants/theme/light';
 
 const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
   const [titleError, setTitleError] = useState(false);
@@ -23,7 +17,6 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
   const [selected, setSelected] = useState();
 
   const [expense, setExpense] = useState({
-    // id: generateUniqueID(),
     id: null,
     title: '',
     description: '',
@@ -33,7 +26,6 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
   });
 
   function resetForm() {
-    // setRest(true);
     setExpense({
       ...expense,
       id: null,
@@ -42,15 +34,10 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
       amount: '',
       created_at: null,
     });
-    // setSelected('related category');
     setError(''), setReqError('');
-    // setTitle('');
-    // setAmount('');
-    // setDescription('');
   }
 
   async function createExpense() {
-    // const MY_NAMESPACE =
     if (expense?.title === '') {
       setTitleError(true);
     }
@@ -73,8 +60,8 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
         setExpense({...expense, id: uuid.v4(), created_at: new Date()});
         await replaceExpenses([...expenses, expense]);
         resetForm();
-        navigation.navigate("Expense");
-        return 0
+        navigation.navigate('Expense');
+        return 0;
       } catch (error) {
         console.log('error when creating expense : ', error);
       }
@@ -148,8 +135,8 @@ const AddExpense = ({navigation, replaceExpenses, expenses, categories}) => {
                 ...expense,
                 amount: val,
                 id: uuid.v4(),
-                created_at: "2023-05-25",
-                // created_at: new Date(),
+                // created_at: "2023-05-25",
+                created_at: new Date(),
               });
               val !== '' && setAmountError(false);
             }}

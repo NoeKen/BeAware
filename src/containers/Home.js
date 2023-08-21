@@ -41,13 +41,13 @@ const Home = ({allCategories, deleteCategory, deleteCascadeExpenses}) => {
       <SafeAreaView>
         <Header
           title={'Home'}
-          // iconR={'information-circle'}
+          iconR={'information-circle'}
           CStyles={{color: light.brandPrimary}}
-          // onPress={() => {
-          //   // setModalVisible(!modalVisible), 
-          //   navigation.navigate('About')
-          //   // console.log('menu button pressed');
-          // }}
+          onPress={() => {
+            // setModalVisible(!modalVisible), 
+            navigation.navigate('About')
+            // console.log('menu button pressed');
+          }}
         />
         <MenuModal
           // doLogout={doLogout}

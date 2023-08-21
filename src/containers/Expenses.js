@@ -40,7 +40,6 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
     var currentExpenses = [];
     var amount = 0;
     var oldAmount = 0;
-    // const catExpenses = getCatExpenses(expenses, cat.id);
     catExpenses?.map(expense => {
       if (moment(expense.created_at).format('YYYY-MM-DD') === currentDate) {
         currentExpenses.push(expense);
@@ -53,9 +52,6 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
           oldAmount += parseInt(expense.amount);
         }
       }
-      // const descDates = currentExpenses.sort((a, b) => {
-      //   return new Date(b).getTime() - new Date(a).getTime();
-      // });
     });
     oldExpenses.sort((a, b) => moment(b.created_at).diff(moment(a.created_at)));
     currentExpenses.sort((a, b) =>
@@ -156,7 +152,7 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <Text style={styles.sectionTitle}>Past</Text>
+              <Text style={styles.sectionTitle}>Passed</Text>
               {oldExpenses?.length > 0 && (
                 <Text style={styles.badge.text}>
                   {oldExpenses?.length < 10

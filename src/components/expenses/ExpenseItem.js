@@ -164,12 +164,16 @@ const styles = StyleSheet.create({
   touchableContainer:{
     backgroundColor: light.brandLight,
     height: device === 'Handset' ? 57: 65,
-    // borderRadius: 8,
     padding: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
     overflow: 'hidden',
-    elevation:10,
+    elevation:3,
+    shadowOffset:{
+      height:-5,
+      width: 0,
+    }
+
     // flex: 0.85,
     // borderTopEndRadius: 30,
     // borderBottomRightRadius: 30,
@@ -183,6 +187,7 @@ const styles = StyleSheet.create({
     //   borderWidth: 1,
   }
 })
+
 
 // View
 //       style={{
