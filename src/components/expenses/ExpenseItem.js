@@ -42,9 +42,9 @@ export default function ExpenseItem({
           <Text
             style={{
               color: light.textColor,
-              fontFamily: 'ubuntu-bold',
+              fontFamily: 'Roboto Bold',
               fontSize: 18,
-              fontWeight: 'bold',
+              // fontWeight: 'bold',
             }}
             numberOfLines={1}>
             {item.title}
@@ -56,7 +56,7 @@ export default function ExpenseItem({
             }}
             numberOfLines={1}>
             {item.description === ''
-              ? 'Aucune description fournie'
+              ? 'No description provided'
               : item.description}
           </Text>
         </View>

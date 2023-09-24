@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Roboto Bold.ttf",
+      "sha1": "0a1793926e2ee724cf2ff3fc7adc745348659f82"
+    },
+    {
+      "path": "assets/fonts/Roboto Medium.ttf",
+      "sha1": "08bab5b1ab478e8af2279b613d3a32636b85cc65"
+    },
+    {
+      "path": "assets/fonts/Roboto.ttf",
+      "sha1": "cb0cb91a31f43293bd7042ddab945ce161c29d3d"
+    },
+    {
+      "path": "assets/fonts/Work Sans.otf",
+      "sha1": "d52ec503ae2195b6d8b4c2aa3e7b6346ba7d3ece"
+    }
+  ]
+}

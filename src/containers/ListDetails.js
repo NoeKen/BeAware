@@ -49,17 +49,19 @@ const ListDetails = ({route}) => {
           <Text
             style={{
               color: light.inactiveTab,
-              fontSize: 16,
               fontWeight: '900',
+              color: light.brandPrimary,
+              fontSize: light.subTitleFontSize,
             }}>
             Total Price
           </Text>
 
           <Text
             style={{
-              color: light.brandSecond,
-              fontSize: 16,
+              color: light.brandPrimary,
+              fontSize: light.subTitleFontSize,
               fontWeight: '900',
+              fontFamily: light.subTitleFontFamily
             }}>
             {item.total_price} XCFA
           </Text>
@@ -82,17 +84,20 @@ const ListDetails = ({route}) => {
               <Text
                 style={{
                   color: light.inactiveTab,
-                  fontSize: 16,
-                  fontWeight: '900',
+                  fontSize: light.textFontSize,
+                  fontFamily: light.textFontFamily,
+                  // fontWeight: '900',
+
                 }}>
                 {item.name}
               </Text>
 
               <Text
                 style={{
+                  fontSize: light.textFontSize,
+                  fontFamily: light.subTitleFontFamily,
                   color: light.textColor,
-                  fontSize: 16,
-                  fontWeight: '900',
+                  // fontWeight: '900',
                 }}>
                 {item.price} XCFA
               </Text>

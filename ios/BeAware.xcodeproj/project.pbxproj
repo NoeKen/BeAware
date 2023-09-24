@@ -43,6 +43,10 @@
 		9E6410B09C424352A94DD930 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96934347ED0241809606BF7B /* rubicon-icon-font.ttf */; };
 		B063127AC1FC4C3787A69FED /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845DEA2C6E5D4543850B03DC /* SimpleLineIcons.ttf */; };
 		1AF8ECA9728C43DA96CC12EC /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F92B28EA03CF49018A750DF8 /* Zocial.ttf */; };
+		967CD7E14AC347CB9B7E181F /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E01B2AE5A43A43F4B054D344 /* Roboto.ttf */; };
+		F0819A329E1D4AE992F7E504 /* Work Sans.otf in Resources */ = {isa = PBXBuildFile; fileRef = 261D3A47941D4571981726DC /* Work Sans.otf */; };
+		AD947B14D624460FB3544ECF /* Roboto Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A7DDD6EE344A19E900351 /* Roboto Bold.ttf */; };
+		87C9CEC7023D4339A9632AD6 /* Roboto Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F397AAF029A4A4E8C274213 /* Roboto Medium.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +106,10 @@
 		96934347ED0241809606BF7B /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		845DEA2C6E5D4543850B03DC /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		F92B28EA03CF49018A750DF8 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E01B2AE5A43A43F4B054D344 /* Roboto.ttf */ = {isa = PBXFileReference; name = "Roboto.ttf"; path = "../assets/fonts/Roboto.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		261D3A47941D4571981726DC /* Work Sans.otf */ = {isa = PBXFileReference; name = "Work Sans.otf"; path = "../assets/fonts/Work Sans.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1A1A7DDD6EE344A19E900351 /* Roboto Bold.ttf */ = {isa = PBXFileReference; name = "Roboto Bold.ttf"; path = "../assets/fonts/Roboto Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4F397AAF029A4A4E8C274213 /* Roboto Medium.ttf */ = {isa = PBXFileReference; name = "Roboto Medium.ttf"; path = "../assets/fonts/Roboto Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -239,6 +247,10 @@
 				96934347ED0241809606BF7B /* rubicon-icon-font.ttf */,
 				845DEA2C6E5D4543850B03DC /* SimpleLineIcons.ttf */,
 				F92B28EA03CF49018A750DF8 /* Zocial.ttf */,
+				E01B2AE5A43A43F4B054D344 /* Roboto.ttf */,
+				261D3A47941D4571981726DC /* Work Sans.otf */,
+				1A1A7DDD6EE344A19E900351 /* Roboto Bold.ttf */,
+				4F397AAF029A4A4E8C274213 /* Roboto Medium.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -369,6 +381,10 @@
 				9E6410B09C424352A94DD930 /* rubicon-icon-font.ttf in Resources */,
 				B063127AC1FC4C3787A69FED /* SimpleLineIcons.ttf in Resources */,
 				1AF8ECA9728C43DA96CC12EC /* Zocial.ttf in Resources */,
+				967CD7E14AC347CB9B7E181F /* Roboto.ttf in Resources */,
+				F0819A329E1D4AE992F7E504 /* Work Sans.otf in Resources */,
+				AD947B14D624460FB3544ECF /* Roboto Bold.ttf in Resources */,
+				87C9CEC7023D4339A9632AD6 /* Roboto Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

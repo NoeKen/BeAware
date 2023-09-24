@@ -31,14 +31,21 @@ const createDynamicTable = array => {
   <html>
     <head>
     <style>
-      .watermark {
-        opacity: 0.5;
-        color: BLACK;
-        position: absolute;
+      footer {
+        position: fixed;
         bottom: 0;
-        right: 0;
-        display: online-flex;
-
+        left: 0;
+        width: 100%;
+        text-align: center;
+      }
+      .watermark {
+        opacity: 0.8;
+        color: ${light.inactiveTab};
+      }
+      tr:first-child th {
+        text-align: center; 
+        background-color:  rgba(3, 96, 112, 1);
+        color: ${light.brandLight};
       }
       table {
         font-family: arial, sans-serif;
@@ -72,36 +79,37 @@ const createDynamicTable = array => {
     </style>
     </head>
     <body>
-    <br/>
-    <br/>
-    <h1>${array.title}</h1>
-    <br/>
-    <br/>
-    <br/>
+      <br/>
+      <br/>
+      <h1>"${array.title}" list expenses</h1>
+      <br/>
+      <br/>
+      <br/>
 
-    <table>
-      <tr>
-        <th>Label</th>
-        <th>Price (XCFA)</th>
-      </tr>
-      ${table}
-      <tr>
-        <th>Total</th>
-        <th id='TotalPrice'>${array.total_price} XCFA</th>
-      </tr>
-    </table>
-    <br/>
-    <p>This is the list that you made on ${moment(array.created_at).format(
-      'MMMM Do YYYY, h:mm a',
-    )}</p>
-    <br/>
-    <div class="watermark">Generated on ${moment(new Date()).format(
-      'DD-MM-YYYY',
-    )} at ${moment(new Date()).format('HH:MM')} from <h3 style="color: ${
-    light.brandSecond
-  };weight:bold ">beAware app</h3></div>
-    
+      <table>
+        <tr>
+          <th>Label</th>
+          <th>Price (XCFA)</th>
+        </tr>
+        ${table}
+        <tr>
+          <th>Total</th>
+          <th id='TotalPrice'>${array.total_price} XCFA</th>
+        </tr>
+      </table>
+      <p>This is the list that you made on ${moment(array.created_at).format(
+        'MMMM Do YYYY, h:mm a',
+      )}</p>
     </body>
+    <footer>
+        <div class="watermark">Generated on ${moment(new Date()).format(
+          'DD-MM-YYYY',
+        )}
+          at ${moment(new Date()).format('HH:MM')} from <span style="color: ${
+    light.brandSecond
+  };weight:bold ">beAware app</span>
+        </div>
+      </footer>
   </html>
     `;
   return html;

@@ -1,15 +1,14 @@
 import {Container, Content, Icon} from 'native-base';
 import React, {useState} from 'react';
 import {
-  FlatList,
-  Image,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  useWindowDimensions,
   View,
+  useWindowDimensions,
 } from 'react-native';
+import uuid from 'react-native-uuid';
 import {connect} from 'react-redux';
 import Header from '../components/UI/header';
 import light from '../constants/theme/light';
@@ -17,6 +16,7 @@ import Spacer from '../ui/Spacer';
 
 const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
   const [items, setItems] = useState({
+    id: '',
     title: '',
     created_at: new Date(),
     total_price: 0,
@@ -33,13 +33,18 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
   const [editable, setEditable] = useState(false);
 
   return (
-<Container style={{flex: 1}}>
+    <Container style={{flex: 1}}>
       <Header
         navigation={navigation}
         iLeft={'arrow-back'}
         title="Add A List"
         iconR={'save'}
-        CStyles={{color:items.title == '' || items.list.length == 0?light.inactiveTab:light.brandPrimary}}
+        CStyles={{
+          color:
+            items.title == '' || items.list.length == 0
+              ? light.inactiveTab
+              : light.brandPrimary,
+        }}
         onPress={() => {
           if (items.title == '' && items.list.length == 0) {
             setError(true);
@@ -52,14 +57,16 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
             setErrorMessage('Please add items to the list');
           } else {
             replaceExpensesList([...expensesList, items]);
-            setItems({...items, title: '', list: [],total_price:0});
-            navigation.navigate('List')
+            setItems({...items, title: '', list: [], total_price: 0});
+            navigation.navigate('List');
           }
-            // navigation.navigate('List')
+          // navigation.navigate('List')
         }}
       />
 
-      <ScrollView scrollEnabled={shouldScroll} showsVerticalScrollIndicator={false} >
+      <ScrollView
+        scrollEnabled={shouldScroll}
+        showsVerticalScrollIndicator={false}>
         <View
           style={{
             flexDirection: 'row',
@@ -95,7 +102,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
                 borderBottomWidth: 1,
                 textAlign: 'center',
                 fontWeight: 'bold',
-                marginHorizontal:20,
+                marginHorizontal: 20,
               }}
               value={items.title}
               placeholder="Title list"
@@ -121,7 +128,13 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
               />
             </TouchableOpacity> */}
             {items.list.length === 0 ? (
-              <Text style={{color: light.inactiveTab, fontSize: 16,textAlign:'center',marginTop:'100%'}}>
+              <Text
+                style={{
+                  color: light.inactiveTab,
+                  fontSize: 16,
+                  textAlign: 'center',
+                  marginTop: '100%',j2
+                }}>
                 Your list will appear here
               </Text>
             ) : (
@@ -137,7 +150,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
                       // marginBottom: 5,
                       // paddingVertical: 5,
                       overflow: 'scroll',
-                      marginHorizontal:20,
+                      marginHorizontal: 20,
                       // backgroundColor: 'red',
                     }}>
                     <TextInput
@@ -163,11 +176,11 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
                 );
               })
             )}
-            <Spacer/>
+            <Spacer />
           </Content>
         </View>
         <Spacer />
-        {error  && (
+        {error && (
           <Text
             style={{
               color: light.brandDanger,
@@ -247,7 +260,12 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
             }}
             onPress={() => {
               if (Item.name !== '' && Item.price !== '') {
-                setItems({...items, total_price: items.total_price + parseInt(Item.price), list: [...items.list, Item]});
+                setItem({...Item, id: uuid.v4()});
+                setItems({
+                  ...items,
+                  total_price: items.total_price + parseInt(Item.price),
+                  list: [...items.list, Item],
+                });
                 // setTotalPrice(totalPrice + parseInt(Item.price));
                 setError(false);
                 setItem({...Item, price: '', name: ''});
@@ -267,7 +285,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
             />
           </TouchableOpacity>
         </View>
-        
+
         {/* </Content> */}
       </ScrollView>
     </Container>

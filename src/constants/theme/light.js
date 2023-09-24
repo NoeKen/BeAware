@@ -1,20 +1,28 @@
 export default{
-    // brandPrimary: '#da8608',
-    // brandPrimary: '#d0e0df',
+    // Colors
     brandPrimary: 'rgba(3, 96, 112, 1)',
-    // brandPrimary: '#2A8C82',
-    // brandPrimary: '#00cef3',
-    // brandSecond: '#da8608',
     brandSecond: '#216e57',
-    // brandSecond: '#e91e63',
     brandSuccess: '#03ad6c',
     textColor: '#000000',
     inverseTextColor:'#F4FBFA',
-    // inactiveTab:'#F4FBFA',
     inactiveTab:'#707070',
     whiteGrey:'#F4FBFA',
     inputBg:'#e91e6216',
     placeholder:'#c5c0c0b5',
     brandLight:'#ffffff',
     brandDanger:'#ff0000',
+
+    // FontFamily
+    titleFontFamily : 'Roboto Bold',
+    subTitleFontFamily : 'Roboto Medium',
+    textFontFamily : 'Roboto',
+
+    // FontSize
+    titleFontSize : 18,
+    subTitleFontSize : 16,
+    textFontSize : 14,
+    minFontSize : 12,
+
+    // Spacing
+    padding: 16,
 }

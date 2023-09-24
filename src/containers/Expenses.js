@@ -17,6 +17,7 @@ import ExpenseItem from '../components/expenses/ExpenseItem';
 import All from '../components/expenses/more';
 import light from '../constants/theme/light';
 import FabIcon from '../ui/fabIcon';
+import { CatExpensesPDF } from '../components/pdf/catExpensesPDF';
 
 const date = moment(date).format('YYYY-MM-DD');
 
@@ -30,6 +31,8 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
   const [catExpenses, setCatExpenses] = useState(
     getCatExpenses(expenses, cat.id),
   );
+
+  console.log('total amount: ', totalAmount + oldTotalAmount)
 
   useEffect(() => {
     getExpenses();
@@ -69,10 +72,10 @@ const Expenses = ({route, navigation, expenses, categories, deleteExpense}) => {
         <Header
           navigation={navigation}
           iLeft={'arrow-back'}
-          title={`- ${cat.name}-  ` + ' Expenses'}
+          title={`${cat.name} - ` + 'Expenses'}
           amount={totalAmount + oldTotalAmount}
-          // iconR={'add-circle'}
-          // onPress={() => navigation.navigate('AddExpense')}
+          iconR={'print'}
+          onPress={() => CatExpensesPDF(catExpenses,cat.name)}
         />
       </SafeAreaView>
       <ScrollView>

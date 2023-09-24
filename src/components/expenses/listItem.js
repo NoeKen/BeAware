@@ -5,8 +5,9 @@ import {Alert, StyleSheet, TouchableOpacity} from 'react-native';
 import PushNotification from 'react-native-push-notification';
 import light from '../../constants/theme/light';
 import ListDetails from '../../containers/ListDetails';
+import moment from 'moment';
 
-const ListItem = ({item,navigation}) => {
+const ListItem = ({item, navigation}) => {
   // const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   // Alert.alert('ListItem:', item.title);
@@ -47,12 +48,22 @@ const ListItem = ({item,navigation}) => {
         // setVisible(!visible)
         navigation.navigate('ListDetails', {item: item});
       }}>
-      <Text style={styles.text} numberOfLines={1}>
-        {item.title}
-      </Text>
-      <Text style={styles.price} numberOfLines={1}>
-        {item.total_price} XCFA
-      </Text>
+      <View style={styles.firstLine}>
+        <Text style={styles.text} numberOfLines={1}>
+          {item.title}
+        </Text>
+        <Text style={styles.price} numberOfLines={1}>
+          {item.total_price} XCFA
+        </Text>
+      </View>
+      <View style={styles.secondLine}>
+        <Text style={styles.date} numberOfLines={1}>
+        {moment(item?.created_at).format('DD-MM-YYYY')}
+        </Text>
+        <Text style={styles.time} numberOfLines={1}>
+        {moment(item?.created_at).format('hh:mm:ss a')}
+        </Text>
+      </View>
 
       {/* {visible&&<ListDetails />} */}
     </TouchableOpacity>
@@ -64,11 +75,11 @@ export default ListItem;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
+    // flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    // alignItems: 'center',
     paddingHorizontal: 10,
-    paddingVertical:14,
+    paddingVertical: 10,
     backgroundColor: 'white',
     marginBottom: 10,
     marginHorizontal: 16,
@@ -76,17 +87,39 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   text: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'black',
+    // fontWeight: 'bold',
+    color: light.textColor,
     flex: 0.65,
+    fontSize: light.subTitleFontSize,
+    fontFamily: light.subTitleFontFamily,
   },
   price: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: light.textFontSize,
+    fontFamily: light.subTitleFontFamily,
     color: light.brandSecond,
     // flex: 0.35,
+    fontWeight:'800',
     overflow: 'hidden',
     textAlign: 'center',
+  },
+  firstLine: {
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    alignItems: 'center',
+  },
+  secondLine: {
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    alignItems: 'center',
+  },
+  date:{
+    fontSize: light.minFontSize,
+    fontFamily: light.textFontFamily,
+    color: light.inactiveTab,
+  },
+  time:{
+    fontSize: light.minFontSize,
+    fontFamily: light.textFontFamily,
+    color: light.inactiveTab,
   },
 });

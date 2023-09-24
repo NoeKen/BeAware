@@ -17,6 +17,7 @@ import Header from '../components/UI/header';
 import CameraModal from '../components/category/cameraModal';
 import light from '../constants/theme/light';
 import Spacer from '../ui/Spacer';
+import { ToastAndroid } from 'react-native';
 
 const AddCategory = ({navigation, categories, replaceCategories}) => {
   const [imgPath, setImgPath] = useState(null);
@@ -50,29 +51,17 @@ const AddCategory = ({navigation, categories, replaceCategories}) => {
     }).then(img => {
       console.log('image path : ', img.path);
       setCategory({...category, image: img.path});
-      // replaceCategory({...category, image: img.path});
-      console.log('image modificated : ', category.image);
     });
   }
 
   async function AddCategory() {
     try {
-      // await addCategory();
-      console.log('====================================');
-      console.log('category: ', category);
-      console.log('====================================');
       await replaceCategories([
         ...categories, category
-        // {
-        //   id: category.id,
-        //   name: category.name,
-        //   image: category.image,
-        //   description: category.description,
-        //   created_at: category.created_at,
-        // },
       ]);
       navigation.goBack();
     } catch (error) {
+      ToastAndroid.show('An error occurred when creating category. Please try again later')
       console.log('error when creating category : ', error);
     }
   }

@@ -13,6 +13,7 @@ import light from '../../constants/theme/light';
 import CModal from '../UI/modal';
 import {getColorCode, random_rgba} from '../../Services/getRandomColor';
 import DeviceInfo from 'react-native-device-info';
+import CatDetailsModal from './CatDetails';
 
 const devise =  DeviceInfo.getDeviceType();
 
@@ -22,6 +23,7 @@ export default function CategoryItem({
   deleteCascadeExpenses,
 }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const [catModalVisible, setCatModalVisible] = useState(false);
   const [del, setDelete] = useState(false);
   // console.log('data:',data);
   const navigation = useNavigation();
@@ -49,6 +51,12 @@ export default function CategoryItem({
           text={`You are going to delete one category ('${data.name}'). \n This will also delete all his expenses`}
           deleCategory={deleteCategory}
         />
+        <CatDetailsModal
+          setModalVisible={setCatModalVisible}
+          modalVisible={catModalVisible}
+          title={'Category Details'}
+          category={data}
+        />
         {data.image !=='' ? (
           <ImageBackground
             source={{uri: data.image}}
@@ -68,7 +76,7 @@ export default function CategoryItem({
             style={styles.imageBackground}>
             <View style={{backgroundColor:random_rgba()}}>
               <View style={styles.textCard}>
-                <Text numberOfLines={1} style={[styles.textValue, styles.name]}>
+                <Text numberOfLines={1} style={styles.name}>
                   {data?.name}
                 </Text>
                 <Text numberOfLines={1} style={styles.description}>
@@ -88,7 +96,14 @@ export default function CategoryItem({
           }>
           <Icon name="close" style={styles.delete.icon} />
         </TouchableOpacity>
-      ) : null}
+      ) : <TouchableOpacity
+          style={styles.delete}
+          onPress={
+            () => setCatModalVisible(!catModalVisible)
+            //  deleteCategory()
+          }>
+          <Icon name="information" style={styles.delete.icon} />
+        </TouchableOpacity>}
     </View>
   );
 }
@@ -107,10 +122,9 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     marginHorizontal: '2%',
     backgroundColor: 'white',
-    height: (devise === 'Handset' )? 90: 150,
+    height: devise === 'Handset' ? 90: 150,
     borderRadius: 10,
     marginBottom: 5,
-    // shadowColor:light.brandPrimary,
   },
   imageBackground: {
     height: '100%',
@@ -118,15 +132,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
   },
-  linearGradient: {
-    height: '100%',
-    // paddingLeft: 15,
-    // paddingRight: 15,
-    // borderRadius: 5,
-    // marginTop: 85,
-    // opacity:0.5
-    // width: 350,
-  },
+  // linearGradient: {
+  //   height: '100%',
+  // },
   textCard: {
     backgroundColor: light.whiteGrey,
     height: '55%',
@@ -136,13 +144,14 @@ const styles = StyleSheet.create({
     paddingTop: -2,
   },
   description: {
-    fontSize: 14,
+    fontSize: light.textFontSize,
+    fontFamily: light.textFontFamily,
     marginTop: -5,
   },
   name: {
     color: light.textColor,
-    fontWeight: 'bold',
-    fontSize: 22,
+    fontSize: light.titleFontSize,
+    fontFamily: light.titleFontFamily
   },
   delete: {
     width: 25,

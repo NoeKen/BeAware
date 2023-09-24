@@ -17,6 +17,7 @@ import Header from '../components/UI/header';
 import light from '../constants/theme/light';
 import {connect} from 'react-redux';
 import {BarChart, LineChart, PieChart} from 'react-native-gifted-charts';
+import CModal from '../components/UI/modal';
 
 const Dashboard = ({
   navigation,
@@ -30,13 +31,8 @@ const Dashboard = ({
   // const [expenses, setExpenses] = useState([]);
   const [dashExpenses, setDashExpenses] = useState([]);
   const dimension = useWindowDimensions();
-  console.log('categories', dashExpenses);
-
-  const barData = [
-    {value: 54, text: '54%'},
-    {value: 40, text: '30%'},
-    {value: 20, text: '26%'},
-  ];
+  const [modalVisible, setModalVisible] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(false);
 
   async function removeItem(id) {
     console.log('id to delete:', id);
@@ -51,26 +47,26 @@ const Dashboard = ({
       var temp = {id: '', label: '', value: 0};
       expenses?.map(expense => {
         if (expense?.category_id === category.id) {
-          var formatNumber = 0
-            if (expense.amount >= 1000000) {
-              formatNumber = (expense.amount/ 1000000).toFixed(2) + 'M';
-            } else if (expense.amount >= 1000) {
-              formatNumber = (expense.amount / 1000).toFixed(1) + 'K';
-            } else {
-              return expense.amount;
-            }
-          
-          console.log('formatNmber:', formatNumber)
+          var formatNumber = 0;
+          if (expense.amount >= 1000000) {
+            formatNumber = (expense.amount / 1000000).toFixed(2) + 'M';
+          } else if (expense.amount >= 1000) {
+            formatNumber = (expense.amount / 1000).toFixed(1) + 'K';
+          } else {
+            return expense.amount;
+          }
+
+          console.log('formatNmber:', formatNumber);
           temp.id = category.id;
           temp.label = category.name;
-          temp.value +=parseInt(expense.amount);
+          temp.value += parseInt(expense.amount);
         }
       });
       cats.push(temp);
     });
     return cats;
   }
-  const yAxisLabels = dashExpenses.map(item => `${item.value} (${item.label.length} chars)`);
+  // const yAxisLabels = dashExpenses.map(item => `${item.value} (${item.label.length} chars)`);
 
   useEffect(() => {
     setDashExpenses(transformData());
@@ -86,9 +82,9 @@ const Dashboard = ({
       <View
         style={{
           // height: 320,
-          width:'100%',
+          width: '100%',
           elevation: 10,
-          maxHeight:400,
+          maxHeight: 400,
           // backgroundColor: '#333340',
           // flexDirection: 'column',
           padding: 16,
@@ -107,8 +103,12 @@ const Dashboard = ({
           autoShiftLabels
           frontColor={'rgba(3, 96, 112, 1)'}
           yAxisLabelWidth={50}
-          yAxisLabels={yAxisLabels}
+          // yAxisLabels={yAxisLabels}
           disablePress
+          yAxisColor={light.inactiveTab}
+          yAxisIndicesColor={light.inactiveTab}
+          xAxisColor={light.inactiveTab}
+          xAxisIndicesColor={light.inactiveTab}
         />
       </View>
       <Content style={styles.content}>
@@ -148,49 +148,54 @@ const Dashboard = ({
             <>
               {expenses?.map((expense, index) => {
                 return (
-                  <DataTable.Row
-                    key={expense.id}
-                    onPress={() => {
-                      replaceSelectedCategory();
-                      navigation.navigate('Expense Detail', {item: expense});
-                    }}
-                    onLongPress={() =>
-                      Alert.alert(
-                        'Delete item',
-                        'Are you sure you want to delete this item?',
-                        [
-                          {
-                            text: 'No',
-                            onPress: () => console.log('Cancel Pressed'),
-                            style: 'cancel',
-                          },
-                          {text: 'Yes', onPress: () => removeItem(expense.id)},
-                        ],
-                      )
-                    }>
-                    <DataTable.Cell
-                      style={{
-                        backgroundColor: light.whiteGrey,
-                        marginLeft: -15,
-                        justifyContent: 'center',
+                  <>
+                    <CModal
+                      setModalVisible={setModalVisible}
+                      modalVisible={modalVisible}
+                      title={'Delete Item'}
+                      text={`You are going to delete one expense ('${itemToDelete.title}'). \n do you want to proceed?`}
+                      onPress={async () => {
+                        {
+                          setModalVisible(!modalVisible);
+                          removeItem(itemToDelete.id)
+                          console.log('espense to delete: ', itemToDelete);
+                        }
                       }}
-                      textStyle={styles.tableHeader}
-                      numeric>
-                      {index + 1}
-                    </DataTable.Cell>
-                    <DataTable.Cell
-                      style={[styles.messageColumn, {}]}
-                      accessibilityHint="press"
-                      textStyle={styles.tableValue}>
-                      {expense.title}
-                    </DataTable.Cell>
-                    <DataTable.Cell textStyle={styles.tableValue}>
-                      {expense.amount}
-                    </DataTable.Cell>
-                    <DataTable.Cell textStyle={styles.tableValue}>
-                      {moment(expense.created_at).calendar('date')}
-                    </DataTable.Cell>
-                  </DataTable.Row>
+                    />
+                    <DataTable.Row
+                      key={expense.id}
+                      onPress={() => {
+                        replaceSelectedCategory();
+                        navigation.navigate('Expense Detail', {item: expense});
+                      }}
+                      onLongPress={() => {
+                        setItemToDelete(expense);
+                        setModalVisible(!modalVisible);
+                      }}>
+                      <DataTable.Cell
+                        style={{
+                          backgroundColor: light.whiteGrey,
+                          marginLeft: -15,
+                          justifyContent: 'center',
+                        }}
+                        textStyle={styles.tableHeader}
+                        numeric>
+                        {index + 1}
+                      </DataTable.Cell>
+                      <DataTable.Cell
+                        style={[styles.messageColumn, {}]}
+                        accessibilityHint="press"
+                        textStyle={styles.tableValue}>
+                        {expense.title}
+                      </DataTable.Cell>
+                      <DataTable.Cell textStyle={styles.tableValue}>
+                        {expense.amount}
+                      </DataTable.Cell>
+                      <DataTable.Cell textStyle={styles.tableValue}>
+                        {moment(expense.created_at).calendar('date')}
+                      </DataTable.Cell>
+                    </DataTable.Row>
+                  </>
                 );
               })}
             </>
@@ -221,12 +226,14 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   tableHeader: {
-    color: light.brandSecond,
+    color: light.brandPrimary,
     // textShadowColor: light.brandPrimary,
-    fontSize: 16,
+    fontSize: light.subTitleFontSize,
+    fontFamily: light.subTitleFontFamily,
   },
   tableValue: {
-    fontSize: 14,
+    fontSize: light.textFontSize,
+    fontFamily: light.textFontFamily,
     marginLeft: 5,
   },
   refreshContainer: {

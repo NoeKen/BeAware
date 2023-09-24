@@ -65,11 +65,11 @@ const Home = ({allCategories, deleteCategory, deleteCascadeExpenses}) => {
         </View> */}
       </SafeAreaView>
       <Content>
-        <View style={{paddingHorizontal: 16, flex: 1}}>
+        <View style={{flex: 1}}>
           <View
             style={{
               flexDirection: 'row',
-              marginVertical: 12,
+              margin: light.padding,
               alignItems: 'center',
               justifyContent: 'space-between',
             }}>
@@ -93,7 +93,7 @@ const Home = ({allCategories, deleteCategory, deleteCascadeExpenses}) => {
             ) : (
               <FlatList
                 data={categories}
-                // style={{marginBottom: 58, paddingBottom: 50}}
+                // style={{paddingHorizontal: light.padding}}
                 disableVirtualization={true}
                 renderItem={({item}) => (
                   <CategoryItem
