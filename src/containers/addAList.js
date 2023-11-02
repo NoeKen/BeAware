@@ -133,7 +133,7 @@ const AddAList = ({expensesList, replaceExpensesList, navigation}) => {
                   color: light.inactiveTab,
                   fontSize: 16,
                   textAlign: 'center',
-                  marginTop: '100%',j2
+                  marginTop: '100%',
                 }}>
                 Your list will appear here
               </Text>
